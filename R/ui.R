@@ -1,9 +1,6 @@
 # Load packages ----
 suppressPackageStartupMessages(source('package-deps.R'))
 
-# Load branding ----
-source('bootstrap-themeing.R')
-
 # Load data ----
 source('data.R')
 
@@ -141,7 +138,7 @@ ui <-
       tabPanel('Other Resources',
                icon = icon('link')),
       tabPanel(a(span(icon('github'),"See the code"), 
-                 href="https://www.github.com/mattwarkentin",
+                 href="https://www.github.com/mattwarkentin/covid-hospitalization-app",
                  target="_blank")
     )
   )
