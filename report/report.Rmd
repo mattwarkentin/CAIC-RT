@@ -1,0 +1,73 @@
+---
+title: "COVID-19 Hospitalization Tool Report"
+date: "Report Generated: `r Sys.time()`"
+output: 
+  html_document: default
+  pdf_document: default
+params:
+  maxAcute: NULL
+  maxCrit: NULL
+  maxVent: NULL
+  inputData: NULL
+  input: NULL
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo=FALSE, 
+  error = TRUE, 
+  message = FALSE, 
+  warning = FALSE,
+  out.width = "80%"
+  )
+
+library(reactable)
+library(kableExtra)
+suppressPackageStartupMessages(library(tidyverse))
+library(scales)
+```
+
+__Tool Developers:__  
+
+- Vasily Giannakeas, MPH  
+- Nathan M. Stall, MD  
+- Deepit Bhatia, MPH  
+- Matthew T. Warkentin, MSc  
+
+# Tool Inputs
+
+```{r}
+shiny_inputs <- 
+  tribble(
+    ~item, ~value,
+    "lou_acute", params$input$lou_acute,
+    "lou_crit", params$input$lou_crit,
+    "lou_vent", params$input$lou_vent,
+    "n_acute", params$input$n_acute,
+    "n_crit", params$input$n_crit,
+    "n_vent", params$input$n_vent,
+    "per_vent", params$input$per_vent,
+  )
+knitr::kable(shiny_inputs) %>% 
+    kable_styling(full_width = FALSE)
+```
+
+```{r}
+if (knitr::is_html_output()) {
+  reactable(
+    params$inputData,
+    sortable = FALSE,
+    resizable = TRUE,
+    searchable = FALSE,
+    filterable = FALSE,
+    fullWidth = FALSE,
+    )
+} else if (knitr::is_latex_output()) {
+  knitr::kable(params$inputData, booktabs = TRUE) %>% 
+    kable_styling(full_width = FALSE)
+}
+```
+
+# Tools Output
+
+The maximum threshold of cases which remains sustainable are `r comma(params$maxAcute)`, `r comma(params$maxCrit)`, and `r comma(params$maxVent)` for acute, critical, and ventilatory capacity, respectively.
