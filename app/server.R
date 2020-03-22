@@ -1,5 +1,5 @@
 server <- function(input, output, session) {
-  
+  # US Data ----
   default_table <- 
     tribble(
       ~age_dist, ~case_dist, ~ac_adm, ~cc_adm,
@@ -26,7 +26,7 @@ server <- function(input, output, session) {
     feedbackWarning(
       inputId = 'n_crit',
       condition = input$n_crit <= input$n_vent,
-      text = "Number of critical care beds are less than the number of ventilaltors."
+      text = "Number of critical care beds are less than the number of ventilators."
     )
   })
   
@@ -35,7 +35,7 @@ server <- function(input, output, session) {
     feedbackWarning(
       inputId = 'n_vent',
       condition = input$n_vent >= input$n_crit,
-      text = "Number of ventilaltors are greater than the number of critical care beds."
+      text = "Number of ventilators are greater than the number of critical care beds."
     )
   })
   
@@ -58,7 +58,7 @@ server <- function(input, output, session) {
         dom = 'tB',
         keys = TRUE,
         buttons = c('copy', 'csv', 'excel')),
-      colnames = c("Age ranges", "Case Distribution [report as %]", 
+      colnames = c("Age groups", "Case distribution [report as %]", 
                    "Acute care admission [report as %]", 
                    "Critical care admission [report as %]")
       ) %>% 
@@ -98,17 +98,17 @@ server <- function(input, output, session) {
     
     plot_data <- tribble(
       ~name, ~value,
-      "Acute Care", ma,
-      "Crticial Care", mc,
-      "Ventilators", mv
+      "Acute Care Beds", ma,
+      "Crtical Care Beds", mc,
+      "Mechanical Ventilators", mv
     )
     
     p <- ggplot(plot_data, aes(name, value, fill = name,
-                               text = glue("Unit: {name}",
-                                           "Threshold: {scales::comma(value)}", 
+                               text = glue("{name}",
+                                           "Maximum: {scales::comma(value)}", 
                                            .sep = '\n'))) +
       geom_col(show.legend = FALSE, col = 'black') +
-      labs(x = '', y = 'Threshold Number of Cases') + 
+      labs(x = '', y = 'Maximum Daily Number of Cases') + 
       scale_fill_manual(values = c('#FFEC19', '#FF9800', '#F6412D')) +
       scale_y_continuous(labels = scales::comma_format()) +
       theme_classic() +

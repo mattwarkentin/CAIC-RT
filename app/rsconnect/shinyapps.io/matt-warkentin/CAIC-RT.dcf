@@ -1,0 +1,13 @@
+name: CAIC-RT
+title: CAIC-RT
+username:
+account: matt-warkentin
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1977233
+bundleId: 2908479
+url: https://matt-warkentin.shinyapps.io/CAIC-RT/
+when: 1584888717.3172
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: www/styles.scss
