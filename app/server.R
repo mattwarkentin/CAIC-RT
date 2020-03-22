@@ -111,6 +111,7 @@ server <- function(input, output, session) {
       labs(x = '', y = 'Maximum Daily Number of Cases') + 
       scale_fill_manual(values = c('#FFEC19', '#FF9800', '#F6412D')) +
       scale_y_continuous(labels = scales::comma_format()) +
+      coord_flip() +
       theme_classic() +
       theme(legend.position = 'none')
     

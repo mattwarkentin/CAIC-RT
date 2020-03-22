@@ -46,7 +46,7 @@ ui <-
         column(3,
                p(HTML(glue("{strong('Last Updated:')} {Sys.Date()}"))),
                wellPanel(
-               h4('Length of Stay'),
+               h4('Expected Length of Stay'),
                numericInput(inputId = "lou_acute",
                             label = HTML("Mean days in acute care<sup>*</sup>"),
                             value = 11, min = 1),
@@ -149,10 +149,9 @@ ui <-
     # More tab ----
     navbarMenu(
       'More Info',
-      tabPanel('Authors',
-               icon = icon('signature')),
-      tabPanel('Other Resources',
-               icon = icon('link')),
+      tabPanel(a(span(icon('file-medical-alt'),"See the article"), 
+                 href="#",
+                 target="_blank")),
       tabPanel(a(span(icon('github'),"See the code"), 
                  href="https://www.github.com/mattwarkentin/covid-hospitalization-app",
                  target="_blank")
