@@ -1,9 +1,21 @@
 server <- function(input, output, session) {
   
+  default_table <- 
+    tribble(
+      ~age_dist, ~case_dist, ~ac_adm, ~cc_adm,
+      "0-19", 5.02, 2.5, 0,
+      "20-44", 28.8, 20.8, 4.2,
+      "45-54", 17.5, 28.3, 4.2,
+      "55-64", 17.5, 30.1, 11.2,
+      "65-74", 16.7, 43.5, 18.8,
+      "75-84", 8.57, 58.7, 31,
+      "85+", 5.88, 70.3, 29
+    )
+  
   # Intro Model ----
   observeEvent("", {
     showModal(modalDialog(
-      includeHTML("../report/intro_text.html"),
+      includeHTML("text/intro_text.html"),
       easyClose = TRUE
     ))
   }
@@ -115,7 +127,7 @@ server <- function(input, output, session) {
       incProgress(0.25)
       tempReport <- file.path(tempdir(), "report.Rmd")
       incProgress(0.25)
-      file.copy("../report/report.Rmd", tempReport, overwrite = TRUE)
+      file.copy("text/report.Rmd", tempReport, overwrite = TRUE)
       incProgress(0.25)
       params <- list(
         maxAcute = maxAcute(x[, 'case_dist'], x[, 'ac_adm'],

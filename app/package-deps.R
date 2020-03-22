@@ -1,6 +1,7 @@
 # Shiny deps
 library(shiny)
 library(shinydashboard)
+library(shinydashboardPlus)
 library(shinyalert)
 library(shinyFeedback)
 library(shinyBS)

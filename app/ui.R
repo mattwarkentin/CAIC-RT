@@ -1,9 +1,6 @@
 # Load packages ----
 suppressPackageStartupMessages(source('package-deps.R'))
 
-# Load data ----
-source('data.R')
-
 # Load functions ----
 source('utils.R')
 
@@ -13,13 +10,17 @@ text <- list(
   info = "Very helpful information!"
 )
 
+# Footer text ----
 
+footer <- HTML(
+  '<footer><p>Developed by <a href="https://www.twitter.com/mwark89">Vasily Giannakeas</a>, <a href="https://www.twitter.com/mwark89">Nathan M. Stall</a>, <a href="https://www.twitter.com/mwark89">Deepit Bhatia</a>, <a href="https://www.twitter.com/mwark89">Matthew T. Warkentin</a>, and <a href="https://www.twitter.com/mwark89">Isaac I. Bogoch</a>.<p/></footer>'
+  )
 
 # Navbar UI ----
 
 ui <- 
   navbarPage(
-    title = 'COVID-19 Hospitalization Tool',
+    title = 'CAIC-RT',
     fluid = TRUE, position = 'fixed-top', collapsible = TRUE,
     header = tags$style(type="text/css", "body {padding-top: 70px;}"),
     # Home Tool ----
@@ -35,6 +36,7 @@ ui <-
       ),
       fluidRow(
         column(3,
+               p(HTML(glue("{strong('Last Updated:')} {Sys.Date()}"))),
                wellPanel(
                h4('Length of Stay'),
                numericInput(inputId = "lou_acute",
@@ -119,7 +121,8 @@ ui <-
           ),
         br(), br()
             )
-      )
+      ),
+      footer
       ),
     
     
@@ -127,7 +130,7 @@ ui <-
     
     tabPanel(
       'Help', icon = icon('question'),
-      includeHTML('../report/help.html')
+      includeHTML('text/help.html')
     ),
     
     # More tab ----
