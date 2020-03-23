@@ -4,16 +4,28 @@ suppressPackageStartupMessages(source('package-deps.R'))
 # Load functions ----
 source('utils.R')
 
-# Dropdown menu text ----
-text <- list(
-  contact = "Please contact us at...",
-  info = "Very helpful information!"
-)
-
 # Footer text ----
 
 footer <- HTML(
-  '<hr /><footer><p>Developed by <a href="https://www.twitter.com/vasilepi">Vasily Giannakeas</a>, <a href="https://www.twitter.com/NathanStall">Nathan M. Stall</a>, <a href="https://www.twitter.com/BreslowDay">Deepit Bhatia</a>, <a href="https://www.twitter.com/mwark89">Matthew T. Warkentin</a>, and <a href="https://www.twitter.com/BogochIsaac">Isaac I. Bogoch</a>.<p/></footer>'
+  '<hr /><footer><p>Developed by <a href="https://www.twitter.com/vasilepi">Vasily Giannakeas</a>, <a href="https://www.twitter.com/BreslowDay">Deepit Bhatia</a>, <a href="https://www.twitter.com/mwark89">Matthew T. Warkentin</a>, <a href="https://www.twitter.com/BogochIsaac">Isaac I. Bogoch</a>, and <a href="https://www.twitter.com/NathanStall">Nathan M. Stall</a>.<p/></footer>'
+  )
+
+# Meta Content ----
+tool_meta <- 
+  meta() %>%
+  meta_general(
+    application_name = "CAIC-RT",
+    description = "An online tool capable of estimating the maximum daily number of incident COVID-19 cases manageable by healthcare systems."
+  ) %>% 
+  meta_social(
+    title = "CAIC-RT - COVID-19 Acute and Intensive Care Resource Tool",
+    description = "An online tool capable of estimating the maximum daily number of incident COVID-19 cases manageable by healthcare systems.",
+    url = "https://caic-rt.shinyapps.io/CAIC-RT",
+    image = "https://images.unsplash.com/photo-1584118624012-df056829fbd0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1778&q=80",
+    image_alt = "Image of the coronavirus courtesy of the CDC",
+    twitter_card_type = "app",
+    og_author = c('Vasily Giannakeas', 'Deepit Bhatia',
+                  'Matthew T. Warkentin', 'Isaac I. Bogoch', 'Nathan M. Stall')
   )
 
 # Navbar UI ----
@@ -33,6 +45,7 @@ ui <-
       'Home', icon = icon('toolbox'),
       useShinyalert(),
       useShinyFeedback(),
+      tool_meta,
       tags$head(
         tags$link(rel = "stylesheet", type = "text/css", 
                   href = "styles.css"),
@@ -59,7 +72,7 @@ ui <-
                
                numericInput(inputId = "lou_crit",
                             label = HTML("Mean days in critical care<sup>1</sup>"),
-                            value = 8, min = 1),
+                            value = 20, min = 1),
                bsTooltip("lou_crit", 
                          "Note: Critical care days are mutually exclusive with acute care days. Total number of days spent in critical care are equal to the number of days spent in critical care with or without a ventilator.", 
                          placement = "bottom", trigger = 'hover',
@@ -67,7 +80,7 @@ ui <-
                
                numericInput(inputId = "lou_vent",
                             label = HTML("Mean days on a mechanical ventilator<sup>1</sup>"),
-                            value = 7.5, min = 1),
+                            value = 20, min = 1),
                bsTooltip("lou_vent", 
                          "Note: Days spent on mechanical ventilator are assumed to be spent in a critical care bed.", 
                          placement = "bottom", trigger = 'hover',
@@ -83,7 +96,7 @@ ui <-
                h4('Resource Availability for COVID-19 Cases'),
                
                numericInput(inputId = "n_acute",
-                            label = HTML("Number of appropriable acute care beds<sup>2,3</sup>"),
+                            label = HTML("Number of available acute care beds<sup>2</sup>"),
                             value = 8378, min = 0),
                bsTooltip("n_acute", 
                          "Note: This is the number of acute care beds that are available for COVID-19 patients.", 
@@ -94,7 +107,7 @@ ui <-
                hr(),
                
                numericInput(inputId = "n_crit",
-                            label = HTML("Number of appropriable critical care beds<sup>2,3</sup>"),
+                            label = HTML("Number of available critical care beds<sup>2</sup>"),
                             value = 513, min = 0),
                bsTooltip("n_crit", 
                          "Note: This is the number of critical care beds that are available for COVID-19 patients.", 
@@ -105,7 +118,7 @@ ui <-
                hr(),
                
                numericInput(inputId = "n_vent",
-                            label = HTML("Number of appropriable mechanical ventilators<sup>2,3</sup>"),
+                            label = HTML("Number of available mechanical ventilators<sup>2</sup>"),
                             value = 328, min = 0),
                bsTooltip("n_vent", 
                          "Note: This is the number of mechanical ventilators that are available for COVID-19 patients.", 
@@ -116,15 +129,15 @@ ui <-
                hr(),
                
                sliderInput(inputId = "per_vent",
-                            label = "Percent of critical care patients requiring mechanical ventilators",
+                            label = HTML("Percent of critical care patients requiring mechanical ventilators<sup>1</sup>"),
                             value = 50, min = 0, max = 100, step = 1, 
                            post = '%'),
                bsTooltip("per_vent", 
                          "Note: This is the percentage of COVID-19 critical care patients that will require mechanical ventilators.", 
                          placement = "bottom", trigger = 'hover',
                          options = list(container = "body")),
-               p(HTML('<sup>2</sup> Appropriable: The maximum number of acute care beds, critical care beds, and mechanical ventilators that can be used or are currently being used by COVID-19 patients. For example, if a healthcare system has 100 acute care beds, and an occupancy rate of 70%, then the number of appropriable beds is 30 beds plus any surge capacity that can be added. If surge capacity is 50 beds, then the total number of appropriable beds is 30+50 = 80 beds.'), class = 'f5'),
-               p(HTML('<sup>3</sup> Default values are based on Ontario data extracted from Barrett <em>et al.</em> (2020). See <strong>Help</strong> page for full citations.'), class = 'f5')
+               p(HTML('<sup>1</sup> Default values are based on Chinese data extracted from Zhou <em>et al.</em> (2020) and Wang <em>et al.</em> (2020). See <strong>Help</strong> page for full citations.'), class = 'f5'),
+               p(HTML('<sup>2</sup> Default values are based on Ontario data extracted from Barrett <em>et al.</em> (2020). See <strong>Help</strong> page for full citations.'), class = 'f5')
                )),
         
         # Third Column ----
@@ -138,7 +151,7 @@ ui <-
                 ), open = ''
               ),
         
-        h4('Maximum daily number of new COVID-19 cases manageable by healthcare system'),
+        h4('Maximum daily number of incident COVID-19 cases manageable by healthcare system'),
         p('The values shown below are thresholds for the maximum daily number of new COVID-19 cases that can occur without causing a resource deficit. In other words, if more cases occur than the values shown, the amount of acute care beds, critical care beds, and mechanical ventilators would be insufficient to meet regional healthcare needs.', class = 'navy'),
         
         span(dropdownButton(size = 'xs', icon = icon('cog'),
@@ -151,13 +164,12 @@ ui <-
                                         multiple = FALSE)),
              plotlyOutput('plot')),
         br(),
-        wellPanel(
-          radioButtons('fmt', 'Please choose your preferred output format',
-                       choices = c('HTML', 'PDF'), selected = 'HTML',
-                       inline = TRUE),
-          downloadButton('report', 'Generate Report')
-          ),
-        br(), br()
+#        wellPanel(
+#          radioButtons('fmt', 'Please choose your preferred output #format',
+#                       choices = c('HTML', 'PDF'), selected = 'HTML',
+#                       inline = TRUE),
+#          downloadButton('report', 'Generate Report')
+#          ),
             )
       )
       ),

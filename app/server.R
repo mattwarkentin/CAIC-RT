@@ -1,18 +1,18 @@
 server <- function(input, output, session) {
-  # US Data ----
+  # US Case Distribution Data ----
   default_table <- 
     tribble(
       ~age_dist, ~case_dist, ~ac_adm, ~cc_adm,
-      "0-19", 5.02, 2.5, 0,
-      "20-44", 28.8, 20.8, 4.2,
-      "45-54", 17.5, 28.3, 4.2,
-      "55-64", 17.5, 30.1, 11.2,
-      "65-74", 16.7, 43.5, 18.8,
-      "75-84", 8.57, 58.7, 31,
-      "85+", 5.88, 70.3, 29
+      "0-19", 5.02, 2.05, 0,
+      "20-44", 28.8, 17.55, 3.10,
+      "45-54", 17.5, 24.75, 7.90,
+      "55-64", 17.5, 25.30, 7.95,
+      "65-74", 16.7, 36.05, 13.45,
+      "75-84", 8.57, 44.60, 20.75,
+      "85+", 5.88, 50.80, 17.65
     )
   
-  # Intro Model ----
+  # Welcome Modal ----
   observeEvent("", {
     showModal(modalDialog(
       includeHTML("text/intro_text.html"),
@@ -30,7 +30,11 @@ server <- function(input, output, session) {
     ))
   })
   
-  # Modal Calculation ----
+  # Modal Resource Calculations ----
+  
+  tot_ac_bed <- 33511; tot_ac_av <- 25; tot_ac_sur <- 0
+  tot_cc_bed <- 2053; tot_cc_av <- 25; tot_cc_sur <- 0
+  tot_mv_bed <- 1311; tot_mv_av <- 25; tot_mv_sur <- 0
   
   observeEvent(input$acute, {
     
@@ -38,12 +42,12 @@ server <- function(input, output, session) {
       title = "Calculate the number of acute care beds available for COVID-19 cases",
       easyClose = TRUE, size = 'm',
       numericInput('tot_ac_bed', 'Total number of acute care beds', 
-                   min = 0, value = 33511),
+                   min = 0, value = tot_ac_bed),
       sliderInput('tot_ac_av', "Percent of acute care beds available for COVID-19 cases",
-                  min = 0, max = 100, value = 25, step = 1,
+                  min = 0, max = 100, value = tot_ac_av, step = 1,
                   post = '%'),
       numericInput('tot_ac_sur', "Surge acute care beds available for COVID-19 cases",
-                   min = 0, max = 100, value = 0),
+                   min = 0, max = 100, value = tot_ac_sur),
       actionButton('submit_ac', "Apply Changes", 
                    class = 'btn-success')
     ))
@@ -56,6 +60,15 @@ server <- function(input, output, session) {
                        )
     removeModal()
   })
+  observeEvent({
+    input$tot_ac_bed
+    input$tot_ac_av
+    input$tot_ac_sur
+  }, {
+    tot_ac_bed <<- input$tot_ac_bed
+    tot_ac_av <<- input$tot_ac_av
+    tot_ac_sur <<- input$tot_ac_sur
+  })
   
   observeEvent(input$critical, {
     
@@ -63,12 +76,12 @@ server <- function(input, output, session) {
       title = "Calculate the number of critical care beds available for COVID-19 cases",
       easyClose = TRUE, size = 'm',
       numericInput('tot_cc_bed', 'Total number of critical care beds', 
-                   min = 0, value = 2053),
+                   min = 0, value = tot_cc_bed),
       sliderInput('tot_cc_av', "Percent of critical care beds available for COVID-19 cases",
-                  min = 0, max = 100, value = 25, step = 1,
+                  min = 0, max = 100, value = tot_cc_av, step = 1,
                   post = '%'),
       numericInput('tot_cc_sur', "Surge critical care beds available for COVID-19 cases",
-                   min = 0, max = 100, value = 0),
+                   min = 0, max = 100, value = tot_cc_sur),
       actionButton('submit_cc', "Apply Changes", 
                    class = 'btn-success')
     ))
@@ -81,6 +94,15 @@ server <- function(input, output, session) {
     )
     removeModal()
   })
+  observeEvent({
+    input$tot_cc_bed
+    input$tot_cc_av
+    input$tot_cc_sur
+  }, {
+    tot_cc_bed <<- input$tot_cc_bed
+    tot_cc_av <<- input$tot_cc_av
+    tot_cc_sur <<- input$tot_cc_sur
+  })
   
   observeEvent(input$mvent, {
     
@@ -88,12 +110,12 @@ server <- function(input, output, session) {
       title = "Calculate the number of mechanical ventilators available for COVID-19 cases",
       easyClose = TRUE, size = 'm',
       numericInput('tot_mv_bed', 'Total number of mechanical ventilators', 
-                   min = 0, value = 1311),
+                   min = 0, value = tot_mv_bed),
       sliderInput('tot_mv_av', "Percent of mechanical ventilators available for COVID-19 cases",
-                  min = 0, max = 100, value = 25, step = 1,
+                  min = 0, max = 100, value = tot_mv_av, step = 1,
                   post = '%'),
       numericInput('tot_mv_sur', "Surge mechanical ventilators available for COVID-19 cases",
-                   min = 0, max = 100, value = 0),
+                   min = 0, max = 100, value = tot_mv_sur),
       actionButton('submit_mv', "Apply Changes", 
                    class = 'btn-success')
     ))
@@ -106,8 +128,17 @@ server <- function(input, output, session) {
     )
     removeModal()
   })
+  observeEvent({
+    input$tot_mv_bed
+    input$tot_mv_av
+    input$tot_mv_sur
+  }, {
+    tot_mv_bed <<- input$tot_mv_bed
+    tot_mv_av <<- input$tot_mv_av
+    tot_mv_sur <<- input$tot_mv_sur
+  })
   
-  # Observe n_crit ----
+  # Observe Number of CC Beds ----
   observeEvent(input$n_crit, {
     feedbackWarning(
       inputId = 'n_crit',
@@ -116,7 +147,7 @@ server <- function(input, output, session) {
     )
   })
   
-  # Observe n_vent ----
+  # Observe Number of MV ----
   observeEvent(input$n_vent, {
     feedbackWarning(
       inputId = 'n_vent',
@@ -125,7 +156,7 @@ server <- function(input, output, session) {
     )
   })
   
-  # Data table ----
+  # Data Table ----
   
   x <- data.frame(default_table)
   
@@ -176,7 +207,7 @@ server <- function(input, output, session) {
     
   })
   
-  # Plot results ----
+  # Plotly Results ----
   output$plot <- renderPlotly({
     input$tab_pop_cell_edit
     ma <- maxAcute(x[, 'case_dist'], x[, 'ac_adm'], 
@@ -203,26 +234,26 @@ server <- function(input, output, session) {
     )
     
     if (all(is.na(ma), is.na(mv), is.na(mc))) {
-      p <- ggplot(plot_data, aes(glue("{name}\n ({value} new cases/day)"), value, fill = name, text = glue("The number of appropriable {name}\n in this healthcare system can manage\n a maximum of {value} daily cases of COVID-19"))) +
+      p <- ggplot(plot_data, aes(glue("{name}\n ({value} new cases/day)"), value, fill = name, text = glue("The number of available {name}\n in this healthcare system can manage\n a maximum of {value} daily cases of COVID-19"))) +
         labs(x = '', 
              y = 'Maximum Daily Number of Cases') + 
         color_scale +
-        coord_flip() +
         theme_classic() +
-        theme(legend.position = 'none')
+        theme(legend.position = 'none',
+              axis.text.x = element_text(angle = 25))
       p
     } else {
     
     p <- ggplot(plot_data, aes(glue("{name}\n ({scales::comma(value)} new cases/day)"), value, fill = name,
-      text = glue("The number of appropriable {name}\n in this healthcare system can manage\n a maximum of {scales::comma(value)} daily cases of COVID-19"))) +
+      text = glue("The number of available {name}\n in this healthcare system can manage\n a maximum of {scales::comma(value)} daily cases of COVID-19"))) +
       geom_col(show.legend = FALSE, col = 'black') +
       labs(x = '', 
             y = 'Maximum Daily Number of Cases') + 
       color_scale +
       scale_y_continuous(labels = scales::comma_format()) +
-      coord_flip() +
       theme_classic() +
-      theme(legend.position = 'none')
+      theme(legend.position = 'none',
+            axis.text.x = element_text(angle = 25))
     p
     }
     
@@ -234,7 +265,7 @@ server <- function(input, output, session) {
   })
   
   
-  # Generate report ----
+  # Generate Reports ----
   output$report <- downloadHandler(
     filename = function() {
       fmt <- tolower(input$fmt)

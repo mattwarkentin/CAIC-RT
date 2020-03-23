@@ -17,3 +17,4 @@ library(rmarkdown)
 # Misc
 library(DT)
 library(plotly)
+library(metathis)
