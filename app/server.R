@@ -215,7 +215,7 @@ server <- function(input, output, session) {
     mc <- maxCrit(x[, 'case_dist'], x[, 'cc_adm'], 
                   input$n_crit, input$lou_crit)
     mv <- maxVent(x[, 'case_dist'], x[, 'cc_adm'], 
-                  input$n_crit, input$lou_vent, input$per_vent)
+                  input$n_vent, input$lou_vent, input$per_vent)
     
     color_scale <- switch(input$colors,
       YlOrRd = scale_fill_manual(values = c('#FFEC19', '#FF9800', '#F6412D')),

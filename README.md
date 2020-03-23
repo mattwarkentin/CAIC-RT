@@ -1,18 +1,5 @@
 
-# covid-hospitalization-app
+### CAIC-RT: COVID-19 Acute and Intensive Care Resource Tool
 
-<!-- badges: start -->
-
-<!-- badges: end -->
-
-**Authors:**  
-\- Vasily Giannakeas, MPH  
-\- Nathan M. Stall, MD  
-\- Deepit Bhatia, MPH  
-\- Matthew T. Warkentin, MSc
-
-**Date Updated:** 2020-03-21
-
-**Objective:** To develop an online tool capable of estimating maximal
-allowable daily cases of COVID-19 that health and critical care systems
-could sustain given age-based case distributions of COVID-19.
+This repository contains all of the code for the
+[**CAIC-RT**](https://caic-rt.shinyapps.io/CAIC-RT/) shiny application.

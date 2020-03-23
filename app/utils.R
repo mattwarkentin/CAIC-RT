@@ -52,7 +52,7 @@ maxCrit <- function(x, y, n_crit, lou_crit) {
   }
 }
 
-# Maximum Ventilarion
+# Maximum Ventilation
 maxVent <- function(x, y, n_vent, lou_vent, per_vent) {
   stopifnot(length(x)==length(y))
   if (any(is.na(x)) | any(is.na(y)) | any(y > 100) | any(y < 0)) {
@@ -60,6 +60,6 @@ maxVent <- function(x, y, n_vent, lou_vent, per_vent) {
   } else if (!dplyr::near(sum(x, na.rm = TRUE), 100, tol = 0.1)) {
     NA
   } else {
-  ((n_vent / lou_vent)) / (sum((x * 0.01) * (y * 0.01) * (per_vent * 0.01), na.rm = TRUE))
+  (n_vent / lou_vent) / sum((x * 0.01) * (y * 0.01) * (per_vent * 0.01), na.rm = TRUE)
   }
 }
