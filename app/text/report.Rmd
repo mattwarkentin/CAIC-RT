@@ -18,7 +18,8 @@ knitr::opts_chunk$set(
   error = TRUE, 
   message = FALSE, 
   warning = FALSE,
-  out.width = "80%"
+  out.width = "80%",
+  eval = FALSE
   )
 
 library(reactable)

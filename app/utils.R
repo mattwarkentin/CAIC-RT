@@ -31,8 +31,10 @@ ventBedRate <- function(n_vent, lou_vent) {
 # Maximum Acute
 maxAcute <- function(x, y, n_acute, lou_acute) {
   stopifnot(length(x)==length(y))
-  if (!dplyr::near(sum(x, na.rm = TRUE), 100, tol = 0.1)) {
-    0
+  if (any(is.na(x)) | any(is.na(y)) | any(y > 100) | any(y < 0)) {
+    NA
+  } else if (!dplyr::near(sum(x, na.rm = TRUE), 100, tol = 0.1)) {
+    NA
   } else {
     (n_acute / lou_acute) / (sum((x * 0.01) * (y * 0.01), na.rm = TRUE))
   }
@@ -41,8 +43,10 @@ maxAcute <- function(x, y, n_acute, lou_acute) {
 # Maximum Critical
 maxCrit <- function(x, y, n_crit, lou_crit) {
   stopifnot(length(x)==length(y))
-  if (!dplyr::near(sum(x, na.rm = TRUE), 100, tol = 0.1)) {
-    0
+  if (any(is.na(x)) | any(is.na(y)) | any(y > 100) | any(y < 0)) {
+    NA
+  } else if (!dplyr::near(sum(x, na.rm = TRUE), 100, tol = 0.1)) {
+    NA
   } else {
   (n_crit / lou_crit) / (sum((x * 0.01) * (y * 0.01), na.rm = TRUE))
   }
@@ -51,9 +55,11 @@ maxCrit <- function(x, y, n_crit, lou_crit) {
 # Maximum Ventilarion
 maxVent <- function(x, y, n_vent, lou_vent, per_vent) {
   stopifnot(length(x)==length(y))
-  if (!dplyr::near(sum(x, na.rm = TRUE), 100, tol = 0.1)) {
-    0
+  if (any(is.na(x)) | any(is.na(y)) | any(y > 100) | any(y < 0)) {
+    NA
+  } else if (!dplyr::near(sum(x, na.rm = TRUE), 100, tol = 0.1)) {
+    NA
   } else {
-  ((n_vent / lou_vent)) / sum((x * 0.01) * (y * 0.01) * (per_vent * 0.01), na.rm = TRUE)
+  ((n_vent / lou_vent)) / (sum((x * 0.01) * (y * 0.01) * (per_vent * 0.01), na.rm = TRUE))
   }
 }

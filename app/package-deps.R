@@ -1,11 +1,9 @@
 # Shiny deps
 library(shiny)
-library(shinydashboard)
-library(shinydashboardPlus)
 library(shinyalert)
 library(shinyFeedback)
+library(shinyWidgets)
 library(shinyBS)
-library(bootstraplib)
 library(htmltools)
 
 # Data science deps
@@ -13,6 +11,8 @@ library(glue)
 library(tibble)
 library(ggplot2)
 library(scales)
+library(knitr)
+library(rmarkdown)
 
 # Misc
 library(DT)
