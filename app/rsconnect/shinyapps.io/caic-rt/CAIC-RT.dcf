@@ -5,9 +5,9 @@ account: caic-rt
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1978294
-bundleId: 2911326
+bundleId: 2911363
 url: https://caic-rt.shinyapps.io/CAIC-RT/
-when: 1584941627.07189
+when: 1584942882.07467
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: www/styles.scss

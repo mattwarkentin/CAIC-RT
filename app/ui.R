@@ -7,7 +7,7 @@ source('utils.R')
 # Footer text ----
 
 footer <- HTML(
-  '<hr /><footer><p>Developed by <a href="https://www.twitter.com/vasilepi">Vasily Giannakeas</a>, <a href="https://www.twitter.com/BreslowDay">Deepit Bhatia</a>, <a href="https://www.twitter.com/mwark89">Matthew T. Warkentin</a>, <a href="https://www.twitter.com/BogochIsaac">Isaac I. Bogoch</a>, and <a href="https://www.twitter.com/NathanStall">Nathan M. Stall</a>.<p/></footer>'
+  '<hr /><footer><p>Developed by <a href="https://www.twitter.com/vasilepi" target="_blank">Vasily Giannakeas</a>, <a href="https://www.twitter.com/BreslowDay" target="_blank">Deepit Bhatia</a>, <a href="https://www.twitter.com/mattwrkntn" target="_blank">Matthew T. Warkentin</a>, <a href="https://www.twitter.com/BogochIsaac" target="_blank">Isaac I. Bogoch</a>, and <a href="https://www.twitter.com/NathanStall" target="_blank">Nathan M. Stall</a>.<p/></footer>'
   )
 
 # Meta Content ----
