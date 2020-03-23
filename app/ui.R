@@ -23,7 +23,7 @@ tool_meta <-
     url = "https://caic-rt.shinyapps.io/CAIC-RT",
     image = "https://images.unsplash.com/photo-1584118624012-df056829fbd0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1778&q=80",
     image_alt = "Image of the coronavirus courtesy of the CDC",
-    twitter_card_type = "app",
+    twitter_card_type = "summary",
     og_author = c('Vasily Giannakeas', 'Deepit Bhatia',
                   'Matthew T. Warkentin', 'Isaac I. Bogoch', 'Nathan M. Stall')
   )
