@@ -50,7 +50,8 @@ ui <-
         tags$link(rel = "stylesheet", type = "text/css", 
                   href = "styles.css"),
         tags$link(rel = "stylesheet", type = "text/css", 
-                  href = "tachyons.min.css")
+                  href = "tachyons.min.css"),
+        includeHTML('www/google-analytics.html')
       ),
       
       fluidRow(
