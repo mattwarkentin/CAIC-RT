@@ -11,4 +11,4 @@ knitr::opts_chunk$set(
 
 ### CAIC-RT: COVID-19 Acute and Intensive Care Resource Tool
 
-This repository contains all of the code for the [__CAIC-RT__](https://caic-rt.shinyapps.io/CAIC-RT/) shiny application.
+This repository contains all of the code for the [__CAIC-RT__](https://caic-rt.shinyapps.io/CAIC-RT/?utm_source=github&utm_medium=readme) shiny application.
