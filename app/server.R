@@ -15,7 +15,7 @@ server <- function(input, output, session) {
   # Welcome Modal ----
   observeEvent("", {
     showModal(modalDialog(
-      includeHTML("text/intro_text.html"),
+      includeHTML("lang/eng/intro_text.html"),
       easyClose = TRUE, size = 'm', 
       title = HTML('CAIC-RT: COVID-19 Acute and Intensive Care Resource Tool')
     ))
@@ -139,20 +139,26 @@ server <- function(input, output, session) {
   })
   
   # Observe Number of CC Beds ----
-  observeEvent(input$n_crit, {
+  observeEvent({
+    input$n_vent
+    input$n_crit
+  }, {
     feedbackWarning(
       inputId = 'n_crit',
-      condition = input$n_crit <= input$n_vent,
-      text = "Number of critical care beds are less than the number of mechanical ventilators."
+      condition = input$n_crit < input$n_vent,
+      text = "Warning: Number of critical care beds is less than the number of mechanical ventilators."
     )
   })
   
   # Observe Number of MV ----
-  observeEvent(input$n_vent, {
+  observeEvent({
+    input$n_vent
+    input$n_crit
+    }, {
     feedbackWarning(
       inputId = 'n_vent',
-      condition = input$n_vent >= input$n_crit,
-      text = "Number of mechanical ventilators are greater than the number of critical care beds."
+      condition = input$n_vent > input$n_crit,
+      text = "Warning: Number of mechanical ventilators is greater than the number of critical care beds."
     )
   })
   
@@ -269,8 +275,8 @@ server <- function(input, output, session) {
   
   # Interpretation Box ----
   acute_data <- reactive(c(input$n_acute, input$lou_acute, 
-                           acuteBedRate(input$n_acute, input$lou_acute)
-                           ))
+                           acuteBedRate(input$n_acute, input$lou_acute))
+                         )
   
   output$acute_int <- renderText({
     input$tab_pop_cell_edit
@@ -281,8 +287,7 @@ server <- function(input, output, session) {
     )
   
   crit_data <- reactive(c(input$n_crit, input$lou_crit, 
-                           critBedRate(input$n_crit, input$lou_crit),
-                           rateCrit(x[, 'case_dist'], x[, 'cc_adm'])
+                           critBedRate(input$n_crit, input$lou_crit)
   ))
   
   output$crit_int <- renderText({
@@ -306,14 +311,7 @@ server <- function(input, output, session) {
   
   # Generate Reports ----
   output$report <- downloadHandler(
-    filename = function() {
-      fmt <- tolower(input$fmt)
-      if (fmt=="html") {
-        glue("COVID-19_report_{Sys.Date()}.html")
-      } else if (fmt=="pdf") {
-        glue("COVID-19_report_{Sys.Date()}.pdf") 
-      } 
-      },
+    filename = function() {glue("COVID-19_report_{Sys.Date()}.pdf")},
     
       content = function(file) {
       withProgress(message = "Generating report...",
@@ -322,24 +320,33 @@ server <- function(input, output, session) {
       incProgress(0.25)
       tempReport <- file.path(tempdir(), "report.Rmd")
       incProgress(0.25)
-      file.copy("text/report.Rmd", tempReport, overwrite = TRUE)
+      file.copy("lang/eng/report_pdf.Rmd", tempReport, 
+                overwrite = TRUE)
       incProgress(0.25)
       params <- list(
-        maxAcute = maxAcute(x[, 'case_dist'], x[, 'ac_adm'],
-                            input$n_acute, input$lou_acute), 
-        maxCrit = maxCrit(x[, 'case_dist'], x[, 'cc_adm'],
-                            input$n_crit, input$lou_crit), 
-        maxVent = maxVent(x[, 'case_dist'], x[, 'cc_adm'],
-                            input$n_crit, input$lou_crit, input$per_vent), 
-        inputData = x,
-        input = reactiveValuesToList(input)
+        widgets = reactiveValuesToList(input),
+        table = x,
+        outputs = list(
+          acute = acute_data(), 
+          ra = rateAcute(x[, "case_dist"], x[, "ac_adm"]),
+          ma = maxAcute(x[, "case_dist"], x[, "ac_adm"], 
+                   input$n_acute, input$lou_acute),
+          crit = crit_data(), 
+          rc = rateCrit(x[, "case_dist"], x[, "cc_adm"]),
+          mc = maxCrit(x[, "case_dist"], x[, "cc_adm"], 
+                  input$n_crit, input$lou_crit),
+          mvd = mv_data(),
+          rv = rateVent(x[, "case_dist"], x[, "cc_adm"], mv_data()[[4]]),
+          mv = maxVent(x[, "case_dist"], x[, "cc_adm"], 
+                  input$n_vent, input$lou_vent, input$per_vent)
+                    )
         )
       incProgress(0.25)
       rmarkdown::render(
         tempReport,
         output_file = file,
         params = params,
-        output_format = glue('{tolower(input$fmt)}_document'),
+        output_format = 'pdf_document',
         envir = new.env(parent = globalenv())
         )
       })

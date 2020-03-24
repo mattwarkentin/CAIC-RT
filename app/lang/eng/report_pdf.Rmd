@@ -1,0 +1,123 @@
+---
+title: "COVID-19 Acute and Intensive Care Resource Tool"
+subtitle: "Resource Utilization Report"
+date: "__Report Generated:__ `r paste0(Sys.time(), ' ', Sys.timezone())`"
+output: 
+  pdf_document:
+    latex_engine: xelatex
+geometry: margin=1in
+fontsize: 12pt
+header-includes:
+  - \usepackage{tcolorbox}
+  - \usepackage{titling}
+  - \usepackage{titlesec}
+  - \usepackage{fontspec}
+  - \usepackage{float}
+  - \usepackage{booktabs}
+  - \pretitle{\begin{flushleft}\LARGE \vskip -3em\textsc}
+  - \posttitle{\end{flushleft}}
+  - \predate{\begin{flushleft}}
+  - \postdate{\end{flushleft}}
+  - \setmainfont{Calibri}
+params:
+  widgets: NULL
+  table: NULL
+  outputs: NULL
+---
+
+\pagenumbering{gobble}
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo=FALSE, 
+  error = TRUE, 
+  message = FALSE, 
+  warning = FALSE,
+  out.width = "80%"
+  )
+
+library(tidyverse)
+library(scales)
+library(glue)
+library(knitr)
+library(kableExtra)
+```
+
+\begin{tcolorbox}
+\textbf{Authors:}
+\begin{itemize}
+  \item{Vasily Giannakeas, MPH \textsuperscript{1,2}}
+  \item{Deepit Bhatia, MPH}
+  \item{Matthew T. Warkentin, MSc \textsuperscript{2,3}}
+  \item{Isaac I. Bogoch, MD \textsuperscript{4,5}}
+  \item{Nathan M. Stall, MD \textsuperscript{1,4,6,7}}
+\end{itemize}
+\medskip
+
+\textbf{Description:} CAIC-RT is an online tool capable of estimating the maximum daily number of incident COVID-19 cases that a healthcare system could manage based on age-based case distribution and severity, and the number of available acute and critical care resources.
+
+\medskip
+{\tiny
+\begin{enumerate}
+  \item{Women's College Research Institute, Women's College Hospital, Toronto, Ontario, Canada}
+  \item{Dalla Lana School of Public Health, University of Toronto, Toronto, Ontario, Canada}
+  \item{Lunenfeld-Tanenbaum Research Institute, Sinai Health System, Toronto, Ontario, Canada}
+  \item{Department of Medicine, University of Toronto, Toronto, Ontario, Canada}
+  \item{Divisions of General Internal Medicine and Infectious Diseases, University Health Network, Toronto, Canada}
+  \item{Institute of Health Policy, Management and Evaluation, University of Toronto, Toronto, Ontario, Canada}
+  \item{Divisions of General Internal Medicine and Geriatrics, Sinai Health System, Toronto, Ontario, Canada}
+\end{enumerate}
+}
+\end{tcolorbox}
+
+```{r widget-inputs, include=FALSE}
+n_acute <- params$widgets$n_acute
+n_crit <- params$widgets$n_crit
+n_vent <- params$widgets$n_vent
+lou_acute <- params$widgets$lou_acute
+lou_crit<- params$widgets$lou_crit
+lou_vent <- params$widgets$lou_vent
+per_vent <- params$widgets$per_vent
+```
+
+```{r}
+tribble(
+  ~item, ~value,
+  "Mean days in acute care", lou_acute,
+  "Mean days in critical care", lou_crit,
+  "Mean days on a mechanical ventilator", lou_vent,
+  "Number of acute care beds", n_acute,
+  "Number of critical care beds", n_crit,
+  "Number of mechanical ventilators", n_vent,
+  "Percent patients requiring mechanical ventilation", per_vent
+) %>% 
+  kable(booktabs = TRUE, format.args = list(big.mark = ','),
+        caption = "Expected resource utilization and resource availability for COVID-19 patients.",
+        col.names = c('Input Parameter', 'Value')) %>% 
+  kable_styling(full_width = FALSE, position = 'center', latex_options = 'H')
+```
+
+
+```{r}
+kable(params$table, booktabs = TRUE, 
+      col.names = c('Age groups',
+                    'Case Distribution (%)',
+                    'Acute Care Admission (%)',
+                    'Critical Care Admission (%)'), 
+      caption = "Age-stratified case distribution and severity.") %>% 
+  kable_styling(full_width = FALSE, 
+                position = 'center', latex_options = 'H')
+```
+
+```{r results='asis'}
+glue('Based on {params$outputs$acute[[1]]} available mechanical ventilators with an average duration of use of {params$outputs$acute[[2]]} days, at maximum capacity the expected turnover rate is {params$outputs$acute[[3]]} ventilators per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring mechanical ventilation is {params$outputs$ra} percent. Given this, your healthcare environment has the capacity to manage a maximum of {params$outputs$ma} incident cases of COVID-19 per day.')
+```
+
+```{r results='asis'}
+glue('Based on {params$outputs$crit[[1]]} available mechanical ventilators with an average duration of use of {params$outputs$crit[[2]]} days, at maximum capacity the expected turnover rate is {params$outputs$crit[[3]]} ventilators per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring mechanical ventilation is {params$outputs$rc} percent. Given this, your healthcare environment has the capacity to manage a maximum of {params$outputs$mc} incident cases of COVID-19 per day.')
+```
+
+```{r results='asis'}
+glue('Based on {params$outputs$mvd[[1]]} available mechanical ventilators with an average duration of use of {params$outputs$mvd[[2]]} days, at maximum capacity the expected turnover rate is {params$outputs$mvd[[3]]} ventilators per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring mechanical ventilation is {params$outputs$rv} percent. Given this, your healthcare environment has the capacity to manage a maximum of {params$outputs$mv} incident cases of COVID-19 per day.')
+```
+

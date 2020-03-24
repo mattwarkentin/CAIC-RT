@@ -69,7 +69,6 @@ ui <-
                   href = "styles.css"),
         tags$link(rel = "stylesheet", type = "text/css", 
                   href = "tachyons.min.css"),
-        includeScript('www/analytics.js'),
         includeHTML('www/google-analytics.html')
       ),
       
@@ -197,12 +196,10 @@ ui <-
                                textOutput('mv_int'))
           ),
           ),
-#        wellPanel(
-#          radioButtons('fmt', 'Please choose your preferred output #format',
-#                       choices = c('HTML', 'PDF'), selected = 'HTML',
-#                       inline = TRUE),
-#          downloadButton('report', 'Generate Report')
-#          ),
+        wellPanel(
+          h4("PDF Report"),
+          downloadButton('report', 'Generate Report')
+          ),
             )
       )
       ),
@@ -212,7 +209,7 @@ ui <-
     tabPanel(
       'Help', 
       icon = icon('question'),
-      includeHTML('text/help.html')
+      includeHTML('lang/eng/help.html')
     ),
     
     # More Info tab ----
