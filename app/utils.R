@@ -1,16 +1,37 @@
 # Acute rate
 rateAcute <- function(x, y) {
-  sum((x * 0.01) * (y * 0.01)) * 100
+  stopifnot(length(x)==length(y))
+  if (any(is.na(x)) | any(is.na(y)) | any(y > 100) | any(y < 0)) {
+    NA
+  } else if (!dplyr::near(sum(x, na.rm = TRUE), 100, tol = 0.1)) {
+    NA
+  } else {
+    sum((x * 0.01) * (y * 0.01)) * 100
+  }
 }
 
 # Critical Rate
 rateCrit <- function(x, y) {
-  sum((x * 0.01) * (y * 0.01)) * 100
+  stopifnot(length(x)==length(y))
+  if (any(is.na(x)) | any(is.na(y)) | any(y > 100) | any(y < 0)) {
+    NA
+  } else if (!dplyr::near(sum(x, na.rm = TRUE), 100, tol = 0.1)) {
+    NA
+  } else {
+    sum((x * 0.01) * (y * 0.01)) * 100
+  }
 }
 
 # Ventilation Rate
 rateVent <- function(x, y, per_vent) {
-  sum((x * 0.01) * (y * 0.01) * (per_vent * 0.01)) * 100
+  stopifnot(length(x)==length(y))
+  if (any(is.na(x)) | any(is.na(y)) | any(y > 100) | any(y < 0)) {
+    NA
+  } else if (!dplyr::near(sum(x, na.rm = TRUE), 100, tol = 0.1)) {
+    NA
+  } else {
+    sum((x * 0.01) * (y * 0.01) * (per_vent * 0.01)) * 100
+  }
 }
 
 # Acute Bed Rate
@@ -37,6 +58,7 @@ maxAcute <- function(x, y, n_acute, lou_acute) {
     NA
   } else {
     (n_acute / lou_acute) / (sum((x * 0.01) * (y * 0.01), na.rm = TRUE))
+    
   }
 }
 

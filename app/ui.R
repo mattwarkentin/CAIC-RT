@@ -6,9 +6,27 @@ source('utils.R')
 
 # Footer text ----
 
-footer <- HTML(
-  '<hr /><footer><p>Developed by <a href="https://www.twitter.com/vasilepi" target="_blank">Vasily Giannakeas</a>, <a href="https://www.twitter.com/BreslowDay" target="_blank">Deepit Bhatia</a>, <a href="https://www.twitter.com/mattwrkntn" target="_blank">Matthew T. Warkentin</a>, <a href="https://www.twitter.com/BogochIsaac" target="_blank">Isaac I. Bogoch</a>, and <a href="https://www.twitter.com/NathanStall" target="_blank">Nathan M. Stall</a>.<p/></footer>'
-  )
+track_twitter <- function(name, handle, label, value = 1) {
+  a(
+    glue('{name}'),
+    href = glue('https://www.twitter.com/{handle}'),
+    target = '_blank',
+    #onclick = glue('ga("send", "event", "click", "link", "{label}", {value})')
+    )
+}
+
+footer <- 
+  HTML(
+    glue(
+      "<hr /><footer><p>Developed by ",
+      "{track_twitter('Vasily Giannakeas', 'vasilepi', 'twitter_vg', 1)}, ",
+      "{track_twitter('Deepit Bhatia', 'BreslowDay', 'twitter_db', 1)}, ",
+      "{track_twitter('Matthew T. Warkentin', 'mattwrkntn', 'twitter_mtw', 1)}, ",
+      "{track_twitter('Isaac I. Bogoch', 'BogochIsaac', 'twitter_iib', 1)}, ",
+      "and ",
+      "{track_twitter('Nathan M. Stall', 'NathanStall', 'twitter_nms', 1)}",
+      " (Toronto, Canada).<p/></footer>"
+    ))
 
 # Meta Content ----
 tool_meta <- 
@@ -51,6 +69,7 @@ ui <-
                   href = "styles.css"),
         tags$link(rel = "stylesheet", type = "text/css", 
                   href = "tachyons.min.css"),
+        includeScript('www/analytics.js'),
         includeHTML('www/google-analytics.html')
       ),
       
@@ -59,15 +78,15 @@ ui <-
         # First Column ----
         column(3,
                span(HTML(glue("{strong('Last Updated:')} {Sys.Date()}"))),
-            actionButton('about', 'About This Tool', icon = icon('info'), 
+            actionButton('about_tool', 'About This Tool', icon = icon('info'), 
                          class = "ma2 btn-primary", style = 'font-variant: small-caps;'),
                wellPanel(
-               h4('Expected Length of Stay for COVID-19 Cases'),
+               h4('Expected Resource Utilization for COVID-19 Patients'),
                numericInput(inputId = "lou_acute",
                             label = HTML("Mean days in acute care<sup>1</sup>"),
                             value = 11, min = 1),
                bsTooltip("lou_acute", 
-                         "Note: Acute care days are mutually exclusive with critical care and ventilator days.", 
+                         "Note: Acute care days are mutually exclusive of critical care and ventilator days.", 
                          placement = "bottom", trigger = 'hover',
                          options = list(container = "body")),
                
@@ -75,7 +94,7 @@ ui <-
                             label = HTML("Mean days in critical care<sup>1</sup>"),
                             value = 20, min = 1),
                bsTooltip("lou_crit", 
-                         "Note: Critical care days are mutually exclusive with acute care days. Total number of days spent in critical care are equal to the number of days spent in critical care with or without a ventilator.", 
+                         "Note: Critical care days are mutually exclusive of acute care days. Total number of days spent in critical care are equal to the number of days spent in critical care with or without a ventilator.", 
                          placement = "bottom", trigger = 'hover',
                          options = list(container = "body")),
                
@@ -83,24 +102,24 @@ ui <-
                             label = HTML("Mean days on a mechanical ventilator<sup>1</sup>"),
                             value = 20, min = 1),
                bsTooltip("lou_vent", 
-                         "Note: Days spent on mechanical ventilator are assumed to be spent in a critical care bed.", 
+                         "Note: Days spent on a mechanical ventilator are assumed to be spent in a critical care bed.", 
                          placement = "bottom", trigger = 'hover',
                          options = list(container = "body")),
                
-               p(HTML('<sup>1</sup> Default values are based on Chinese data extracted from Zhou <em>et al.</em> (2020) and Wang <em>et al.</em> (2020). See <strong>Help</strong> page for full citations.'), class = 'f5'),
+               p(HTML('<sup>1</sup> Default values are based on data extracted from Zhou <em>et al.</em> (2020) and Wang <em>et al.</em> (2020), collected in China. See <strong>Help</strong> page for full citations.'), class = 'f5'),
                )
                ),
         
         # Second Column ----
         column(3,
                wellPanel(
-               h4('Resource Availability for COVID-19 Cases'),
+               h4('Resource Availability'),
                
                numericInput(inputId = "n_acute",
-                            label = HTML("Number of available acute care beds<sup>2</sup>"),
+                            label = HTML("Number of acute care beds for COVID-19 patients<sup>2</sup>"),
                             value = 8378, min = 0),
                bsTooltip("n_acute", 
-                         "Note: This is the number of acute care beds that are available for COVID-19 patients.", 
+                         "Note: This is the total number of acute care beds that are available for or are currently being used by COVID-19 patients.", 
                          placement = "bottom", trigger = 'hover',
                          options = list(container = "body")),
                actionButton('acute', 'Calculate Acute Care Beds',
@@ -108,10 +127,10 @@ ui <-
                hr(),
                
                numericInput(inputId = "n_crit",
-                            label = HTML("Number of available critical care beds<sup>2</sup>"),
+                            label = HTML("Number of critical care beds for COVID-19 patients<sup>2</sup>"),
                             value = 513, min = 0),
                bsTooltip("n_crit", 
-                         "Note: This is the number of critical care beds that are available for COVID-19 patients.", 
+                         "Note: This is the total number of critical care beds that are available for or are currently being used by COVID-19 patients.", 
                          placement = "bottom", trigger = 'hover',
                          options = list(container = "body")),
                actionButton('critical', 'Calculate Critical Care Beds',
@@ -119,10 +138,10 @@ ui <-
                hr(),
                
                numericInput(inputId = "n_vent",
-                            label = HTML("Number of available mechanical ventilators<sup>2</sup>"),
+                            label = HTML("Number of mechanical ventilators for COVID-19 patients<sup>2</sup>"),
                             value = 328, min = 0),
                bsTooltip("n_vent", 
-                         "Note: This is the number of mechanical ventilators that are available for COVID-19 patients.", 
+                         "Note: This is the total number of mechanical ventilators that are available for or are currently being used by COVID-19 patients.", 
                          placement = "bottom", trigger = 'hover',
                          options = list(container = "body")),
                actionButton('mvent', 'Calculate Mechanical Ventilators',
@@ -130,15 +149,15 @@ ui <-
                hr(),
                
                sliderInput(inputId = "per_vent",
-                            label = HTML("Percent of critical care patients requiring mechanical ventilators<sup>1</sup>"),
+                            label = HTML("Percent of critical care patients requiring mechanical ventilation<sup>1</sup>"),
                             value = 50, min = 0, max = 100, step = 1, 
                            post = '%'),
                bsTooltip("per_vent", 
-                         "Note: This is the percentage of COVID-19 critical care patients that will require mechanical ventilators.", 
+                         "Note: This is the percentage of COVID-19 critical care patients requiring mechanical ventilation.", 
                          placement = "bottom", trigger = 'hover',
                          options = list(container = "body")),
-               p(HTML('<sup>1</sup> Default values are based on Chinese data extracted from Zhou <em>et al.</em> (2020) and Wang <em>et al.</em> (2020). See <strong>Help</strong> page for full citations.'), class = 'f5'),
-               p(HTML('<sup>2</sup> Default values are based on Ontario data extracted from Barrett <em>et al.</em> (2020). See <strong>Help</strong> page for full citations.'), class = 'f5')
+               p(HTML('<sup>1</sup> Default values are based on data extracted from Zhou <em>et al.</em> (2020) and Wang <em>et al.</em> (2020), collected in China. See <strong>Help</strong> page for full citations.'), class = 'f5'),
+               p(HTML('<sup>2</sup> Default values are based on data extracted from Barrett <em>et al.</em> (2020), collected in Ontario. See <strong>Help</strong> page for full citations.'), class = 'f5')
                )),
         
         # Third Column ----
@@ -153,8 +172,8 @@ ui <-
               ),
         
         h4('Maximum daily number of incident COVID-19 cases manageable by healthcare system'),
-        p('The values shown below are thresholds for the maximum daily number of new COVID-19 cases that can occur without causing a resource deficit. In other words, if more cases occur than the values shown, the amount of acute care beds, critical care beds, and mechanical ventilators would be insufficient to meet regional healthcare needs.', class = 'navy'),
-        
+        p("The values shown below are thresholds for the maximum daily number of incident COVID-19 cases that can occur without causing a resource deficit. In other words, if more cases occur than the values shown below, the amount of acute care beds, critical care beds, and/or mechanical ventilators would be insufficient to meet the healthcare system's needs.", class = 'navy'),
+
         span(dropdownButton(size = 'xs', icon = icon('cog'),
                             tooltip = TRUE, inline = TRUE, width = '100px',
                             selectInput('colors', 'Choose Colour Palette',
@@ -164,7 +183,20 @@ ui <-
                                         selected = 'YlOrRd', 
                                         multiple = FALSE)),
              plotlyOutput('plot')),
-        br(),
+        wellPanel(
+          h4("Interpreting the Results"),
+          tabsetPanel(id = 'intepretations',
+                      tabPanel('Acute Care',
+                               br(),
+                               textOutput('acute_int')),
+                      tabPanel('Critical Care',
+                               br(),
+                               textOutput('crit_int')),
+                      tabPanel('Mechanical Ventilators',
+                               br(),
+                               textOutput('mv_int'))
+          ),
+          ),
 #        wellPanel(
 #          radioButtons('fmt', 'Please choose your preferred output #format',
 #                       choices = c('HTML', 'PDF'), selected = 'HTML',
@@ -188,10 +220,12 @@ ui <-
       'More Info',
       tabPanel(a(span(icon('file-medical-alt'),"See the article"), 
                  href="#",
-                 target="_blank")),
+                 target="_blank"
+                 )),
       tabPanel(a(span(icon('github'),"See the code"), 
-                 href="https://www.github.com/mattwarkentin/covid-hospitalization-app",
-                 target="_blank")
+                 href="https://www.github.com/mattwarkentin/CAIC-RT",
+                 target="_blank"
+                 )
     )
   )
   )

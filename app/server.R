@@ -22,7 +22,7 @@ server <- function(input, output, session) {
   }
   )
   
-  observeEvent(input$about, {
+  observeEvent(input$about_tool, {
     showModal(modalDialog(
       includeHTML("text/intro_text.html"),
       easyClose = TRUE, size = 'm', 
@@ -43,10 +43,10 @@ server <- function(input, output, session) {
       easyClose = TRUE, size = 'm',
       numericInput('tot_ac_bed', 'Total number of acute care beds', 
                    min = 0, value = tot_ac_bed),
-      sliderInput('tot_ac_av', "Percent of acute care beds available for COVID-19 cases",
+      sliderInput('tot_ac_av', "Percent of acute care beds available for or currently being used by COVID-19 cases",
                   min = 0, max = 100, value = tot_ac_av, step = 1,
                   post = '%'),
-      numericInput('tot_ac_sur', "Surge acute care beds available for COVID-19 cases",
+      numericInput('tot_ac_sur', "Acute care bed surge capacity for COVID-19 cases (number of beds)",
                    min = 0, max = 100, value = tot_ac_sur),
       actionButton('submit_ac', "Apply Changes", 
                    class = 'btn-success')
@@ -77,10 +77,10 @@ server <- function(input, output, session) {
       easyClose = TRUE, size = 'm',
       numericInput('tot_cc_bed', 'Total number of critical care beds', 
                    min = 0, value = tot_cc_bed),
-      sliderInput('tot_cc_av', "Percent of critical care beds available for COVID-19 cases",
+      sliderInput('tot_cc_av', "Percent of critical care beds available for or currently being used by COVID-19 cases",
                   min = 0, max = 100, value = tot_cc_av, step = 1,
                   post = '%'),
-      numericInput('tot_cc_sur', "Surge critical care beds available for COVID-19 cases",
+      numericInput('tot_cc_sur', "Critical care bed surge capacity for COVID-19 cases (number of beds)",
                    min = 0, max = 100, value = tot_cc_sur),
       actionButton('submit_cc', "Apply Changes", 
                    class = 'btn-success')
@@ -111,10 +111,10 @@ server <- function(input, output, session) {
       easyClose = TRUE, size = 'm',
       numericInput('tot_mv_bed', 'Total number of mechanical ventilators', 
                    min = 0, value = tot_mv_bed),
-      sliderInput('tot_mv_av', "Percent of mechanical ventilators available for COVID-19 cases",
+      sliderInput('tot_mv_av', "Percent of mechanical ventilators available for or currently being used by COVID-19 cases",
                   min = 0, max = 100, value = tot_mv_av, step = 1,
                   post = '%'),
-      numericInput('tot_mv_sur', "Surge mechanical ventilators available for COVID-19 cases",
+      numericInput('tot_mv_sur', "Mechanical ventilator surge capacity for COVID-19 cases (number of ventilators)",
                    min = 0, max = 100, value = tot_mv_sur),
       actionButton('submit_mv', "Apply Changes", 
                    class = 'btn-success')
@@ -160,32 +160,31 @@ server <- function(input, output, session) {
   
   x <- data.frame(default_table)
   
-  output$tab_pop <-
-    DT::renderDT(
+  output$tab_pop <- DT::renderDT(
       DT::datatable(
-      x,
-      editable = 'column',
-      selection = 'none',
-      rownames = FALSE,
-      extensions = c('Buttons'),
-      options = list(
-        paging = FALSE,
-        searching = FALSE,
-        ordering = FALSE,
-        dom = 'tB',
-        keys = TRUE,
-        buttons = c('copy', 'csv', 'excel')),
-      colnames = c("Age groups", "Case distribution [report as %]", 
-                   "Acute care admission [report as %]", 
-                   "Critical care admission [report as %]")
+        x,
+        editable = 'column',
+        selection = 'none',
+        rownames = FALSE,
+        extensions = c('Buttons'),
+        options = list(
+          paging = FALSE,
+          searching = FALSE,
+          ordering = FALSE,
+          dom = 'tB',
+          keys = TRUE,
+          buttons = c('copy', 'csv', 'excel')),
+        colnames = c("Age groups", 
+                     "Case distribution (%)", 
+                     "Acute care admission (%)", 
+                     "Critical care admission (%)")
       ) %>% 
         formatString(columns = c(2,3,4), suffix = '%')
-      )
+    )
   
   proxy <- dataTableProxy('tab_pop')
   
   observeEvent(input$tab_pop_cell_edit, {
-    
     x <<- editData(x, input$tab_pop_cell_edit, 'proxy', rownames = FALSE)
     
     if (any(is.na(x[, 2:4]), na.rm = TRUE)) {
@@ -197,25 +196,29 @@ server <- function(input, output, session) {
     }
     
     if (any(x[, 'ac_adm']>100 | x[, 'ac_adm']<0, na.rm = TRUE)) {
-      shinyalert('Uh oh!', 'The admission rate cannot be less than 0% or greater than 100%. Please check your numbers!', type = 'error')
+      shinyalert('Uh oh!', 'Admission rates cannot be less than 0% or greater than 100%. Please check your numbers!', type = 'error')
     }
     
     if (any(x[, 'cc_adm']>100 | x[, 'cc_adm']<0, na.rm = TRUE)) {
-      shinyalert('Uh oh!', 'The admission rate cannot be less than 0% or greater than 100%. Please check your numbers!', type = 'error')
+      shinyalert('Uh oh!', 'Admission rates cannot be less than 0% or greater than 100%. Please check your numbers!', type = 'error')
       x[, 'cc_adm']
     }
     
   })
   
   # Plotly Results ----
+  
   output$plot <- renderPlotly({
     input$tab_pop_cell_edit
+    
     ma <- maxAcute(x[, 'case_dist'], x[, 'ac_adm'], 
-                   input$n_acute, input$lou_acute)
+                            input$n_acute, input$lou_acute)
+    
     mc <- maxCrit(x[, 'case_dist'], x[, 'cc_adm'], 
-                  input$n_crit, input$lou_crit)
+                           input$n_crit, input$lou_crit)
+    
     mv <- maxVent(x[, 'case_dist'], x[, 'cc_adm'], 
-                  input$n_vent, input$lou_vent, input$per_vent)
+                           input$n_vent, input$lou_vent, input$per_vent)
     
     color_scale <- switch(input$colors,
       YlOrRd = scale_fill_manual(values = c('#FFEC19', '#FF9800', '#F6412D')),
@@ -234,7 +237,7 @@ server <- function(input, output, session) {
     )
     
     if (all(is.na(ma), is.na(mv), is.na(mc))) {
-      p <- ggplot(plot_data, aes(glue("{name}\n ({value} new cases/day)"), value, fill = name, text = glue("The number of available {name}\n in this healthcare system can manage\n a maximum of {value} daily cases of COVID-19"))) +
+      p <- ggplot(plot_data, aes(glue("{name}\n ({value} new cases/day)"), value, fill = name, text = glue("The number of available {tolower(name)}\n in this healthcare system can manage\n a maximum of {value} daily cases of COVID-19"))) +
         labs(x = '', 
              y = 'Maximum Daily Number of Cases') + 
         color_scale +
@@ -245,7 +248,7 @@ server <- function(input, output, session) {
     } else {
     
     p <- ggplot(plot_data, aes(glue("{name}\n ({scales::comma(value)} new cases/day)"), value, fill = name,
-      text = glue("The number of available {name}\n in this healthcare system can manage\n a maximum of {scales::comma(value)} daily cases of COVID-19"))) +
+      text = glue("The number of available {tolower(name)}\n in this healthcare system can manage\n a maximum of {scales::comma(value)} daily new cases of COVID-19"))) +
       geom_col(show.legend = FALSE, col = 'black') +
       labs(x = '', 
             y = 'Maximum Daily Number of Cases') + 
@@ -264,6 +267,42 @@ server <- function(input, output, session) {
     
   })
   
+  # Interpretation Box ----
+  acute_data <- reactive(c(input$n_acute, input$lou_acute, 
+                           acuteBedRate(input$n_acute, input$lou_acute)
+                           ))
+  
+  output$acute_int <- renderText({
+    input$tab_pop_cell_edit
+    
+    glue('Based on {format(acute_data()[[1]], big.mark = ",")} available acute care beds and an average length of stay of {acute_data()[[2]]} days, at maximum capacity the expected turnover rate is {format(acute_data()[[3]], big.mark = ",", digits = 0)} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring an acute care bed is {round(rateAcute(x[, "case_dist"], x[, "ac_adm"]), 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(maxAcute(x[, "case_dist"], x[, "ac_adm"], 
+                                 input$n_acute, input$lou_acute), big.mark = ",", digits = 0)} incident cases of COVID-19 per day.')
+  }
+    )
+  
+  crit_data <- reactive(c(input$n_crit, input$lou_crit, 
+                           critBedRate(input$n_crit, input$lou_crit),
+                           rateCrit(x[, 'case_dist'], x[, 'cc_adm'])
+  ))
+  
+  output$crit_int <- renderText({
+    input$tab_pop_cell_edit
+    glue('Based on {format(crit_data()[[1]], big.mark = ",", digits = 0)} available critical care beds and an average length of stay of {crit_data()[[2]]} days, at maximum capacity the expected turnover rate is {format(crit_data()[[3]], big.mark = ",", digits = 0)} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring a critical care bed is {round(rateCrit(x[, "case_dist"], x[, "cc_adm"]), 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(maxCrit(x[, "case_dist"], x[, "cc_adm"], 
+                input$n_crit, input$lou_crit), big.mark = ",", digits = 0)} incident cases of COVID-19 per day.')
+  }
+  )
+  
+  mv_data <- reactive(c(input$n_vent, input$lou_vent, 
+                        ventBedRate(input$n_vent, input$lou_vent),
+                        input$per_vent
+  ))
+  
+  output$mv_int <- renderText({
+    input$tab_pop_cell_edit
+    glue('Based on {format(mv_data()[[1]], big.mark = ",", digits = 0)} available mechanical ventilators with an average duration of use of {mv_data()[[2]]} days, at maximum capacity the expected turnover rate is {format(mv_data()[[3]], big.mark = ",", digits = 0)} ventilators per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring mechanical ventilation is {round(rateVent(x[, "case_dist"], x[, "cc_adm"], mv_data()[[4]]), 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(maxVent(x[, "case_dist"], x[, "cc_adm"], 
+                input$n_vent, input$lou_vent, input$per_vent), big.mark = ",", digits = 0)} incident cases of COVID-19 per day.')
+  }
+  )
   
   # Generate Reports ----
   output$report <- downloadHandler(
