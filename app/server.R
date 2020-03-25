@@ -24,7 +24,7 @@ server <- function(input, output, session) {
   
   observeEvent(input$about_tool, {
     showModal(modalDialog(
-      includeHTML("text/intro_text.html"),
+      includeHTML("lang/eng/intro_text.html"),
       easyClose = TRUE, size = 'm', 
       title = HTML('CAIC-RT: COVID-19 Acute and Intensive Care Resource Tool')
     ))

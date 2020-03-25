@@ -195,11 +195,7 @@ ui <-
                                br(),
                                textOutput('mv_int'))
           ),
-          ),
-        wellPanel(
-          h4("PDF Report"),
-          downloadButton('report', 'Generate Report')
-          ),
+          )
             )
       )
       ),
