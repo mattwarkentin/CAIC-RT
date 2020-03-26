@@ -4,6 +4,7 @@ stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://
 [![](https://img.shields.io/github/last-commit/mattwarkentin/CAIC-RT.svg)](https://github.com/mattwarkentin/CAIC-RT/commits/master)
 ![GitHub repo
 size](https://img.shields.io/github/repo-size/mattwarkentin/CAIC-RT)
+[![Licence](https://img.shields.io/github/license/mashape/apistatus.svg)](http://choosealicense.com/licenses/mit/)
 
 ### CAIC-RT: COVID-19 Acute and Intensive Care Resource Tool
 
