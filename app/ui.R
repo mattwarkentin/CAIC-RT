@@ -105,7 +105,7 @@ ui <-
                          placement = "bottom", trigger = 'hover',
                          options = list(container = "body")),
                
-               p(HTML('<sup>1</sup> Default values are based on data extracted from Zhou <em>et al.</em> (2020) and Wang <em>et al.</em> (2020), collected in China. See <strong>Help</strong> page for full citations.'), class = 'f5'),
+               p(HTML('<sup>1</sup> Default values are based on data extracted from Zhou <em>et al.</em> (2020), Yang <em>et al.</em> (2020), and Wang <em>et al.</em> (2020), collected in China. See <strong>Help</strong> page for full citations.'), class = 'f5'),
                )
                ),
         
@@ -195,7 +195,11 @@ ui <-
                                br(),
                                textOutput('mv_int'))
           ),
-          )
+          ),
+        wellPanel(
+          h4("PDF Report"),
+          downloadButton('report', 'Generate Report')
+        )
             )
       )
       ),

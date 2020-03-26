@@ -164,11 +164,11 @@ server <- function(input, output, session) {
   
   # Data Table ----
   
-  x <- data.frame(default_table)
+  x <- reactiveVal(default_table)
   
   output$tab_pop <- DT::renderDT(
       DT::datatable(
-        x,
+        x(),
         editable = 'column',
         selection = 'none',
         rownames = FALSE,
@@ -191,59 +191,81 @@ server <- function(input, output, session) {
   proxy <- dataTableProxy('tab_pop')
   
   observeEvent(input$tab_pop_cell_edit, {
-    x <<- editData(x, input$tab_pop_cell_edit, 'proxy', rownames = FALSE)
+    new <- editData(x(), input$tab_pop_cell_edit, 'proxy', rownames = FALSE)
+    x(new)
     
-    if (any(is.na(x[, 2:4]), na.rm = TRUE)) {
+    if (any(is.na(x()[, 2:4]), na.rm = TRUE)) {
       shinyalert('Uh oh!', 'This column can only accept numeric inputs. Please check your numbers!', type = 'error')
     } 
     
-    if (!dplyr::near(sum(x[, 'case_dist'], na.rm = TRUE), 100, tol = 0.1)) {
+    if (!dplyr::near(sum(x()[, 'case_dist'], na.rm = TRUE), 100, tol = 0.1)) {
       shinyalert('Uh oh!', 'The case distribution column must sum to 100%. Please check your numbers!', type = 'error')
     }
     
-    if (any(x[, 'ac_adm']>100 | x[, 'ac_adm']<0, na.rm = TRUE)) {
+    if (any(x()[, 'ac_adm']>100 | x()[, 'ac_adm']<0, na.rm = TRUE)) {
       shinyalert('Uh oh!', 'Admission rates cannot be less than 0% or greater than 100%. Please check your numbers!', type = 'error')
     }
     
-    if (any(x[, 'cc_adm']>100 | x[, 'cc_adm']<0, na.rm = TRUE)) {
+    if (any(x()[, 'cc_adm']>100 | x()[, 'cc_adm']<0, na.rm = TRUE)) {
       shinyalert('Uh oh!', 'Admission rates cannot be less than 0% or greater than 100%. Please check your numbers!', type = 'error')
-      x[, 'cc_adm']
     }
     
   })
+  
+  # Output Results ----
+  
+  # Acute Care Data
+  n_acute <- reactive(input$n_acute)
+  lou_acute <- reactive(input$lou_acute)
+  rateAcuteR <- reactive({rateAcute(x()[, "case_dist"], x()[, "ac_adm"])})
+  acuteBedRateR <- reactive({acuteBedRate(input$n_acute, input$lou_acute)})
+  maxAcuteR <- reactive({maxAcute(x()[, 'case_dist'], x()[, 'ac_adm'], 
+                                input$n_acute, input$lou_acute)})
+  
+  # Critical Care Data
+  n_crit <- reactive(input$n_crit)
+  lou_crit <- reactive(input$lou_crit)
+  rateCritR <- reactive({rateCrit(x()[, "case_dist"], x()[, "cc_adm"])})
+  critBedRateR <- reactive({critBedRate(input$n_crit, input$lou_crit)})
+  maxCritR <- reactive({maxCrit(x()[, 'case_dist'], x()[, 'cc_adm'], 
+                          input$n_crit, input$lou_crit)})
+  
+  # Mechanical Ventilator Data
+  n_vent <- reactive(input$n_vent)
+  lou_vent <- reactive(input$lou_vent)
+  per_vent <- reactive(input$per_vent)
+  rateVentR <- reactive({rateVent(x()[, "case_dist"], x()[, "cc_adm"], 
+                       input$per_vent)})
+  ventBedRateR <- reactive({ventBedRate(input$n_vent, input$lou_vent)})
+  maxVentR <- reactive({maxVent(x()[, 'case_dist'], x()[, 'cc_adm'], 
+                           input$n_vent, input$lou_vent, input$per_vent)})
+  
+  # Plot Data
+  plot_data <- reactive(
+    tribble(
+      ~name, ~value,
+      "Acute Care Beds", maxAcuteR(),
+      "Critical Care Beds", maxCritR(),
+      "Mechanical Ventilators", maxVentR()
+    )
+  )
   
   # Plotly Results ----
   
   output$plot <- renderPlotly({
     input$tab_pop_cell_edit
     
-    ma <- maxAcute(x[, 'case_dist'], x[, 'ac_adm'], 
-                            input$n_acute, input$lou_acute)
-    
-    mc <- maxCrit(x[, 'case_dist'], x[, 'cc_adm'], 
-                           input$n_crit, input$lou_crit)
-    
-    mv <- maxVent(x[, 'case_dist'], x[, 'cc_adm'], 
-                           input$n_vent, input$lou_vent, input$per_vent)
-    
     color_scale <- switch(input$colors,
-      YlOrRd = scale_fill_manual(values = c('#FFEC19', '#FF9800', '#F6412D')),
-      Viridis = scale_fill_viridis_d(),
-      Grayscale = scale_fill_grey(),
-      Pastel = scale_fill_brewer(palette = 'Set2'),
-      Brewer = scale_fill_brewer(),
-      Default = scale_fill_hue()
+                          YlOrRd = scale_fill_manual(values = c('#FFEC19', '#FF9800', '#F6412D')),
+                          Viridis = scale_fill_viridis_d(),
+                          Grayscale = scale_fill_grey(),
+                          Pastel = scale_fill_brewer(palette = 'Set2'),
+                          Brewer = scale_fill_brewer(),
+                          Default = scale_fill_hue()
     )
     
-    plot_data <- tribble(
-      ~name, ~value,
-      "Acute Care Beds", ma,
-      "Critical Care Beds", mc,
-      "Mechanical Ventilators", mv
-    )
-    
-    if (all(is.na(ma), is.na(mv), is.na(mc))) {
-      p <- ggplot(plot_data, aes(glue("{name}\n ({value} new cases/day)"), value, fill = name, text = glue("The number of available {tolower(name)}\n in this healthcare system can manage\n a maximum of {value} daily cases of COVID-19"))) +
+    if (all(is.na(maxAcuteR()), is.na(maxCritR()), is.na(maxVentR()))) {
+      p <- ggplot(plot_data(), aes(glue("{name}\n ({value} new cases/day)"), value, fill = name, text = glue("The number of available {tolower(name)}\n in this healthcare system can manage\n a maximum of {value} daily cases of COVID-19"))) +
         labs(x = '', 
              y = 'Maximum Daily Number of Cases') + 
         color_scale +
@@ -252,18 +274,18 @@ server <- function(input, output, session) {
               axis.text.x = element_text(angle = 25))
       p
     } else {
-    
-    p <- ggplot(plot_data, aes(glue("{name}\n ({scales::comma(value)} new cases/day)"), value, fill = name,
-      text = glue("The number of available {tolower(name)}\n in this healthcare system can manage\n a maximum of {scales::comma(value)} daily new cases of COVID-19"))) +
-      geom_col(show.legend = FALSE, col = 'black') +
-      labs(x = '', 
-            y = 'Maximum Daily Number of Cases') + 
-      color_scale +
-      scale_y_continuous(labels = scales::comma_format()) +
-      theme_classic() +
-      theme(legend.position = 'none',
-            axis.text.x = element_text(angle = 25))
-    p
+      
+      p <- ggplot(plot_data(), aes(glue("{name}\n ({scales::comma(value)} new cases/day)"), value, fill = name,
+                                   text = glue("The number of available {tolower(name)}\n in this healthcare system can manage\n a maximum of {scales::comma(value)} daily new cases of COVID-19"))) +
+        geom_col(show.legend = FALSE, col = 'black') +
+        labs(x = '', 
+             y = 'Maximum Daily Number of Cases') + 
+        color_scale +
+        scale_y_continuous(labels = scales::comma_format()) +
+        theme_classic() +
+        theme(legend.position = 'none',
+              axis.text.x = element_text(angle = 25))
+      p
     }
     
     ggplotly(p, tooltip = 'text') %>% 
@@ -274,38 +296,24 @@ server <- function(input, output, session) {
   })
   
   # Interpretation Box ----
-  acute_data <- reactive(c(input$n_acute, input$lou_acute, 
-                           acuteBedRate(input$n_acute, input$lou_acute))
-                         )
   
   output$acute_int <- renderText({
     input$tab_pop_cell_edit
     
-    glue('Based on {format(acute_data()[[1]], big.mark = ",")} available acute care beds and an average length of stay of {acute_data()[[2]]} days, at maximum capacity the expected turnover rate is {format(acute_data()[[3]], big.mark = ",", digits = 0)} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring an acute care bed is {round(rateAcute(x[, "case_dist"], x[, "ac_adm"]), 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(maxAcute(x[, "case_dist"], x[, "ac_adm"], 
-                                 input$n_acute, input$lou_acute), big.mark = ",", digits = 0)} incident cases of COVID-19 per day.')
-  }
-    )
-  
-  crit_data <- reactive(c(input$n_crit, input$lou_crit, 
-                           critBedRate(input$n_crit, input$lou_crit)
-  ))
-  
-  output$crit_int <- renderText({
-    input$tab_pop_cell_edit
-    glue('Based on {format(crit_data()[[1]], big.mark = ",", digits = 0)} available critical care beds and an average length of stay of {crit_data()[[2]]} days, at maximum capacity the expected turnover rate is {format(crit_data()[[3]], big.mark = ",", digits = 0)} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring a critical care bed is {round(rateCrit(x[, "case_dist"], x[, "cc_adm"]), 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(maxCrit(x[, "case_dist"], x[, "cc_adm"], 
-                input$n_crit, input$lou_crit), big.mark = ",", digits = 0)} incident cases of COVID-19 per day.')
+    glue('Based on {format(n_acute(), big.mark = ",")} available acute care beds and an average length of stay of {lou_acute()} days, at maximum capacity the expected turnover rate is {format(acuteBedRateR(), big.mark = ",", digits = 0)} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring an acute care bed is {round(rateAcuteR(), 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(maxAcuteR(), big.mark = ",", digits = 0)} incident cases of COVID-19 per day.')
   }
   )
   
-  mv_data <- reactive(c(input$n_vent, input$lou_vent, 
-                        ventBedRate(input$n_vent, input$lou_vent),
-                        input$per_vent
-  ))
+  output$crit_int <- renderText({
+    input$tab_pop_cell_edit
+    
+    glue('Based on {format(n_crit(), big.mark = ",", digits = 0)} available critical care beds and an average length of stay of {lou_crit()} days, at maximum capacity the expected turnover rate is {format(critBedRateR(), big.mark = ",", digits = 0)} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring a critical care bed is {round(rateCritR(), 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(maxCritR(), big.mark = ",", digits = 0)} incident cases of COVID-19 per day.')
+  }
+  )
   
   output$mv_int <- renderText({
     input$tab_pop_cell_edit
-    glue('Based on {format(mv_data()[[1]], big.mark = ",", digits = 0)} available mechanical ventilators with an average duration of use of {mv_data()[[2]]} days, at maximum capacity the expected turnover rate is {format(mv_data()[[3]], big.mark = ",", digits = 0)} ventilators per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring mechanical ventilation is {round(rateVent(x[, "case_dist"], x[, "cc_adm"], mv_data()[[4]]), 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(maxVent(x[, "case_dist"], x[, "cc_adm"], 
-                input$n_vent, input$lou_vent, input$per_vent), big.mark = ",", digits = 0)} incident cases of COVID-19 per day.')
+    glue('Based on {format(n_vent(), big.mark = ",", digits = 0)} available mechanical ventilators with an average duration of use of {lou_vent()} days, at maximum capacity the expected turnover rate is {format(ventBedRateR(), big.mark = ",", digits = 0)} ventilators per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring mechanical ventilation is {round(rateVentR(), 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(maxVentR(), big.mark = ",", digits = 0)} incident cases of COVID-19 per day.')
   }
   )
   
@@ -313,43 +321,52 @@ server <- function(input, output, session) {
   output$report <- downloadHandler(
     filename = function() {glue("COVID-19_report_{Sys.Date()}.pdf")},
     
-      content = function(file) {
+    content = function(file) {
       withProgress(message = "Generating report...",
                    detail = 'Hold tight, this may take a few moments.',
                    {
-      incProgress(0.25)
-      tempReport <- file.path(tempdir(), "report.Rmd")
-      incProgress(0.25)
-      file.copy("lang/eng/report_pdf.Rmd", tempReport, 
-                overwrite = TRUE)
-      incProgress(0.25)
-      params <- list(
-        widgets = reactiveValuesToList(input),
-        table = x,
-        outputs = list(
-          acute = acute_data(), 
-          ra = rateAcute(x[, "case_dist"], x[, "ac_adm"]),
-          ma = maxAcute(x[, "case_dist"], x[, "ac_adm"], 
-                   input$n_acute, input$lou_acute),
-          crit = crit_data(), 
-          rc = rateCrit(x[, "case_dist"], x[, "cc_adm"]),
-          mc = maxCrit(x[, "case_dist"], x[, "cc_adm"], 
-                  input$n_crit, input$lou_crit),
-          mvd = mv_data(),
-          rv = rateVent(x[, "case_dist"], x[, "cc_adm"], mv_data()[[4]]),
-          mv = maxVent(x[, "case_dist"], x[, "cc_adm"], 
-                  input$n_vent, input$lou_vent, input$per_vent)
-                    )
-        )
-      incProgress(0.25)
-      rmarkdown::render(
-        tempReport,
-        output_file = file,
-        params = params,
-        output_format = 'pdf_document',
-        envir = new.env(parent = globalenv())
-        )
-      })
+                     incProgress(0.25)
+                     tempReport <- file.path(tempdir(), "report.Rmd")
+                     incProgress(0.25)
+                     file.copy("lang/eng/report_pdf.Rmd", tempReport, 
+                               overwrite = TRUE)
+                     incProgress(0.25)
+                     params <- list(
+                       widgets = reactiveValuesToList(input),
+                       table = x(),
+                       outputs = list(
+                         acute = list(
+                           n_acute = n_acute(),
+                           lou_acute = lou_acute(),
+                           rateAcute = rateAcuteR(),
+                           acuteBedRate = acuteBedRateR(),
+                           maxAcute = maxAcuteR()
+                         ),
+                         crit = list(
+                           n_crit = n_crit(),
+                           lou_crit = lou_crit(),
+                           rateCrit = rateCritR(),
+                           critBedRate = critBedRateR(),
+                           maxCrit = maxCritR()
+                         ), 
+                         mvent = list(
+                           n_vent = n_vent(),
+                           lou_vent = lou_vent(),
+                           per_vent = per_vent(),
+                           rateVent = rateVentR(),
+                           ventBedRate = ventBedRateR(),
+                           maxVent = maxVentR()
+                         )
+                       ))
+                     incProgress(0.25)
+                     rmarkdown::render(
+                       tempReport,
+                       output_file = file,
+                       params = params,
+                       output_format = 'pdf_document',
+                       envir = new.env(parent = globalenv())
+                     )
+                   })
       
     }
   )

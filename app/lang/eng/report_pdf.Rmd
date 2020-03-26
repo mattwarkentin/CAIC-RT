@@ -110,14 +110,14 @@ kable(params$table, booktabs = TRUE,
 ```
 
 ```{r results='asis'}
-glue('Based on {params$outputs$acute[[1]]} available mechanical ventilators with an average duration of use of {params$outputs$acute[[2]]} days, at maximum capacity the expected turnover rate is {params$outputs$acute[[3]]} ventilators per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring mechanical ventilation is {params$outputs$ra} percent. Given this, your healthcare environment has the capacity to manage a maximum of {params$outputs$ma} incident cases of COVID-19 per day.')
+glue('Based on {params$outputs$acute$n_acute} available mechanical ventilators with an average duration of use of {params$outputs$acute$lou_acute} days, at maximum capacity the expected turnover rate is {params$outputs$acute$acuteBedRate} ventilators per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring mechanical ventilation is {params$outputs$acute$rateAcute} percent. Given this, your healthcare environment has the capacity to manage a maximum of {params$outputs$acute$maxAcute} incident cases of COVID-19 per day.')
 ```
 
 ```{r results='asis'}
-glue('Based on {params$outputs$crit[[1]]} available mechanical ventilators with an average duration of use of {params$outputs$crit[[2]]} days, at maximum capacity the expected turnover rate is {params$outputs$crit[[3]]} ventilators per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring mechanical ventilation is {params$outputs$rc} percent. Given this, your healthcare environment has the capacity to manage a maximum of {params$outputs$mc} incident cases of COVID-19 per day.')
+glue('Based on {params$outputs$crit$n_crit} available mechanical ventilators with an average duration of use of {params$outputs$crit$lou_crit} days, at maximum capacity the expected turnover rate is {params$outputs$crit$critBedRate} ventilators per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring mechanical ventilation is {params$outputs$crit$rateCrit} percent. Given this, your healthcare environment has the capacity to manage a maximum of {params$outputs$crit$maxCrit} incident cases of COVID-19 per day.')
 ```
 
 ```{r results='asis'}
-glue('Based on {params$outputs$mvd[[1]]} available mechanical ventilators with an average duration of use of {params$outputs$mvd[[2]]} days, at maximum capacity the expected turnover rate is {params$outputs$mvd[[3]]} ventilators per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring mechanical ventilation is {params$outputs$rv} percent. Given this, your healthcare environment has the capacity to manage a maximum of {params$outputs$mv} incident cases of COVID-19 per day.')
+glue('Based on {params$outputs$mvent$n_vent} available mechanical ventilators with an average duration of use of {params$outputs$mvent$lou_vent} days, at maximum capacity the expected turnover rate is {params$outputs$mvent$ventBedRate} ventilators per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring mechanical ventilation is {params$outputs$mvent$rateVent} percent. Given this, your healthcare environment has the capacity to manage a maximum of {params$outputs$mvent$maxVent} incident cases of COVID-19 per day.')
 ```
 
