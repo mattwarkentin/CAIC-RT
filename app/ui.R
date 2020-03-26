@@ -216,7 +216,7 @@ ui <-
     navbarMenu(
       'More Info',
       tabPanel(a(span(icon('file-medical-alt'),"See the article"), 
-                 href="#",
+                 href="https://www.medrxiv.org/content/10.1101/2020.03.25.20043711v1",
                  target="_blank"
                  )),
       tabPanel(a(span(icon('github'),"See the code"), 
