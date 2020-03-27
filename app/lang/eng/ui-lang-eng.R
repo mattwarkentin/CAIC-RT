@@ -1,17 +1,34 @@
-#=================================================================
+#==============================================================================
 
-# Instructions for Editing
-# How to open file
-# How to send it back to us
+# Instructions for Editing:
+#
+# We recommend opening the file in a full-featured text editor,
+# such as atom or notepad++. These tools support code
+# highlighting which makes editing easier.
+# 
+# Do NOT edit anything on the left side of the assignment arrow
+# 
+# When editing the server-side code, you will sometimes see words
+# wrapped in curly brace, {}. You can move these around as needed
+# But do not change the text inside the braces. These are used for
+# string interpolation.
 
-# Conrtibutor code of conduct
+# Contacts: 
+# Matt Warkentin <warkentin@lunenfeld.ca>
+# Deepit Bhatia <deepitbhatia@gmail.com>
+
+# Conrtibutor Code of Conduct
 # https://github.com/mattwarkentin/CAIC-RT/blob/master/CODE_OF_CONDUCT.md
 
-#=================================================================
+#==============================================================================
 
 # User Interface ====
 
 ## Panel 1 ----
+
+lang <- "Choose Language"
+
+contribtue <- "How can I contribute?"
 
 last_update <- "Last Updated"
 
@@ -19,37 +36,37 @@ about_tool <- "About This Tool"
 
 p1_header <- "Expected Resource Utilization for COVID-19 Patients"
 
-lou_acute <- "Mean days in acute care"
+lou_acute_label <- "Mean days in acute care"
 lou_acute_tooltip <- "Note: Acute care days are mutually exclusive of critical care and ventilator days."
 
-lou_crit <- "Mean days in critical care"
+lou_crit_label <- "Mean days in critical care"
 lou_crit_tooltip <- "Note: Critical care days are mutually exclusive of acute care days. Total number of days spent in critical care are equal to the number of days spent in critical care with or without a ventilator."
 
-lou_vent <- ""
+lou_vent_label <- "Mean days on a mechanical ventilator"
 lou_crit_tooltip <- "Note: Days spent on a mechanical ventilator are assumed to be spent in a critical care bed."
 
-p1_footnote <- "Default values are based on data extracted from Zhou et al. (2020), Yang et al. (2020), and Wang et al. (2020), collected in China. See <strong>Help</strong> page for full citations."
+p1_footnote <- "Default values are based on data extracted from Zhou et al. (2020), Yang et al. (2020), and Wang et al. (2020), collected in China. See Help page for full citations."
 
 ## Panel 2 ----
 
 p2_header <- "Resource Availability"
 
-n_acute <- "Number of acute care beds for COVID-19 patients"
+n_acute_label <- "Number of acute care beds for COVID-19 patients"
 n_acute_tooltip <- "Note: This is the total number of acute care beds that are available for or are currently being used by COVID-19 patients."
 calc_acute <- "Calculate Acute Care Beds"
 
-n_crit <- "Number of critical care beds for COVID-19 patients"
+n_crit_label <- "Number of critical care beds for COVID-19 patients"
 n_crit_tooltip <- "Note: This is the total number of critical care beds that are available for or are currently being used by COVID-19 patients."
 calc_crit <- "Calculate Critical Care Beds"
 
-n_vent <- "Number of mechanical ventilators for COVID-19 patients"
+n_vent_label <- "Number of mechanical ventilators for COVID-19 patients"
 n_vent_tooltip <- "Note: This is the total number of mechanical ventilators that are available for or are currently being used by COVID-19 patients."
 calc_vent <- "Calculate Mechanical Ventilators"
 
-per_vent <- "Percent of critical care patients requiring mechanical ventilation"
+per_vent_label <- "Percent of critical care patients requiring mechanical ventilation"
 per_vent_tooltip <- "Note: This is the percentage of COVID-19 critical care patients requiring mechanical ventilation."
 
-p2_footnote_1 <- "Default values are based on data extracted from Zhou et al. (2020) and Wang <em>et al. (2020), collected in China. See Help page for full citations."
+p2_footnote_1 <- "Default values are based on data extracted from Zhou et al. (2020) and Wang et al. (2020), collected in China. See Help page for full citations."
 p2_footnote_2 <- "Default values are based on data extracted from Barrett et al. (2020), collected in Ontario. See Help page for full citations."
 
 ## Panel 3 ----
@@ -66,7 +83,7 @@ color_label <- "Choose Colour Palette"
 
 interpret_title <- "Interpreting the Results"
 acute_res_title <- "Acute Care"
-crit_res_title <- "Critical Care Care"
+crit_res_title <- "Critical Care"
 vent_res_title <- "Mechanical Ventilators"
 
 report_title <- "PDF Report"
@@ -81,9 +98,12 @@ help_tab <- "Help"
 see_article <- "See the article"
 see_code <- "See the code"
 
-
-
 # Server Side ====
+
+## Language Modal ----
+
+lang_title <- "How can I contribute?"
+lang_content <- ""
 
 ## Welcome Modal ----
 
@@ -113,11 +133,11 @@ table_modal_adm <- "Admission rates cannot be less than 0% or greater than 100%.
 
 ylab <- "Maximum Daily Number of Cases"
 
-xlab_acute <- ""
-xlab_crit <- ""
-xlab_vent <- ""
+xlab_acute <- "Acute Care Beds"
+xlab_crit <- "Critical Care Beds"
+xlab_vent <- "Mechanical Ventilators"
 
-xlab_suffic <- "new cases/day"
+xlab_suffix <- "new cases/day"
 
 plot_tooltip <- "The number of available {tolower(name)}\n in this healthcare system can manage\n a maximum of {value} daily cases of COVID-19"
 

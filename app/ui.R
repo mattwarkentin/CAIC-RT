@@ -48,6 +48,8 @@ tool_meta <-
 
 # Navbar UI ----
 
+langs <- sort(c('English' = 'eng', 'French' = 'fr'))
+
 ui <- 
   navbarPage(
     # Navbar ----
@@ -76,11 +78,21 @@ ui <-
         
         # First Column ----
         column(3,
+               span(
+               selectInput('lang', 'Choose Language', 
+                           choices = langs,
+                           selected = 'English',  
+                           multiple = FALSE, width = "150px"),
+               actionButton('contribute', 'How can I contribute?',
+                            icon = icon('info'), 
+                            class = 'f5 dib bg-gold grow hover-bg-gold')
+               ),
+               
                span(HTML(glue("{strong('Last Updated:')} {Sys.Date()}"))),
             actionButton('about_tool', 'About This Tool', icon = icon('info'), 
-                         class = "ma2 btn-primary f4", style = 'font-variant: small-caps;'),
+                         class = "ma2 btn-primary f5", style = 'font-variant: small-caps;'),
                wellPanel(
-               h4('Expected Resource Utilization for COVID-19 Patients'),
+               htmlOutput('p1_header'),
                numericInput(inputId = "lou_acute",
                             label = HTML("Mean days in acute care<sup>1</sup>"),
                             value = 11, min = 1),

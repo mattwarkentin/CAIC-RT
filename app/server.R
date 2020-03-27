@@ -1,6 +1,33 @@
 server <- function(input, output, session) {
+  # Language Contribution ----
+  
+  observeEvent(input$contribute, {
+    showModal(modalDialog(title = h4('How can I contribute?'), 
+                          size = 'm', 
+                          easyClose = TRUE, footer = modalButton('Close'),
+                          includeHTML('lang/eng/contribute.html')))
+  })
+  
   # Lanuage Rendering ----
 
+  load_lang <- function(lang) {
+    source(glue('lang/{lang}/ui-lang-{lang}.R'))
+  }
+  
+  observeEvent(input$lang, {
+    req(input$lang)
+    lang <- input$lang
+    
+    loader <- switch(lang,
+      'eng' = load_lang('eng'),
+      'fr' = load_lang('fr'),
+    )
+    loader
+    
+    updateNumericInput(session, 'lou_acute', label = lou_acute_label)
+    output$p1_header <- renderUI(h4(p1_header))
+  })
+  
   # US Case Distribution Data ----
   default_table <- 
     tribble(
