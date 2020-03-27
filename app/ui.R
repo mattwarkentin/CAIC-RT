@@ -185,7 +185,7 @@ ui <-
         wellPanel(
           span(h4("Interpreting the Results", style = "display: inline"),
                downloadButton('report', 'Generate PDF Report', 
-                             class = "btn-primary f5")
+                             class = "btn-primary f4")
                ),
           tabsetPanel(id = 'intepretations',
                       tabPanel('Acute Care',
