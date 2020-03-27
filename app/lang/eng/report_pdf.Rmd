@@ -1,28 +1,27 @@
 ---
 title: "COVID-19 Acute and Intensive Care Resource Tool"
-subtitle: "Resource Utilization Report"
-date: "__Report Generated:__ `r paste0(Sys.time(), ' ', Sys.timezone())`"
-output: 
-  pdf_document:
-    latex_engine: xelatex
-geometry: margin=1in
-fontsize: 12pt
+subtitle: "CAIC-RT: General Report"
+date: "__Report Generated:__ `r paste0(Sys.Date())`"
+output: pdf_document
+geometry: margin=2cm
+fontsize: 10pt
 header-includes:
   - \usepackage{tcolorbox}
   - \usepackage{titling}
   - \usepackage{titlesec}
-  - \usepackage{fontspec}
+  - \usepackage{setspace}
   - \usepackage{float}
   - \usepackage{booktabs}
-  - \pretitle{\begin{flushleft}\LARGE \vskip -3em\textsc}
+  - \pretitle{\begin{flushleft}\LARGE \vskip -3em\textsf \textsc}
   - \posttitle{\end{flushleft}}
   - \predate{\begin{flushleft}}
   - \postdate{\end{flushleft}}
-  - \setmainfont{Calibri}
+  - \renewcommand{\familydefault}{\sfdefault}
 params:
   widgets: NULL
   table: NULL
   outputs: NULL
+  plot: NULL
 ---
 
 \pagenumbering{gobble}
@@ -43,7 +42,7 @@ library(knitr)
 library(kableExtra)
 ```
 
-\begin{tcolorbox}
+\begin{tcolorbox}[title=Tool Information, colback=white]
 \textbf{Authors:}
 \begin{itemize}
   \item{Vasily Giannakeas, MPH \textsuperscript{1,2}}
@@ -57,18 +56,14 @@ library(kableExtra)
 \textbf{Description:} CAIC-RT is an online tool capable of estimating the maximum daily number of incident COVID-19 cases that a healthcare system could manage based on age-based case distribution and severity, and the number of available acute and critical care resources.
 
 \medskip
-{\tiny
-\begin{enumerate}
-  \item{Women's College Research Institute, Women's College Hospital, Toronto, Ontario, Canada}
-  \item{Dalla Lana School of Public Health, University of Toronto, Toronto, Ontario, Canada}
-  \item{Lunenfeld-Tanenbaum Research Institute, Sinai Health System, Toronto, Ontario, Canada}
-  \item{Department of Medicine, University of Toronto, Toronto, Ontario, Canada}
-  \item{Divisions of General Internal Medicine and Infectious Diseases, University Health Network, Toronto, Canada}
-  \item{Institute of Health Policy, Management and Evaluation, University of Toronto, Toronto, Ontario, Canada}
-  \item{Divisions of General Internal Medicine and Geriatrics, Sinai Health System, Toronto, Ontario, Canada}
-\end{enumerate}
-}
+{\tiny\begin{singlespace}
+1. Women's College Research Institute, Women's College Hospital, Toronto, Ontario, Canada, 2. Dalla Lana School of Public Health, University of Toronto, Toronto, Ontario, Canada, 3. Lunenfeld-Tanenbaum Research Institute, Sinai Health System, Toronto, Ontario, Canada, 4. Department of Medicine, University of Toronto, Toronto, Ontario, Canada, 5. Divisions of General Internal Medicine and Infectious Diseases, University Health Network, Toronto, Canada, 6. Institute of Health Policy, Management and Evaluation, University of Toronto, Toronto, Ontario, Canada, 7. Divisions of General Internal Medicine and Geriatrics, Sinai Health System, Toronto, Ontario, Canada
+\end{singlespace}}
 \end{tcolorbox}
+
+```{r}
+knitr::asis_output('\\begin{tcolorbox}[title=Customizable Inputs, colback=white]')
+```
 
 ```{r widget-inputs, include=FALSE}
 n_acute <- params$widgets$n_acute
@@ -85,18 +80,29 @@ tribble(
   ~item, ~value,
   "Mean days in acute care", lou_acute,
   "Mean days in critical care", lou_crit,
-  "Mean days on a mechanical ventilator", lou_vent,
+  "Mean days on a mechanical ventilator", lou_vent
+) %>% 
+  kable(booktabs = TRUE, format.args = list(big.mark = ','),
+        caption = "Expected resource utilization for COVID-19 patients.",
+        col.names = c('Input Parameter', 'Value')) %>% 
+  kable_styling(full_width = FALSE, position = 'center', latex_options = 'H') %>% 
+  row_spec(0, bold = TRUE)
+```
+
+```{r}
+tribble(
+  ~item, ~value,
   "Number of acute care beds", n_acute,
   "Number of critical care beds", n_crit,
   "Number of mechanical ventilators", n_vent,
   "Percent patients requiring mechanical ventilation", per_vent
 ) %>% 
   kable(booktabs = TRUE, format.args = list(big.mark = ','),
-        caption = "Expected resource utilization and resource availability for COVID-19 patients.",
+        caption = "Resource availability for COVID-19 patients.",
         col.names = c('Input Parameter', 'Value')) %>% 
-  kable_styling(full_width = FALSE, position = 'center', latex_options = 'H')
+  kable_styling(full_width = FALSE, position = 'center', latex_options = 'H') %>% 
+  row_spec(0, bold = TRUE)
 ```
-
 
 ```{r}
 kable(params$table, booktabs = TRUE, 
@@ -106,18 +112,57 @@ kable(params$table, booktabs = TRUE,
                     'Critical Care Admission (%)'), 
       caption = "Age-stratified case distribution and severity.") %>% 
   kable_styling(full_width = FALSE, 
-                position = 'center', latex_options = 'H')
+                position = 'center', latex_options = 'H') %>% 
+  row_spec(0, bold = TRUE)
+```
+
+```{r}
+knitr::asis_output('\\end{tcolorbox}')
+```
+
+```{r}
+knitr::asis_output('\\begin{tcolorbox}[title={Output - Maximum daily number of incident COVID-19 cases, by resource type}, colback=white]')
+```
+
+```{r plot, fig.align='center'}
+params$plot + 
+  theme(
+    text = element_text(size = 14),
+    axis.text.x = element_text(angle = 0)
+  )
+```
+
+```{r}
+knitr::asis_output('\\end{tcolorbox}')
+```
+
+```{r}
+knitr::asis_output('\\begin{tcolorbox}[title=Interpretation, colback=white]')
+```
+
+```{r acute, results='asis'}
+knitr::asis_output('\\textbf{Acute Care: }')
+glue('Based on {format(params$outputs$acute$n_acute, big.mark = ",")} available acute care beds with an average length of stay of {params$outputs$acute$lou_acute} days, at maximum capacity the expected turnover rate is {format(floor(params$outputs$acute$acuteBedRate), big.mark = ",")} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring an acute care bed is {round(params$outputs$acute$rateAcute, 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(floor(params$outputs$acute$maxAcute), big.mark = ",")} incident cases of COVID-19 per day.')
+```
+
+```{r}
+knitr::asis_output('\\bigskip')
+```
+
+```{r critical, results='asis'}
+knitr::asis_output('\\textbf{Critical Care: }')
+glue('Based on {format(params$outputs$crit$n_crit, big.mark = ",")} available critical care beds with an average length of stay of {params$outputs$crit$lou_crit} days, at maximum capacity the expected turnover rate is {format(floor(params$outputs$crit$critBedRate), big.mark = ",")} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring a critical care bed is {round(params$outputs$crit$rateCrit, 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(floor(params$outputs$crit$maxCrit), big.mark = ",")} incident cases of COVID-19 per day.')
+```
+
+```{r}
+knitr::asis_output('\\bigskip')
 ```
 
 ```{r results='asis'}
-glue('Based on {params$outputs$acute$n_acute} available mechanical ventilators with an average duration of use of {params$outputs$acute$lou_acute} days, at maximum capacity the expected turnover rate is {params$outputs$acute$acuteBedRate} ventilators per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring mechanical ventilation is {params$outputs$acute$rateAcute} percent. Given this, your healthcare environment has the capacity to manage a maximum of {params$outputs$acute$maxAcute} incident cases of COVID-19 per day.')
+knitr::asis_output('\\textbf{Mechanical Ventilators: }')
+glue('Based on {format(params$outputs$mvent$n_vent, big.mark = ",")} available mechanical ventilators with an average duration of use of {params$outputs$mvent$lou_vent} days, at maximum capacity the expected turnover rate is {format(floor(params$outputs$mvent$ventBedRate), big.mark = ",")} ventilators per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring mechanical ventilation is {round(params$outputs$mvent$rateVent, 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(floor(params$outputs$mvent$maxVent), big.mark = ",")} incident cases of COVID-19 per day.')
 ```
 
-```{r results='asis'}
-glue('Based on {params$outputs$crit$n_crit} available mechanical ventilators with an average duration of use of {params$outputs$crit$lou_crit} days, at maximum capacity the expected turnover rate is {params$outputs$crit$critBedRate} ventilators per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring mechanical ventilation is {params$outputs$crit$rateCrit} percent. Given this, your healthcare environment has the capacity to manage a maximum of {params$outputs$crit$maxCrit} incident cases of COVID-19 per day.')
+```{r}
+knitr::asis_output('\\end{tcolorbox}')
 ```
-
-```{r results='asis'}
-glue('Based on {params$outputs$mvent$n_vent} available mechanical ventilators with an average duration of use of {params$outputs$mvent$lou_vent} days, at maximum capacity the expected turnover rate is {params$outputs$mvent$ventBedRate} ventilators per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring mechanical ventilation is {params$outputs$mvent$rateVent} percent. Given this, your healthcare environment has the capacity to manage a maximum of {params$outputs$mvent$maxVent} incident cases of COVID-19 per day.')
-```
-

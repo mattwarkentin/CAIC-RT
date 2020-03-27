@@ -2,7 +2,7 @@
 
 # Instructions for Editing
 # How to open file
-# How to send it back to use
+# How to send it back to us
 
 # Conrtibutor code of conduct
 # https://github.com/mattwarkentin/CAIC-RT/blob/master/CODE_OF_CONDUCT.md
@@ -80,6 +80,7 @@ help_tab <- "Help"
 
 see_article <- "See the article"
 see_code <- "See the code"
+
 
 
 # Server Side ====

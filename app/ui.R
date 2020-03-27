@@ -78,7 +78,7 @@ ui <-
         column(3,
                span(HTML(glue("{strong('Last Updated:')} {Sys.Date()}"))),
             actionButton('about_tool', 'About This Tool', icon = icon('info'), 
-                         class = "ma2 btn-primary", style = 'font-variant: small-caps;'),
+                         class = "ma2 btn-primary f4", style = 'font-variant: small-caps;'),
                wellPanel(
                h4('Expected Resource Utilization for COVID-19 Patients'),
                numericInput(inputId = "lou_acute",
@@ -183,7 +183,10 @@ ui <-
                                         multiple = FALSE)),
              plotlyOutput('plot')),
         wellPanel(
-          h4("Interpreting the Results"),
+          span(h4("Interpreting the Results", style = "display: inline"),
+               downloadButton('report', 'Generate PDF Report', 
+                             class = "btn-primary f5")
+               ),
           tabsetPanel(id = 'intepretations',
                       tabPanel('Acute Care',
                                br(),
@@ -194,12 +197,8 @@ ui <-
                       tabPanel('Mechanical Ventilators',
                                br(),
                                textOutput('mv_int'))
-          ),
-          ),
-        wellPanel(
-          h4("PDF Report"),
-          downloadButton('report', 'Generate Report')
-        )
+          )
+          )
             )
       )
       ),

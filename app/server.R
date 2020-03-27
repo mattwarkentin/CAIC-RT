@@ -1,4 +1,6 @@
 server <- function(input, output, session) {
+  # Lanuage Rendering ----
+
   # US Case Distribution Data ----
   default_table <- 
     tribble(
@@ -54,7 +56,7 @@ server <- function(input, output, session) {
   })
   observeEvent(input$submit_ac, {
     updateNumericInput(session, 'n_acute', 
-                       value = round((input$tot_ac_bed * 
+                       value = floor((input$tot_ac_bed * 
                                   (input$tot_ac_av / 100)) + 
                                   (input$tot_ac_sur))
                        )
@@ -88,7 +90,7 @@ server <- function(input, output, session) {
   })
   observeEvent(input$submit_cc, {
     updateNumericInput(session, 'n_crit', 
-                       value = round((input$tot_cc_bed * 
+                       value = floor((input$tot_cc_bed * 
                                         (input$tot_cc_av / 100)) + 
                                        (input$tot_cc_sur))
     )
@@ -122,7 +124,7 @@ server <- function(input, output, session) {
   })
   observeEvent(input$submit_mv, {
     updateNumericInput(session, 'n_vent', 
-                       value = round((input$tot_mv_bed * 
+                       value = floor((input$tot_mv_bed * 
                                         (input$tot_mv_av / 100)) + 
                                        (input$tot_mv_sur))
     )
@@ -252,7 +254,7 @@ server <- function(input, output, session) {
   
   # Plotly Results ----
   
-  output$plot <- renderPlotly({
+  plot <- reactive({
     input$tab_pop_cell_edit
     
     color_scale <- switch(input$colors,
@@ -274,9 +276,9 @@ server <- function(input, output, session) {
               axis.text.x = element_text(angle = 25))
       p
     } else {
-      
-      p <- ggplot(plot_data(), aes(glue("{name}\n ({scales::comma(value)} new cases/day)"), value, fill = name,
-                                   text = glue("The number of available {tolower(name)}\n in this healthcare system can manage\n a maximum of {scales::comma(value)} daily new cases of COVID-19"))) +
+    
+      p <- ggplot(plot_data(), aes(glue("{name}\n ({scales::comma(floor(value))} new cases/day)"), value, fill = name,
+                                   text = glue("The number of available {tolower(name)}\n in this healthcare system can manage\n a maximum of {scales::comma(floor(value))} daily new cases of COVID-19"))) +
         geom_col(show.legend = FALSE, col = 'black') +
         labs(x = '', 
              y = 'Maximum Daily Number of Cases') + 
@@ -287,8 +289,11 @@ server <- function(input, output, session) {
               axis.text.x = element_text(angle = 25))
       p
     }
+  })
+  
+  output$plot <- renderPlotly({
     
-    ggplotly(p, tooltip = 'text') %>% 
+    ggplotly(plot(), tooltip = 'text') %>% 
       config(displayModeBar = FALSE) %>% 
       layout(xaxis = list(fixedrange = TRUE)) %>% 
       layout(yaxis = list(fixedrange = TRUE))
@@ -300,32 +305,32 @@ server <- function(input, output, session) {
   output$acute_int <- renderText({
     input$tab_pop_cell_edit
     
-    glue('Based on {format(n_acute(), big.mark = ",")} available acute care beds and an average length of stay of {lou_acute()} days, at maximum capacity the expected turnover rate is {format(acuteBedRateR(), big.mark = ",", digits = 0)} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring an acute care bed is {round(rateAcuteR(), 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(maxAcuteR(), big.mark = ",", digits = 0)} incident cases of COVID-19 per day.')
+    glue('Based on {format(n_acute(), big.mark = ",")} available acute care beds and an average length of stay of {lou_acute()} days, at maximum capacity the expected turnover rate is {format(floor(acuteBedRateR()), big.mark = ",")} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring an acute care bed is {round(rateAcuteR(), 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(floor(maxAcuteR()), big.mark = ",")} incident cases of COVID-19 per day.')
   }
   )
   
   output$crit_int <- renderText({
     input$tab_pop_cell_edit
     
-    glue('Based on {format(n_crit(), big.mark = ",", digits = 0)} available critical care beds and an average length of stay of {lou_crit()} days, at maximum capacity the expected turnover rate is {format(critBedRateR(), big.mark = ",", digits = 0)} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring a critical care bed is {round(rateCritR(), 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(maxCritR(), big.mark = ",", digits = 0)} incident cases of COVID-19 per day.')
+    glue('Based on {format(n_crit(), big.mark = ",")} available critical care beds and an average length of stay of {lou_crit()} days, at maximum capacity the expected turnover rate is {format(floor(critBedRateR()), big.mark = ",")} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring a critical care bed is {round(rateCritR(), 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(floor(maxCritR()), big.mark = ",")} incident cases of COVID-19 per day.')
   }
   )
   
   output$mv_int <- renderText({
     input$tab_pop_cell_edit
-    glue('Based on {format(n_vent(), big.mark = ",", digits = 0)} available mechanical ventilators with an average duration of use of {lou_vent()} days, at maximum capacity the expected turnover rate is {format(ventBedRateR(), big.mark = ",", digits = 0)} ventilators per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring mechanical ventilation is {round(rateVentR(), 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(maxVentR(), big.mark = ",", digits = 0)} incident cases of COVID-19 per day.')
+    glue('Based on {format(n_vent(), big.mark = ",")} available mechanical ventilators with an average duration of use of {lou_vent()} days, at maximum capacity the expected turnover rate is {format(floor(ventBedRateR()), big.mark = ",")} ventilators per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring mechanical ventilation is {round(rateVentR(), 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(floor(maxVentR()), big.mark = ",")} incident cases of COVID-19 per day.')
   }
   )
   
   # Generate Reports ----
   output$report <- downloadHandler(
-    filename = function() {glue("COVID-19_report_{Sys.Date()}.pdf")},
+    filename = function() {glue("CAIC-RT_report_{Sys.Date()}.pdf")},
     
     content = function(file) {
+
       withProgress(message = "Generating report...",
                    detail = 'Hold tight, this may take a few moments.',
                    {
-                     incProgress(0.25)
                      tempReport <- file.path(tempdir(), "report.Rmd")
                      incProgress(0.25)
                      file.copy("lang/eng/report_pdf.Rmd", tempReport, 
@@ -357,7 +362,7 @@ server <- function(input, output, session) {
                            ventBedRate = ventBedRateR(),
                            maxVent = maxVentR()
                          )
-                       ))
+                       ), plot = plot())
                      incProgress(0.25)
                      rmarkdown::render(
                        tempReport,
@@ -366,6 +371,7 @@ server <- function(input, output, session) {
                        output_format = 'pdf_document',
                        envir = new.env(parent = globalenv())
                      )
+                     incProgress(0.25)
                    })
       
     }
