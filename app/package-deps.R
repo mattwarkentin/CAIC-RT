@@ -7,6 +7,7 @@ library(shinyBS)
 library(htmltools)
 
 # Data science deps
+library(tidyverse)
 library(glue)
 library(tibble)
 library(ggplot2)
@@ -18,3 +19,4 @@ library(rmarkdown)
 library(DT)
 library(plotly)
 library(metathis)
+library(kableExtra)
