@@ -1,13 +1,49 @@
-<p>Welcome to the <strong>Help</strong> page for the <strong>COVID-19 Acute and Intensive Care Resource Tool (CAIC-RT)</strong>. This page provides <a href="#contact">contact</a> information and <a href="#impres">important resources</a> that were used when developing this tool.</p>
+---
+title: Help
+output: html_fragment
+params:
+  help_welcome: NULL
+  contact_title: NULL
+  contact_info: NULL
+  thanks: NULL
+  important_resources: NULL
+  resource_sentence: NULL
+---
+
+```{r setup, include=FALSE}
+library(htmltools)
+library(glue)
+
+knitr::opts_chunk$set(
+  echo=FALSE, 
+  results = 'asis'
+  )
+
+person <- tags$a('Nathan M. Stall', href = "mailto:nathan.stall@mail.utoronto.ca")
+```
+
+```{r welcome-help}
+p(params$help_welcome)
+```
+
 <hr />
 
-<h4 id='contact'>Contact</h4>
-<p>If you would like to contact the developers of this tool with any comments, questions, or feedback, please send an email to <a href="mailto:nathan.stall@mail.utoronto.ca">Nathan M. Stall</a>. </p>
-<p>Thank you for using our tool! We look forward to hearing from you!</p>
+```{r contact}
+h4(params$contact_title)
+
+p(HTML(glue(params$contact_info)))
+
+p(params$thanks)
+```
+
 <hr />
 
-<h4 id='impres'>Important Resources</h4>
-<p>Below are some key resources that were used when developing this tool.</p>
+```{r resources}
+h4(params$important_resources)
+
+p(params$resource_sentence)
+```
+
 <ul>
   <li>Barrett K, Khan Y, Mac S, Ximenes R, Naimark D, Tuite A, et al. COVID-19: Predicting Healthcare Resource Needs in Ontario 2020 [updated March 18, 2020. Available from: <a href="https://drive.google.com/drive/folders/1T5I2VKuvVFD0FmFGItcH_ZX1XioH4vYU">https://drive.google.com/drive/folders/1T5I2VKuvVFD0FmFGItcH_ZX1XioH4vYU</a>.
 </li>

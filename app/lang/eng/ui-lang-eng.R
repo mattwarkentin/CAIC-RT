@@ -2,14 +2,14 @@
 
 # Instructions for Editing:
 #
-# We recommend opening the file in a full-featured text editor,
-# such as atom or notepad++. These tools support code
+# We recommend opening the file/script in a full-featured text editor,
+# such as RStudio, atom or notepad++. These tools support text
 # highlighting which makes editing easier.
 # 
 # Do NOT edit anything on the left side of the assignment arrow
 # 
-# When editing the server-side code, you will sometimes see words
-# wrapped in curly brace, {}. You can move these around as needed
+# When editing the text, you will sometimes see words
+# wrapped in curly braces (e.g. {var}). You can move these around as needed
 # But do not change the text inside the braces. These are used for
 # string interpolation.
 
@@ -24,11 +24,24 @@
 
 # User Interface ====
 
+## Misc ----
+
+submit <- "Apply Changes"
+close <- "Close"
+
+## Navbar ----
+
+home <- "Home"
+help <- "Help"
+more_info <- "More Info"
+see_article <- "See the article"
+see_code <- "See the code"
+
 ## Panel 1 ----
 
 lang <- "Choose Language"
 
-contribtue <- "How can I contribute?"
+contribute <- "How can I contribute?"
 
 last_update <- "Last Updated"
 
@@ -43,7 +56,7 @@ lou_crit_label <- "Mean days in critical care"
 lou_crit_tooltip <- "Note: Critical care days are mutually exclusive of acute care days. Total number of days spent in critical care are equal to the number of days spent in critical care with or without a ventilator."
 
 lou_vent_label <- "Mean days on a mechanical ventilator"
-lou_crit_tooltip <- "Note: Days spent on a mechanical ventilator are assumed to be spent in a critical care bed."
+lou_vent_tooltip <- "Note: Days spent on a mechanical ventilator are assumed to be spent in a critical care bed."
 
 p1_footnote <- "Default values are based on data extracted from Zhou et al. (2020), Yang et al. (2020), and Wang et al. (2020), collected in China. See Help page for full citations."
 
@@ -66,8 +79,23 @@ calc_vent <- "Calculate Mechanical Ventilators"
 per_vent_label <- "Percent of critical care patients requiring mechanical ventilation"
 per_vent_tooltip <- "Note: This is the percentage of COVID-19 critical care patients requiring mechanical ventilation."
 
-p2_footnote_1 <- "Default values are based on data extracted from Zhou et al. (2020) and Wang et al. (2020), collected in China. See Help page for full citations."
-p2_footnote_2 <- "Default values are based on data extracted from Barrett et al. (2020), collected in Ontario. See Help page for full citations."
+acute_modal_title <- "Calculate the number of acute care beds available for COVID-19 cases"
+acute_modal_n_acute <- "Total number of acute care beds"
+acute_modal_per_acute <- "Percent of acute care beds available for or currently being used by COVID-19 cases"
+acute_modal_surge <- "Acute care bed surge capacity for COVID-19 cases (number of beds)"
+
+crit_modal_title <- "Calculate the number of critical care beds available for COVID-19 cases"
+crit_modal_n_crit <- "Total number of critical care beds"
+crit_modal_per_crit <- "Percent of critical care beds available for or currently being used by COVID-19 cases"
+crit_modal_surge <- "Critical care bed surge capacity for COVID-19 cases (number of beds)"
+
+vent_modal_title <- "Calculate the number of mechanical ventilators available for COVID-19 cases"
+vent_modal_n_vent <- "Total number of mechanical ventilators"
+vent_modal_per_vent <- "Percent of mechanical ventilators available for or currently being used by COVID-19 cases"
+vent_modal_surge <- "Mechanical ventilator surge capacity for COVID-19 cases (number of ventilators)"
+
+p2_footnote_1 <- "Default percent of critical care patients requiring mechanical ventilation are based on data extracted from Zhou et al. (2020) and Wang et al. (2020), collected in China. See Help page for full citations."
+p2_footnote_2 <- "Default number of acute care beds, critical care beds, and mechanical ventilators are based data extracted from Barrett et al. (2020), collected in Ontario. See Help page for full citations."
 
 ## Panel 3 ----
 
@@ -86,29 +114,59 @@ acute_res_title <- "Acute Care"
 crit_res_title <- "Critical Care"
 vent_res_title <- "Mechanical Ventilators"
 
-report_title <- "PDF Report"
-report_button <- "Generate Report"
+report_button <- "Generate PDF Report"
 
 ## Help Page ----
 
-help_tab <- "Help"
+help_welcome <- "Welcome to the Help page for the COVID-19 Acute and Intensive Care Resource Tool (CAIC-RT). This page provides contact information and important resources that were used when developing this tool."
 
-## More Info ----
+contact_title <- 'Contact'
 
-see_article <- "See the article"
-see_code <- "See the code"
+contact_info <- "If you would like to contact the developers of this tool with any comments, questions, or feedback, please send an email to {person}."
+
+thanks <- 'Thank you for using our tool! We look forward to hearing from you!'
+
+important_resources <- "Important Resources"
+resource_sentence <- "Below are some key resources that were used when developing this tool."
 
 # Server Side ====
 
 ## Language Modal ----
 
 lang_title <- "How can I contribute?"
-lang_content <- ""
+
+cont_details <- "We are honoured that you are interested in contributing to this project. Right now, we are very interested in collaborating to translate this tool into as many languages as possible. First, please read the {CoC}."
+
+how_to_cont <- "In order to contribute, please make sure you meet the following criteria:"
+
+cont1 <- "You are multi-lingual, where one of the languages is English"
+cont2 <- "You have technical training in one of the following areas: medicine, epidemiology, medical sciences, public health, or a related field"
+
+thats_it <- "That's it! If you meet both of the above criteria, we would be happy to have you contribute to this project. If you are still interested in contributing to this translation effort, please contact {deepit} or {matt} for instructions on how to contribute."
+
+recognition <- "Lastly, if you contribute to this project we would be happy to feature your name within the tool in order to give you the proper recognition."
+
+code <- "Please note that the ‘CAIC-RT’ project is released with a {CoC}. By contributing to this project, you agree to abide by its terms."
 
 ## Welcome Modal ----
 
 welcome_title <- "CAIC-RT: COVID-19 Acute and Intensive Care Resource Tool"
-welcome_content <- ""
+authors <- "Authors"
+
+desc_title <- "Description"
+desc <- "An online tool capable of estimating the maximum daily number of incident COVID-19 cases that a healthcare system could manage based on age-based case distribution and severity, and the number of available acute and critical care resources."
+
+how_to <- "How to use this tool:"
+
+item1 <- "Review the default age-stratified case distribution and severity data, which are based on US data from the {CDC}."
+
+item1_opt <- "Optional: You may enter your own information into the table based on local clinical data and experience."
+
+item2 <- "Tune the Expected Resource Utilization and Resource Availability inputs to your own healthcare environment."
+
+item3 <- "Inspect the results in the bar graph, which displays the maximum daily number of incident COVID-19 cases that a healthcare system could manage based on resource availability."
+
+item4 <- "Visualize in real-time how the results change when modifying the input parameters."
 
 ## Feedback ----
 
@@ -139,17 +197,30 @@ xlab_vent <- "Mechanical Ventilators"
 
 xlab_suffix <- "new cases/day"
 
-plot_tooltip <- "The number of available {tolower(name)}\n in this healthcare system can manage\n a maximum of {value} daily cases of COVID-19"
+plot_tooltip <- "The number of available {resource} in this healthcare system can manage a maximum of {value} daily cases of COVID-19"
 
 ## Interpretations ----
 
-summary_acute <- 'Based on {format(n_acute(), big.mark = ",")} available acute care beds and an average length of stay of {lou_acute()} days, at maximum capacity the expected turnover rate is {format(acuteBedRateR(), big.mark = ",", digits = 0)} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring an acute care bed is {round(rateAcuteR(), 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(maxAcuteR(), big.mark = ",", digits = 0)} incident cases of COVID-19 per day.'
+summary_acute <- 'Based on {n_acute} available acute care beds and an average length of stay of {lou_acute} days, at maximum capacity the expected turnover rate is {acuteBedRate} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring an acute care bed is {rateAcute} percent. Given this, your healthcare environment has the capacity to manage a maximum of {maxAcute} incident cases of COVID-19 per day.'
 
-summary_crit <- 'Based on {format(n_crit(), big.mark = ",", digits = 0)} available critical care beds and an average length of stay of {lou_crit()} days, at maximum capacity the expected turnover rate is {format(critBedRateR(), big.mark = ",", digits = 0)} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring a critical care bed is {round(rateCritR(), 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(maxCritR(), big.mark = ",", digits = 0)} incident cases of COVID-19 per day.'
+summary_crit <- 'Based on {n_crit} available critical care beds and an average length of stay of {lou_crit} days, at maximum capacity the expected turnover rate is {critBedRate} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring a critical care bed is {rateCrit} percent. Given this, your healthcare environment has the capacity to manage a maximum of {maxCrit} incident cases of COVID-19 per day.'
 
-summary_vent <- 'Based on {format(n_vent(), big.mark = ",", digits = 0)} available mechanical ventilators with an average duration of use of {lou_vent()} days, at maximum capacity the expected turnover rate is {format(ventBedRateR(), big.mark = ",", digits = 0)} ventilators per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring mechanical ventilation is {round(rateVentR(), 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(maxVentR(), big.mark = ",", digits = 0)} incident cases of COVID-19 per day.'
+summary_vent <- 'Based on {n_vent} available ventical care beds and an average length of stay of {lou_vent} days, at maximum capacity the expected turnover rate is {ventBedRate} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring a ventical care bed is {rateVent} percent. Given this, your healthcare environment has the capacity to manage a maximum of {maxVent} incident cases of COVID-19 per day.'
 
 ## Report ----
 
 progress_1 <- "Generating report..."
-prorgess_2 <- "Hold tight, this may take a few moments."
+progress_2 <- "Hold tight, this may take a few moments."
+
+report_type <- "General Report"
+report_date <- "Report Generated"
+
+tool_info <- "Tool Information"
+custom_inputs <- "Customizable Inputs"
+
+caption1 <- "Expected resource utilization for COVID-19 patients."
+caption2 <- "Resource availability for COVID-19 patients."
+caption3 <- "Age-stratified case distribution and severity."
+
+col_name1 <- "Input Parameter"
+col_name2 <- "Value"

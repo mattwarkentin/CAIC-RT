@@ -1,0 +1,56 @@
+---
+title: "Contribute"
+output: html_fragment
+params:
+  cont_details: NULL
+  how_to_cont: NULL
+  cont1: NULL
+  cont2: NULL
+  thats_it: NULL
+  recognition: NULL
+  code: NULL
+---
+
+```{r setup, include=FALSE}
+library(htmltools)
+library(glue)
+
+knitr::opts_chunk$set(
+  echo=FALSE, 
+  results = 'asis'
+  )
+
+CoC <- tags$a('Contributor Code of Conduct', href = "https://github.com/mattwarkentin/CAIC-RT/blob/master/CODE_OF_CONDUCT.md", target = "_blank")
+
+deepit <- tags$a("Deepit Bhatia", href = "mailto:deepitbhatia@gmail.com")
+matt <- tags$a("Matt Warkentin", href = "mailto:warkentin@lunenfeld.ca")
+```
+
+```{r}
+p(HTML(glue(params$cont_details)))
+```
+
+```{r}
+p(params$how_to_cont)
+```
+
+```{r}
+tags$ol(
+  tags$li(params$cont1),
+  tags$li(params$cont2)
+)
+```
+
+```{r}
+p(HTML(glue(params$thats_it)))
+```
+
+```{r}
+p(params$recognition)
+```
+
+<hr />
+
+```{r}
+p(HTML(glue(params$code)), class = 'f6')
+```

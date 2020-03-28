@@ -1,0 +1,239 @@
+---
+title: "COVID-19 Acute and Intensive Care Resource Tool"
+subtitle: "CAIC-RT: `r params$report_type`"
+date: "__`r params$report_date`:__ `r paste0(Sys.Date())`"
+output: pdf_document
+geometry: margin=2cm
+fontsize: 10pt
+subparagraph: true
+header-includes:
+  - \usepackage{tcolorbox}
+  - \usepackage{titling}
+  - \usepackage{titlesec}
+  - \usepackage{setspace}
+  - \usepackage{float}
+  - \usepackage{booktabs}
+  - \pretitle{\begin{flushleft}\LARGE \vskip -3em\textsf \textsc}
+  - \posttitle{\end{flushleft}}
+  - \predate{\begin{flushleft}}
+  - \postdate{\end{flushleft}}
+  - \renewcommand{\familydefault}{\sfdefault}
+params:
+  report_type: NULL
+  report_date: NULL
+  authors: NULL
+  tool_info: NULL
+  desc: NULL
+  desc_title: NULL
+  custom_inputs: NULL
+  lou_acute_label: NULL
+  lou_crit_label: NULL
+  lou_vent_label: NULL
+  caption1: NULL
+  caption2: NULL
+  caption3: NULL
+  col_name1: NULL
+  col_name2: NULL
+  n_acute_label: NULL
+  n_crit_label: NULL
+  n_vent_label: NULL
+  per_vent_label: NULL
+  table_col1: NULL
+  table_col2: NULL
+  table_col3: NULL
+  table_col4: NULL
+  plot_title: NULL
+  interpret_title: NULL
+  acute_res_title: NULL
+  crit_res_title: NULL
+  vent_res_title: NULL
+  widgets: NULL
+  table: NULL
+  outputs: NULL
+  plot: NULL
+  acute_int: NULL
+  crit_int: NULL
+  vent_int: NULL
+---
+
+\pagenumbering{gobble}
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo=FALSE, 
+  error = TRUE, 
+  message = FALSE, 
+  warning = FALSE,
+  out.width = "80%"
+  )
+
+library(tidyverse)
+library(scales)
+library(glue)
+library(knitr)
+library(kableExtra)
+```
+
+```{r authors}
+knitr::asis_output(
+  glue('\\begin{tcolorbox}[title=<<params$tool_info>>, colback=white]', 
+       .open = '<<', .close = '>>')
+       )
+knitr::asis_output(glue('\\textbf{<<params$authors>>:}', .open = '<<', .close = '>>'))
+knitr::asis_output('\\begin{itemize}')
+knitr::asis_output('\\item{Vasily Giannakeas, MPH \textsuperscript{1,2}}')
+knitr::asis_output('\\item{Deepit Bhatia, MPH}')
+knitr::asis_output('\\item{Matthew T. Warkentin, MSc \textsuperscript{2,3}}')
+knitr::asis_output('\\item{Isaac I. Bogoch, MD \\textsuperscript{4,5}}')
+knitr::asis_output('\\item{Nathan M. Stall, MD \textsuperscript{1,4,6,7}}')
+knitr::asis_output('\\end{itemize}')
+knitr::asis_output('\\medskip')
+```
+
+```{r desc}
+knitr::asis_output(
+  glue('\\textbf{<<params$desc_title>>}: ', '{desc}', 
+       .open = '<<', .close = '>>')
+)
+```
+
+```{r}
+knitr::asis_output('\\medskip')
+```
+
+```{r affiliations}
+knitr::asis_output("{\\tiny\\begin{singlespace}
+1. Women's College Research Institute, Women's College Hospital, Toronto, Ontario, Canada, 2. Dalla Lana School of Public Health, University of Toronto, Toronto, Ontario, Canada, 3. Lunenfeld-Tanenbaum Research Institute, Sinai Health System, Toronto, Ontario, Canada, 4. Department of Medicine, University of Toronto, Toronto, Ontario, Canada, 5. Divisions of General Internal Medicine and Infectious Diseases, University Health Network, Toronto, Canada, 6. Institute of Health Policy, Management and Evaluation, University of Toronto, Toronto, Ontario, Canada, 7. Divisions of General Internal Medicine and Geriatrics, Sinai Health System, Toronto, Ontario, Canada
+\\end{singlespace}}")
+```
+
+```{r}
+knitr::asis_output('\\end{tcolorbox}')
+```
+
+```{r custom-inputs}
+knitr::asis_output(
+  glue('\\begin{tcolorbox}[title=<<params$custom_inputs>>, colback=white]',
+       .open = '<<', .close = '>>')
+  )
+```
+
+```{r widget-inputs, include=FALSE}
+n_acute <- params$widgets$n_acute
+n_crit <- params$widgets$n_crit
+n_vent <- params$widgets$n_vent
+lou_acute <- params$widgets$lou_acute
+lou_crit<- params$widgets$lou_crit
+lou_vent <- params$widgets$lou_vent
+per_vent <- params$widgets$per_vent
+```
+
+```{r table1}
+tribble(
+  ~item, ~value,
+  params$lou_acute_label, lou_acute,
+  params$lou_crit_label, lou_crit,
+  params$lou_vent_label, lou_vent
+) %>% 
+  kable(booktabs = TRUE, format.args = list(big.mark = ','),
+        format = 'latex',
+        caption = params$caption1,
+        col.names = c(params$col_name1, params$col_name2)) %>% 
+  kable_styling(full_width = FALSE, position = 'center', latex_options = 'H') %>% 
+  row_spec(0, bold = TRUE)
+```
+
+```{r table2}
+tribble(
+  ~item, ~value,
+  params$n_acute_label, n_acute,
+  params$n_crit_label, n_crit,
+  params$n_vent_label, n_vent,
+  params$per_vent_label, per_vent
+) %>% 
+  kable(booktabs = TRUE, format.args = list(big.mark = ','),
+        format = 'latex',
+        caption = params$caption2,
+        col.names = c(params$col_name1, params$col_name2)) %>% 
+  kable_styling(full_width = FALSE, position = 'center', latex_options = 'H') %>% 
+  row_spec(0, bold = TRUE)
+```
+
+```{r table3}
+kable(params$table, booktabs = TRUE,
+      format = 'latex',
+      col.names = c(params$table_col1,
+                    params$table_col2,
+                    params$table_col3,
+                    params$table_col4), 
+      caption = params$caption3) %>% 
+  kable_styling(full_width = FALSE, 
+                position = 'center', latex_options = 'H') %>% 
+  row_spec(0, bold = TRUE)
+```
+
+```{r}
+knitr::asis_output('\\end{tcolorbox}')
+```
+
+```{r plot-title}
+knitr::asis_output(
+  glue('\\begin{tcolorbox}[title={Output - <<params$plot_title>>}, colback=white]', 
+       .open = '<<', .close = '>>')
+  )
+```
+
+```{r plot, fig.align='center'}
+params$plot + 
+  theme(
+    text = element_text(size = 14),
+    axis.text.x = element_text(angle = 0)
+  )
+```
+
+```{r}
+knitr::asis_output('\\end{tcolorbox}')
+```
+
+```{r interpret-title}
+knitr::asis_output(
+  glue('\\begin{tcolorbox}[title=<<params$interpret_title>>, colback=white]',
+       .open = '<<', .close = '>>')
+  )
+```
+
+```{r acute, results='asis'}
+knitr::asis_output(
+  glue('\\textbf{<<params$acute_res_title>>: }',
+       .open = '<<', .close = '>>')
+  )
+params$acute_int
+```
+
+```{r}
+knitr::asis_output('\\bigskip')
+```
+
+```{r critical, results='asis'}
+knitr::asis_output(
+  glue('\\textbf{<<params$crit_res_title>>: }',
+       .open = '<<', .close = '>>')
+  )
+params$crit_int
+```
+
+```{r}
+knitr::asis_output('\\bigskip')
+```
+
+```{r vent, results='asis'}
+knitr::asis_output(
+  glue('\\textbf{<<params$vent_res_title>>: }',
+       .open = '<<', .close = '>>')
+  )
+params$vent_int
+```
+
+```{r}
+knitr::asis_output('\\end{tcolorbox}')
+```

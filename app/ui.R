@@ -62,7 +62,8 @@ ui <-
     header = tags$style(type="text/css", "body {padding-top: 70px;}"),
     # Home Tool ----
     tabPanel(
-      'Home', icon = icon('toolbox'),
+      'Home', 
+      icon = icon('toolbox'),
       useShinyalert(),
       useShinyFeedback(),
       tool_meta,
@@ -78,115 +79,90 @@ ui <-
         
         # First Column ----
         column(3,
-               span(
+               htmlOutput('last_update'),
                selectInput('lang', 'Choose Language', 
                            choices = langs,
                            selected = 'English',  
-                           multiple = FALSE, width = "150px"),
-               actionButton('contribute', 'How can I contribute?',
-                            icon = icon('info'), 
-                            class = 'f5 dib bg-gold grow hover-bg-gold')
-               ),
-               
-               span(HTML(glue("{strong('Last Updated:')} {Sys.Date()}"))),
-            actionButton('about_tool', 'About This Tool', icon = icon('info'), 
-                         class = "ma2 btn-primary f5", style = 'font-variant: small-caps;'),
+                           multiple = FALSE),
+            actionButton('about_tool', ' About This Tool', icon = icon('info'), 
+                         class = "mb3 btn-primary f5", style = 'font-variant: small-caps;')
+            ,
+            actionButton('contribute', ' How can I contribute?',
+                         icon = icon('hands-helping'), 
+                         class = 'f5 bg-gold hover-bg-yellow small-caps mb3'),
                wellPanel(
                htmlOutput('p1_header'),
                numericInput(inputId = "lou_acute",
-                            label = HTML("Mean days in acute care<sup>1</sup>"),
+                            label = HTML("Mean days in acute care"),
                             value = 11, min = 1),
-               bsTooltip("lou_acute", 
-                         "Note: Acute care days are mutually exclusive of critical care and ventilator days.", 
-                         placement = "bottom", trigger = 'hover',
-                         options = list(container = "body")),
                
                numericInput(inputId = "lou_crit",
-                            label = HTML("Mean days in critical care<sup>1</sup>"),
+                            label = HTML("Mean days in critical care"),
                             value = 20, min = 1),
-               bsTooltip("lou_crit", 
-                         "Note: Critical care days are mutually exclusive of acute care days. Total number of days spent in critical care are equal to the number of days spent in critical care with or without a ventilator.", 
-                         placement = "bottom", trigger = 'hover',
-                         options = list(container = "body")),
                
                numericInput(inputId = "lou_vent",
-                            label = HTML("Mean days on a mechanical ventilator<sup>1</sup>"),
+                            label = HTML("Mean days on a mechanical ventilator"),
                             value = 20, min = 1),
-               bsTooltip("lou_vent", 
-                         "Note: Days spent on a mechanical ventilator are assumed to be spent in a critical care bed.", 
-                         placement = "bottom", trigger = 'hover',
-                         options = list(container = "body")),
                
-               p(HTML('<sup>1</sup> Default values are based on data extracted from Zhou <em>et al.</em> (2020), Yang <em>et al.</em> (2020), and Wang <em>et al.</em> (2020), collected in China. See <strong>Help</strong> page for full citations.'), class = 'f5'),
+               htmlOutput('p1_footnote'),
                )
                ),
         
         # Second Column ----
         column(3,
                wellPanel(
-               h4('Resource Availability'),
+               htmlOutput('p2_header'),
                
                numericInput(inputId = "n_acute",
-                            label = HTML("Number of acute care beds for COVID-19 patients<sup>2</sup>"),
+                            label = HTML("Number of acute care beds for COVID-19 patients"),
                             value = 8378, min = 0),
-               bsTooltip("n_acute", 
-                         "Note: This is the total number of acute care beds that are available for or are currently being used by COVID-19 patients.", 
-                         placement = "bottom", trigger = 'hover',
-                         options = list(container = "body")),
                actionButton('acute', 'Calculate Acute Care Beds',
                             icon = icon('cogs'), class = 'bg-dark-gray white'),
                hr(),
                
                numericInput(inputId = "n_crit",
-                            label = HTML("Number of critical care beds for COVID-19 patients<sup>2</sup>"),
+                            label = HTML("Number of critical care beds for COVID-19 patients"),
                             value = 513, min = 0),
-               bsTooltip("n_crit", 
-                         "Note: This is the total number of critical care beds that are available for or are currently being used by COVID-19 patients.", 
-                         placement = "bottom", trigger = 'hover',
-                         options = list(container = "body")),
                actionButton('critical', 'Calculate Critical Care Beds',
                             icon = icon('cogs'), class = 'bg-dark-gray white'),
                hr(),
                
                numericInput(inputId = "n_vent",
-                            label = HTML("Number of mechanical ventilators for COVID-19 patients<sup>2</sup>"),
+                            label = HTML("Number of mechanical ventilators for COVID-19 patients"),
                             value = 328, min = 0),
-               bsTooltip("n_vent", 
-                         "Note: This is the total number of mechanical ventilators that are available for or are currently being used by COVID-19 patients.", 
-                         placement = "bottom", trigger = 'hover',
-                         options = list(container = "body")),
                actionButton('mvent', 'Calculate Mechanical Ventilators',
                             icon = icon('cogs'), class = "bg-dark-gray white"),
                hr(),
                
                sliderInput(inputId = "per_vent",
-                            label = HTML("Percent of critical care patients requiring mechanical ventilation<sup>1</sup>"),
+                            label = HTML("Percent of critical care patients requiring mechanical ventilation"),
                             value = 50, min = 0, max = 100, step = 1, 
                            post = '%'),
                bsTooltip("per_vent", 
                          "Note: This is the percentage of COVID-19 critical care patients requiring mechanical ventilation.", 
                          placement = "bottom", trigger = 'hover',
                          options = list(container = "body")),
-               p(HTML('<sup>1</sup> Default values are based on data extracted from Zhou <em>et al.</em> (2020) and Wang <em>et al.</em> (2020), collected in China. See <strong>Help</strong> page for full citations.'), class = 'f5'),
-               p(HTML('<sup>2</sup> Default values are based on data extracted from Barrett <em>et al.</em> (2020), collected in Ontario. See <strong>Help</strong> page for full citations.'), class = 'f5')
+               htmlOutput('p2_footnote_1'),
+               htmlOutput('p2_footnote_2')
                )),
         
         # Third Column ----
         column(6,
                
               bsCollapse(id = 'global', multiple = TRUE,
-                bsCollapsePanel('Age-stratified Case Distribution and Severity (click to toggle visibility)',
+                bsCollapsePanel(
+                  title = htmlOutput('table_title'),
         DT::dataTableOutput("tab_pop"),
         p('Source: CDC COVID-19 Response Team. Severe Outcomes Among Patients with Coronavirus Disease 2019 (COVID-19) — United States, February 12–March 16, 2020. MMWR Morb Mortal Wkly Rep. 2020.', class='f5'),
-        p(HTML('<strong>TIP:</strong> Double-click a cell to begin editing. Use [TAB] to navigate through column items while editing. Press [CONTROL + ENTER] when done editing a column.'), class = 'f5')
+        htmlOutput('table_tip'), style = 'primary'
                 ), open = ''
               ),
         
-        h4('Maximum daily number of incident COVID-19 cases manageable by healthcare system'),
-        p("The values shown below are thresholds for the maximum daily number of incident COVID-19 cases that can occur without causing a resource deficit. In other words, if more cases occur than the values shown below, the amount of acute care beds, critical care beds, and/or mechanical ventilators would be insufficient to meet the healthcare system's needs.", class = 'navy'),
+        htmlOutput('plot_title'),
+        htmlOutput('plot_desc'),
 
         span(dropdownButton(size = 'xs', icon = icon('cog'),
-                            tooltip = TRUE, inline = TRUE, width = '100px',
+                            tooltip = TRUE, inline = TRUE, width = '200px',
                             selectInput('colors', 'Choose Colour Palette',
                                         choices = c('YlOrRd', 'Viridis',
                                                     'Grayscale', 'Pastel', 
@@ -195,21 +171,19 @@ ui <-
                                         multiple = FALSE)),
              plotlyOutput('plot')),
         wellPanel(
-          span(h4("Interpreting the Results", style = "display: inline"),
-               downloadButton('report', 'Generate PDF Report', 
-                             class = "btn-primary f5")
-               ),
+          htmlOutput('interpret_title'),
           tabsetPanel(id = 'intepretations',
-                      tabPanel('Acute Care',
+                      tabPanel(htmlOutput('acute_res_title'),
                                br(),
                                textOutput('acute_int')),
-                      tabPanel('Critical Care',
+                      tabPanel(htmlOutput('crit_res_title'),
                                br(),
                                textOutput('crit_int')),
-                      tabPanel('Mechanical Ventilators',
+                      tabPanel(htmlOutput('vent_res_title'),
                                br(),
-                               textOutput('mv_int'))
-          )
+                               textOutput('mv_int'))),
+          hr(),
+          div(uiOutput('report'), class = 'tc')
           )
             )
       )
@@ -220,7 +194,7 @@ ui <-
     tabPanel(
       'Help', 
       icon = icon('question'),
-      includeHTML('lang/eng/help.html')
+      htmlOutput('help_text')
     ),
     
     # More Info tab ----
