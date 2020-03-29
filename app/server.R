@@ -15,14 +15,42 @@ server <- function(input, output, session) {
     )
     loader
     
+    output$home <- renderUI(span(icon('toolbox'), home))
+    
+    ## Footer ----
+    
+    track_twitter <- function(name, handle, label, value = 1) {
+      a(
+        glue('{name}'),
+        href = glue('https://www.twitter.com/{handle}'),
+        target = '_blank',
+        #onclick = glue('ga("send", "event", "click", "link", "{label}", {value})')
+      )
+    }
+    
+    footer <- 
+      HTML(
+        glue(" ",
+             "{track_twitter('Vasily Giannakeas', 'vasilepi', 'twitter_vg', 1)}, ",
+             "{track_twitter('Deepit Bhatia', 'BreslowDay', 'twitter_db', 1)}, ",
+             "{track_twitter('Matthew T. Warkentin', 'mattwrkntn', 'twitter_mtw', 1)}, ",
+             "{track_twitter('Isaac I. Bogoch', 'BogochIsaac', 'twitter_iib', 1)}, ",
+             "and ",
+             "{track_twitter('Nathan M. Stall', 'NathanStall', 'twitter_nms', 1)}",
+             " (Toronto, Canada).<p/></footer>"
+        ))
+    
+    output$dev_by <- renderUI(HTML(glue('<hr /><footer><p>', dev_by, footer)))
+    
     ## Panel 1 ----
     output$last_update <- renderUI(HTML(glue("{strong(last_update)}: {Sys.Date()}")))
     updateButton(session, 'about_tool', glue(' {about_tool}'))
     updateButton(session, 'contribute', glue(' {contribute}'))
-    output$p1_header <- renderUI(h4(p1_header))
-    updateNumericInput(session, 'lou_acute', lou_acute_label)
-    updateNumericInput(session, 'lou_crit', lou_crit_label)
-    updateNumericInput(session, 'lou_vent',lou_vent_label)
+    output$p1_header <- renderUI(h4(p1_header,
+                                    class = 'f2 f4-m f2-l'))
+    output$lou_acute_label <- renderUI(p(lou_acute_label, class = 'f5-m f3-l f3'))
+    output$lou_crit_label <- renderUI(p(lou_crit_label, class = 'f5-m f3-l f3'))
+    output$lou_vent_label <- renderUI(p(lou_vent_label, class = 'f5-m f3-l f3'))
     
     addTooltip(session, "lou_acute", lou_acute_tooltip, 
               placement = "bottom", trigger = 'hover',
@@ -34,46 +62,48 @@ server <- function(input, output, session) {
                placement = "bottom", trigger = 'hover',
                options = list(container = "body"))
     
-    output$p1_footnote <- renderUI(p(p1_footnote, class = 'f5'))
+    output$p1_footnote <- renderUI(p(p1_footnote, class = 'f5 f5-l f6-m'))
     
     ## Panel 2 ----
     
-    output$p2_header <- renderUI(h4('Resource Availability'))
+    output$p2_header <- renderUI(h4('Resource Availability',
+                                    class = 'f2 f4-m f2-l'))
     
-    updateNumericInput(session, 'n_acute', n_acute_label)
+    output$n_acute_label <- renderUI(p(n_acute_label, class = 'f5-m f3-l f3'))
     updateButton(session, 'calc_acute', calc_acute)
     
-    updateNumericInput(session, 'n_crit', n_crit_label)
+    output$n_crit_label <- renderUI(p(n_crit_label, class = 'f5-m f3-l f3'))
     updateButton(session, 'calc_crit', calc_crit)
     
-    updateNumericInput(session, 'n_vent', n_vent_label)
+    output$n_vent_label <- renderUI(p(n_vent_label, class = 'f5-m f3-l f3'))
     updateButton(session, 'calc_vent', calc_vent)
     
-    updateSliderInput(session, 'per_vent', per_vent_label)
+    output$per_vent_label <- renderUI(p(per_vent_label, class = 'f5-m f3-l f3'))
     
-    output$p2_footnote_1 <- renderUI(p(p2_footnote_1, class = 'f5'))
-    output$p2_footnote_2 <- renderUI(p(p2_footnote_2, class = 'f5'))
+    output$p2_footnote_1 <- renderUI(p(p2_footnote_1, class = 'f5 f5-l f6-m'))
+    output$p2_footnote_2 <- renderUI(p(p2_footnote_2, class = 'f5 f5-l f6-m'))
     
-    addTooltip(session, "n_acute", 
-               "Note: This is the total number of acute care beds that are available for or are currently being used by COVID-19 patients.", 
+    addTooltip(session, "n_acute", n_acute_tooltip, 
                placement = "bottom", trigger = 'hover',
                options = list(container = "body"))
-    addTooltip(session, "n_crit", 
-              "Note: This is the total number of critical care beds that are available for or are currently being used by COVID-19 patients.", 
+    addTooltip(session, "n_crit", n_crit_tooltip, 
               placement = "bottom", trigger = 'hover',
               options = list(container = "body"))
-    addTooltip(session, "n_vent", 
-              "Note: This is the total number of mechanical ventilators that are available for or are currently being used by COVID-19 patients.", 
+    addTooltip(session, "n_vent", n_vent_tooltip, 
+              placement = "bottom", trigger = 'hover',
+              options = list(container = "body"))
+    addTooltip(session, "per_vent", per_vent_tooltip, 
               placement = "bottom", trigger = 'hover',
               options = list(container = "body"))
     
     ## Panel 3 ----
     
-    output$table_title <- renderUI(table_title)
+    output$table_title <- renderUI(HTML(glue("{icon('arrows-alt-v')} {table_title1} ({table_title2})")))
     output$table_tip <- renderUI(p(table_tip, class = 'f5'))
+    output$table_source <- renderUI(p(glue('{table_source}: CDC COVID-19 Response Team. Severe Outcomes Among Patients with Coronavirus Disease 2019 (COVID-19) — United States, February 12–March 16, 2020. MMWR Morb Mortal Wkly Rep. 2020.'), class='f5'))
     
-    output$plot_title <- renderUI(h4(plot_title))
-    output$plot_desc <- renderUI(p(plot_desc, class = 'navy'))
+    output$plot_title <- renderUI(h4(plot_title, class = 'f2 f3-m f2-l'))
+    output$plot_desc <- renderUI(p(plot_desc, class = 'navy f3 f3-l f4-m'))
     
     updateSelectInput(session, 'colors', color_label)
     
@@ -81,54 +111,32 @@ server <- function(input, output, session) {
     output$acute_res_title <- renderUI(acute_res_title)
     output$crit_res_title <- renderUI(crit_res_title)
     output$vent_res_title <- renderUI(vent_res_title)
-    output$report <- renderUI(
-      {actionButton('report', report_button,
-                    icon = icon('download'),
-                     class = "btn-primary f4")}
-    )
-    
+
     output$report <- renderUI({
       downloadButton('report_btn', report_button, 
-                     class = 'btn-primary f5')
+                     class = 'btn-primary f4')
     })
     
     ## Help Page ----
     
-    observeEvent(input$lang, {
-      rmarkdown::render('lang/eng/help-text.Rmd',
-                        output_file = glue('../{input$lang}/help-text.html'),
-                        output_format = 'html_fragment',
-                        params = list(
-                          help_welcome = help_welcome,
-                          contact_title = contact_title,
-                          contact_info = contact_info,
-                          thanks = thanks, 
-                          important_resources = important_resources,
-                          resource_sentence = resource_sentence
-                        ))
-    })
+    output$help <- renderUI(span(icon('question-circle'), help))
     
     output$help_text <- renderUI(includeHTML(glue('lang/{input$lang}/help-text.html')))
+    
+    ## More Info ----
+    
+    output$tutorial <- renderUI(span(icon('youtube'), tutorial))
+    
+    output$more_info <- renderUI(more_info)
+    
+    output$see_article <- renderUI(span(icon('file-medical-alt'), 
+                                          see_article))
+    
+    output$see_code <- renderUI(span(icon('github'), see_code))
     
   })
   
   # Language Contribution ----
-  
-  observeEvent(input$lang, {
-    rmarkdown::render('lang/eng/contribute.Rmd',
-                      output_file = glue('../{input$lang}/contribute.html'),
-                      output_format = 'html_fragment',
-                      params = list(
-                        cont_details = cont_details,
-                        how_to_cont = how_to_cont,
-                        cont1 = cont1,
-                        cont2 = cont2,
-                        thats_it = thats_it,
-                        recognition = recognition,
-                        code = code
-                      )
-    )
-  })
   
   observeEvent(input$contribute, {
     showModal(modalDialog(title = h4(lang_title), 
@@ -150,24 +158,7 @@ server <- function(input, output, session) {
     )
   
   # Welcome Modal ----
-  
-  observeEvent(input$lang, {
-    rmarkdown::render(input = 'lang/eng/intro-text.Rmd',
-                      output_file = glue('../{input$lang}/intro-text.html'),
-                      output_format = 'html_fragment',
-                      params = list(
-                        authors = authors,
-                        desc = desc,
-                        desc_title = desc_title,
-                        how_to = how_to,
-                        item1 = item1,
-                        item1_opt = item1_opt,
-                        item2 = item2,
-                        item3 = item3,
-                        item4 = item4
-                      ))
-  })
-  
+
   observeEvent("", {
     showModal(modalDialog(
       includeHTML("lang/eng/intro-text.html"),
@@ -475,10 +466,10 @@ server <- function(input, output, session) {
     sanitize_acute(n_acute(), lou_acute(), acuteBedRateR(),
                    rateAcuteR(), maxAcuteR()))
   
-  output$acute_int <- renderText({
+  output$acute_int <- renderUI({
     input$tab_pop_cell_edit
     
-    acute_int()
+    p(acute_int(), class = 'f3 f4-m f3-l')
   }
   )
   
@@ -498,10 +489,10 @@ server <- function(input, output, session) {
                   rateCritR(), maxCritR())
   )
   
-  output$crit_int <- renderText({
+  output$crit_int <- renderUI({
     input$tab_pop_cell_edit
     
-    crit_int()
+    p(crit_int(), class = 'f3 f4-m f3-l')
   }
   )
   
@@ -521,10 +512,10 @@ server <- function(input, output, session) {
                   rateVentR(), maxVentR())
   )
   
-  output$mv_int <- renderText({
+  output$mv_int <- renderUI({
     input$tab_pop_cell_edit
 
-    vent_int()
+    p(vent_int(), class = 'f3 f4-m f3-l')
   }
   )
   
@@ -583,9 +574,9 @@ server <- function(input, output, session) {
                        lou_acute_label = lou_acute_label,
                        lou_crit_label = lou_crit_label,
                        lou_vent_label = lou_vent_label,
-                       caption1 = caption1,
+                       caption1 = p1_header,
                        caption2 = caption2,
-                       caption3 = caption3,
+                       caption3 = table_title1,
                        col_name1 = col_name1,
                        col_name2 = col_name2,
                        n_acute_label = n_acute_label,

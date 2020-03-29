@@ -92,7 +92,7 @@ knitr::asis_output('\\medskip')
 
 ```{r desc}
 knitr::asis_output(
-  glue('\\textbf{<<params$desc_title>>}: ', '{desc}', 
+  glue('\\textbf{<<params$desc_title>>}: ', '<<params$desc>>', 
        .open = '<<', .close = '>>')
 )
 ```

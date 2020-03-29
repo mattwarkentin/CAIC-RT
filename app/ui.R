@@ -1,32 +1,8 @@
 # Load packages ----
-suppressPackageStartupMessages(source('package-deps.R'))
+source('package-deps.R')
 
 # Load functions ----
 source('utils.R')
-
-# Footer text ----
-
-track_twitter <- function(name, handle, label, value = 1) {
-  a(
-    glue('{name}'),
-    href = glue('https://www.twitter.com/{handle}'),
-    target = '_blank',
-    #onclick = glue('ga("send", "event", "click", "link", "{label}", {value})')
-    )
-}
-
-footer <- 
-  HTML(
-    glue(
-      "<hr /><footer><p>Developed by ",
-      "{track_twitter('Vasily Giannakeas', 'vasilepi', 'twitter_vg', 1)}, ",
-      "{track_twitter('Deepit Bhatia', 'BreslowDay', 'twitter_db', 1)}, ",
-      "{track_twitter('Matthew T. Warkentin', 'mattwrkntn', 'twitter_mtw', 1)}, ",
-      "{track_twitter('Isaac I. Bogoch', 'BogochIsaac', 'twitter_iib', 1)}, ",
-      "and ",
-      "{track_twitter('Nathan M. Stall', 'NathanStall', 'twitter_nms', 1)}",
-      " (Toronto, Canada).<p/></footer>"
-    ))
 
 # Meta Content ----
 tool_meta <- 
@@ -48,13 +24,13 @@ tool_meta <-
 
 # Navbar UI ----
 
-langs <- sort(c('English' = 'eng', 'French' = 'fr'))
+langs <- sort(c('English' = 'eng'))
 
 ui <- 
   navbarPage(
     # Navbar ----
     title = 'CAIC-RT',
-    footer = footer,
+    footer = htmlOutput('dev_by'),
     inverse = TRUE,
     fluid = TRUE, 
     position = 'fixed-top', 
@@ -62,8 +38,7 @@ ui <-
     header = tags$style(type="text/css", "body {padding-top: 70px;}"),
     # Home Tool ----
     tabPanel(
-      'Home', 
-      icon = icon('toolbox'),
+      htmlOutput('home'),
       useShinyalert(),
       useShinyFeedback(),
       tool_meta,
@@ -85,23 +60,23 @@ ui <-
                            selected = 'English',  
                            multiple = FALSE),
             actionButton('about_tool', ' About This Tool', icon = icon('info'), 
-                         class = "mb3 btn-primary f5", style = 'font-variant: small-caps;')
+                         class = "mb3 btn-primary f4 f5-ns small-caps")
             ,
             actionButton('contribute', ' How can I contribute?',
                          icon = icon('hands-helping'), 
-                         class = 'f5 bg-gold hover-bg-yellow small-caps mb3'),
+                         class = 'f4 f5-ns bg-gold hover-bg-yellow small-caps mb3'),
                wellPanel(
                htmlOutput('p1_header'),
                numericInput(inputId = "lou_acute",
-                            label = HTML("Mean days in acute care"),
+                            label = htmlOutput('lou_acute_label'),
                             value = 11, min = 1),
                
                numericInput(inputId = "lou_crit",
-                            label = HTML("Mean days in critical care"),
+                            label = htmlOutput('lou_crit_label'),
                             value = 20, min = 1),
                
                numericInput(inputId = "lou_vent",
-                            label = HTML("Mean days on a mechanical ventilator"),
+                            label = htmlOutput('lou_vent_label'),
                             value = 20, min = 1),
                
                htmlOutput('p1_footnote'),
@@ -114,34 +89,33 @@ ui <-
                htmlOutput('p2_header'),
                
                numericInput(inputId = "n_acute",
-                            label = HTML("Number of acute care beds for COVID-19 patients"),
+                            label = htmlOutput('n_acute_label'),
                             value = 8378, min = 0),
                actionButton('acute', 'Calculate Acute Care Beds',
-                            icon = icon('cogs'), class = 'bg-dark-gray white'),
+                            icon = icon('cogs'), 
+                            class = 'bg-dark-gray white f3 f5-l f7-m'),
                hr(),
                
                numericInput(inputId = "n_crit",
-                            label = HTML("Number of critical care beds for COVID-19 patients"),
+                            label = htmlOutput('n_crit_label'),
                             value = 513, min = 0),
                actionButton('critical', 'Calculate Critical Care Beds',
-                            icon = icon('cogs'), class = 'bg-dark-gray white'),
+                            icon = icon('cogs'), 
+                            class = 'bg-dark-gray white f3 f5-l f7-m'),
                hr(),
                
                numericInput(inputId = "n_vent",
-                            label = HTML("Number of mechanical ventilators for COVID-19 patients"),
+                            label = htmlOutput('n_vent_label'),
                             value = 328, min = 0),
                actionButton('mvent', 'Calculate Mechanical Ventilators',
-                            icon = icon('cogs'), class = "bg-dark-gray white"),
+                            icon = icon('cogs'), 
+                            class = "bg-dark-gray white f3 f5-l f7-m"),
                hr(),
                
                sliderInput(inputId = "per_vent",
-                            label = HTML("Percent of critical care patients requiring mechanical ventilation"),
+                            label = htmlOutput('per_vent_label'),
                             value = 50, min = 0, max = 100, step = 1, 
                            post = '%'),
-               bsTooltip("per_vent", 
-                         "Note: This is the percentage of COVID-19 critical care patients requiring mechanical ventilation.", 
-                         placement = "bottom", trigger = 'hover',
-                         options = list(container = "body")),
                htmlOutput('p2_footnote_1'),
                htmlOutput('p2_footnote_2')
                )),
@@ -153,7 +127,7 @@ ui <-
                 bsCollapsePanel(
                   title = htmlOutput('table_title'),
         DT::dataTableOutput("tab_pop"),
-        p('Source: CDC COVID-19 Response Team. Severe Outcomes Among Patients with Coronavirus Disease 2019 (COVID-19) — United States, February 12–March 16, 2020. MMWR Morb Mortal Wkly Rep. 2020.', class='f5'),
+        htmlOutput('table_source'),
         htmlOutput('table_tip'), style = 'primary'
                 ), open = ''
               ),
@@ -175,13 +149,13 @@ ui <-
           tabsetPanel(id = 'intepretations',
                       tabPanel(htmlOutput('acute_res_title'),
                                br(),
-                               textOutput('acute_int')),
+                               htmlOutput('acute_int')),
                       tabPanel(htmlOutput('crit_res_title'),
                                br(),
-                               textOutput('crit_int')),
+                               htmlOutput('crit_int')),
                       tabPanel(htmlOutput('vent_res_title'),
                                br(),
-                               textOutput('mv_int'))),
+                               htmlOutput('mv_int'))),
           hr(),
           div(uiOutput('report'), class = 'tc')
           )
@@ -192,24 +166,17 @@ ui <-
     
     # Help Page ----
     tabPanel(
-      'Help', 
-      icon = icon('question'),
+      htmlOutput('help'),
       htmlOutput('help_text')
     ),
     
     # More Info tab ----
-    navbarMenu(
-      'More Info',
-      tabPanel(a(span(icon('file-medical-alt'),"See the article"), 
-                 href="https://www.medrxiv.org/content/10.1101/2020.03.25.20043711v1",
-                 target="_blank"
-                 )),
-      tabPanel(a(span(icon('github'),"See the code"), 
-                 href="https://www.github.com/mattwarkentin/CAIC-RT",
-                 target="_blank"
-                 )
+    tabPanel(htmlOutput('tutorial'),
+             HTML('<iframe width="560" height="315" src="https://www.youtube.com/embed/VxvweotOWBQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')),
+    navbarMenu("More Info",
+    tabPanel(tags$a(htmlOutput('see_article'), href = "https://www.medrxiv.org/content/10.1101/2020.03.25.20043711v1", target = "_blank")),
+    tabPanel(tags$a(htmlOutput('see_code'), href = "https://www.github.com/mattwarkentin/CAIC-RT", target = "_blank"))
     )
-  )
   )
 
 
