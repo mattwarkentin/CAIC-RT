@@ -53,17 +53,20 @@ server <- function(input, output, session) {
     output$lou_crit_label <- renderUI(p(lou_crit_label, class = 'f5-m f3-l f3'))
     output$lou_vent_label <- renderUI(p(lou_vent_label, class = 'f5-m f3-l f3'))
     
+    output$p1_footnote <- renderUI(p(p1_footnote, class = 'f5 f5-l f6-m'))
+    
+    
     addTooltip(session, "lou_acute", lou_acute_tooltip, 
-              placement = "bottom", trigger = 'hover',
-              options = list(container = "body"))
-    addTooltip(session, "lou_crit", lou_crit_tooltip, 
-               placement = "bottom", trigger = 'hover',
-               options = list(container = "body"))
-    addTooltip(session, "lou_vent", lou_vent_tooltip, 
                placement = "bottom", trigger = 'hover',
                options = list(container = "body"))
     
-    output$p1_footnote <- renderUI(p(p1_footnote, class = 'f5 f5-l f6-m'))
+    addTooltip(session, "lou_crit", lou_crit_tooltip, 
+               placement = "bottom", trigger = 'hover',
+               options = list(container = "body"))
+    
+    addTooltip(session, "lou_vent", lou_vent_tooltip, 
+               placement = "bottom", trigger = 'hover',
+               options = list(container = "body"))
     
     ## Panel 2 ----
     

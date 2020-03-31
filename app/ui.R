@@ -175,7 +175,7 @@ ui <-
     # More Info tab ----
     tabPanel(htmlOutput('tutorial'),
              HTML('<iframe width="560" height="315" src="https://www.youtube.com/embed/VxvweotOWBQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')),
-    navbarMenu(htmlOutput('more_info'),
+    navbarMenu("More Info",
     tabPanel(tags$a(htmlOutput('see_article'), href = "https://www.medrxiv.org/content/10.1101/2020.03.25.20043711v1", target = "_blank")),
     tabPanel(tags$a(htmlOutput('see_code'), href = "https://www.github.com/mattwarkentin/CAIC-RT", target = "_blank"))
     )
