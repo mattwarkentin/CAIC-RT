@@ -3,7 +3,7 @@ title: "COVID-19 Acute and Intensive Care Resource Tool"
 subtitle: "CAIC-RT: `r params$report_type`"
 date: "__`r params$report_date`:__ `r paste0(Sys.Date())`"
 output: pdf_document
-geometry: margin=2cm
+geometry: margin=1.5cm
 fontsize: 10pt
 subparagraph: true
 header-includes:
@@ -12,8 +12,9 @@ header-includes:
   - \usepackage{titlesec}
   - \usepackage{setspace}
   - \usepackage{float}
+  - \usepackage{array}
   - \usepackage{booktabs}
-  - \pretitle{\begin{flushleft}\LARGE \vskip -3em\textsf \textsc}
+  - \pretitle{\begin{flushleft}\Large \vskip -3em\textsf \textsc}
   - \posttitle{\end{flushleft}}
   - \predate{\begin{flushleft}}
   - \postdate{\end{flushleft}}
@@ -81,18 +82,18 @@ knitr::asis_output(
        )
 knitr::asis_output(glue('\\textbf{<<params$authors>>:}', .open = '<<', .close = '>>'))
 knitr::asis_output('\\begin{itemize}')
-knitr::asis_output('\\item{Vasily Giannakeas, MPH \textsuperscript{1,2}}')
-knitr::asis_output('\\item{Deepit Bhatia, MPH}')
-knitr::asis_output('\\item{Matthew T. Warkentin, MSc \textsuperscript{2,3}}')
-knitr::asis_output('\\item{Isaac I. Bogoch, MD \\textsuperscript{4,5}}')
-knitr::asis_output('\\item{Nathan M. Stall, MD \textsuperscript{1,4,6,7}}')
+knitr::asis_output('\\item{\\small Vasily Giannakeas, MPH \\textsuperscript{1,2}}')
+knitr::asis_output('\\item{\\small Deepit Bhatia, MPH}')
+knitr::asis_output('\\item{\\small Matthew T. Warkentin, MSc \\textsuperscript{2,3}}')
+knitr::asis_output('\\item{\\small Isaac I. Bogoch, MD \\textsuperscript{4,5}}')
+knitr::asis_output('\\item{\\small Nathan M. Stall, MD \\textsuperscript{1,4,6,7}}')
 knitr::asis_output('\\end{itemize}')
 knitr::asis_output('\\medskip')
 ```
 
 ```{r desc}
 knitr::asis_output(
-  glue('\\textbf{<<params$desc_title>>}: ', '<<params$desc>>', 
+  glue('\\textbf{<<params$desc_title>>}: ', '\\small <<params$desc>>', 
        .open = '<<', .close = '>>')
 )
 ```
@@ -139,7 +140,8 @@ tribble(
         format = 'latex',
         caption = params$caption1,
         col.names = c(params$col_name1, params$col_name2)) %>% 
-  kable_styling(full_width = FALSE, position = 'center', latex_options = 'H') %>% 
+  kable_styling(full_width = FALSE,
+                position = 'center', latex_options = 'H') %>% 
   row_spec(0, bold = TRUE)
 ```
 
@@ -167,9 +169,11 @@ kable(params$table, booktabs = TRUE,
                     params$table_col3,
                     params$table_col4), 
       caption = params$caption3) %>% 
-  kable_styling(full_width = FALSE, 
+  kable_styling(full_width = FALSE,
                 position = 'center', latex_options = 'H') %>% 
-  row_spec(0, bold = TRUE)
+  row_spec(0, bold = TRUE) %>% 
+  column_spec(1, width = '0.75in') %>% 
+  column_spec(c(2:4), width = '1.5in')
 ```
 
 ```{r}
@@ -187,7 +191,7 @@ knitr::asis_output(
 params$plot + 
   theme(
     text = element_text(size = 14),
-    axis.text.x = element_text(angle = 0)
+    axis.text.x = element_text(angle = 25, vjust = 0.5)
   )
 ```
 

@@ -7,11 +7,11 @@ server <- function(input, output, session) {
   
   observeEvent(input$lang, {
     req(input$lang)
-    lang <- input$lang
+    choose_lang <- input$lang
     
-    loader <- switch(lang,
+    loader <- switch(choose_lang,
       'eng' = load_lang('eng'),
-      'fr' = load_lang('fr'),
+      'spa' = load_lang('spa')
     )
     loader
     
@@ -44,6 +44,7 @@ server <- function(input, output, session) {
     
     ## Panel 1 ----
     output$last_update <- renderUI(HTML(glue("{strong(last_update)}: {Sys.Date()}")))
+    updateSelectInput(session, 'lang', lang)
     updateButton(session, 'about_tool', glue(' {about_tool}'))
     updateButton(session, 'contribute', glue(' {contribute}'))
     output$p1_header <- renderUI(h4(p1_header,
@@ -66,17 +67,17 @@ server <- function(input, output, session) {
     
     ## Panel 2 ----
     
-    output$p2_header <- renderUI(h4('Resource Availability',
+    output$p2_header <- renderUI(h4(p2_header,
                                     class = 'f2 f4-m f2-l'))
     
     output$n_acute_label <- renderUI(p(n_acute_label, class = 'f5-m f3-l f3'))
-    updateButton(session, 'calc_acute', calc_acute)
+    updateButton(session, 'acute', glue(' {calc_acute}'))
     
     output$n_crit_label <- renderUI(p(n_crit_label, class = 'f5-m f3-l f3'))
-    updateButton(session, 'calc_crit', calc_crit)
+    updateButton(session, 'critical', glue(' {calc_crit}'))
     
     output$n_vent_label <- renderUI(p(n_vent_label, class = 'f5-m f3-l f3'))
-    updateButton(session, 'calc_vent', calc_vent)
+    updateButton(session, 'mvent', glue(' {calc_vent}'))
     
     output$per_vent_label <- renderUI(p(per_vent_label, class = 'f5-m f3-l f3'))
     
@@ -164,7 +165,7 @@ server <- function(input, output, session) {
       includeHTML("lang/eng/intro-text.html"),
       easyClose = TRUE, size = 'm', 
       footer = modalButton(close),
-      title = welcome_title)
+      title = "CAIC-RT: COVID-19 Acute and Intensive Care Resource Tool")
     )
   }
   )
@@ -174,7 +175,7 @@ server <- function(input, output, session) {
       includeHTML(glue("lang/{input$lang}/intro-text.html")),
       easyClose = TRUE, size = 'm', 
       footer = modalButton(close),
-      title = welcome_title)
+      title = "CAIC-RT: COVID-19 Acute and Intensive Care Resource Tool")
     )
   })
   
@@ -392,19 +393,38 @@ server <- function(input, output, session) {
                            input$n_vent, input$lou_vent, input$per_vent)})
   
   # Plot Data
-  plot_data <- reactive(
+  
+  format_tooltip <- function(resource, value, text) {
+    resource <- tolower(resource)
+    value <- format(floor(value), big.mark = ",")
+    
+    glue(text)
+  }
+  
+  plot_data <- reactive({
+    input$tab_pop_cell_edit
+    input$lang
+    
     tribble(
       ~resource, ~value,
       xlab_acute, maxAcuteR(),
       xlab_crit, maxCritR(),
       xlab_vent, maxVentR()
-    )
+    ) %>% 
+      mutate(
+        tooltip = format_tooltip(resource, value, plot_tooltip),
+        resource = factor(resource,
+                          levels = c(xlab_acute, xlab_crit,
+                                          xlab_vent)))
+    
+    }
   )
+  
+  y_lab <- reactive({input$lang; ylab})
   
   # Plotly Results ----
   
   plot <- reactive({
-    input$tab_pop_cell_edit
     
     color_scale <- switch(input$colors,
                           YlOrRd = scale_fill_manual(values = c('#FFEC19', '#FF9800', '#F6412D')),
@@ -416,9 +436,9 @@ server <- function(input, output, session) {
     )
     
     if (all(is.na(maxAcuteR()), is.na(maxCritR()), is.na(maxVentR()))) {
-      p <- ggplot(plot_data(), aes(glue("{resource}\n ({value} {xlab_suffix}"), value, fill = resource, text = str_wrap(glue("The number of available {tolower(resource)} in this healthcare system can manage a maximum of {value} daily cases of COVID-19"), width = 40))) +
+      p <- ggplot(plot_data(), aes(resource, value, fill = resource, text = str_wrap(tooltip, width = 40))) +
         labs(x = '', 
-             y = ylab) + 
+             y = y_lab()) + 
         color_scale +
         theme_classic() +
         theme(legend.position = 'none',
@@ -426,12 +446,15 @@ server <- function(input, output, session) {
       p
     } else {
     
-      p <- ggplot(plot_data(), aes(glue("{resource}\n ({scales::comma(floor(value))} {xlab_suffix})"), value, fill = resource,
-                                   text = str_wrap(glue("The number of available {tolower(resource)} in this healthcare system can manage a maximum of {scales::comma(floor(value))} daily new cases of COVID-19"), width = 40))) +
+      p <- 
+        plot_data() %>% 
+        ggplot(aes(resource, value, fill = resource,
+                                   text = str_wrap(tooltip, width = 40))) +
         geom_col(show.legend = FALSE, col = 'black') +
         labs(x = '', 
-             y = 'Maximum Daily Number of Cases') + 
+             y = y_lab()) + 
         color_scale +
+        scale_x_discrete(labels = with(plot_data(), glue("{resource}\n ({scales::comma(floor(value))} {xlab_suffix})"))) +
         scale_y_continuous(labels = scales::comma_format()) +
         theme_classic() +
         theme(legend.position = 'none',
@@ -462,9 +485,10 @@ server <- function(input, output, session) {
     glue(summary_acute)
   }
   
-  acute_int <- reactive(
+  acute_int <- reactive({
+    input$lang
     sanitize_acute(n_acute(), lou_acute(), acuteBedRateR(),
-                   rateAcuteR(), maxAcuteR()))
+                   rateAcuteR(), maxAcuteR())})
   
   output$acute_int <- renderUI({
     input$tab_pop_cell_edit
@@ -484,9 +508,10 @@ server <- function(input, output, session) {
     glue(summary_crit)
   }
   
-  crit_int <- reactive(
+  crit_int <- reactive({
+    input$lang
     sanitize_crit(n_crit(), lou_crit(), critBedRateR(),
-                  rateCritR(), maxCritR())
+                  rateCritR(), maxCritR())}
   )
   
   output$crit_int <- renderUI({
@@ -507,9 +532,10 @@ server <- function(input, output, session) {
     glue(summary_vent)
   }
   
-  vent_int <- reactive(
+  vent_int <- reactive({
+    input$lang
     sanitize_crit(n_vent(), lou_vent(), ventBedRateR(),
-                  rateVentR(), maxVentR())
+                  rateVentR(), maxVentR())}
   )
   
   output$mv_int <- renderUI({
