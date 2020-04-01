@@ -28,7 +28,7 @@ tool_meta <-
 # https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
 langs <- sort(c('English' = 'eng', 'Spanish' = 'spa'))
 
-ui <- 
+ui <- function(request) {
   navbarPage(
     # Navbar ----
     title = 'CAIC-RT',
@@ -120,7 +120,9 @@ ui <-
                            post = '%'),
                htmlOutput('p2_footnote_1'),
                htmlOutput('p2_footnote_2')
-               )),
+               ), div(bookmarkButton(label = "Bookmark Current Values",
+                                     class = 'btn-success mb4'),
+                      class = 'tc')),
         
         # Third Column ----
         column(6,
@@ -148,7 +150,7 @@ ui <-
              plotlyOutput('plot')),
         wellPanel(
           htmlOutput('interpret_title'),
-          tabsetPanel(id = 'intepretations',
+          tabsetPanel(id = 'interpretations',
                       tabPanel(htmlOutput('acute_res_title'),
                                br(),
                                htmlOutput('acute_int')),
@@ -159,7 +161,8 @@ ui <-
                                br(),
                                htmlOutput('mv_int'))),
           hr(),
-          div(uiOutput('report'), class = 'tc')
+          div(uiOutput('report'),
+              class = 'tc')
           )
             )
       )
@@ -180,5 +183,5 @@ ui <-
     tabPanel(tags$a(htmlOutput('see_code'), href = "https://www.github.com/mattwarkentin/CAIC-RT", target = "_blank"))
     )
   )
-
+}
 

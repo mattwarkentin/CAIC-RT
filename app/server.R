@@ -6,6 +6,18 @@ server <- function(input, output, session) {
   }
   
   observeEvent(input$lang, {
+    showMe <- function(lang) {
+      showNotification(p(glue('Rendering {lang} UI...')), 
+                       type = 'message') 
+    }
+    
+    switch (input$lang,
+      eng = showMe('English'),
+      spa = showMe('Spanish')
+    )
+  }, ignoreInit = TRUE)
+  
+  observeEvent(input$lang, {
     req(input$lang)
     choose_lang <- input$lang
     
@@ -16,6 +28,14 @@ server <- function(input, output, session) {
     loader
     
     output$home <- renderUI(span(icon('toolbox'), home))
+    
+    setBookmarkExclude(
+      names = c('about_tool', 'interpretations',
+                'mvent', 'colors', 'global', 'plotly_afterplot-A',
+                '.clientValue-default-plotlyCrosstalkOpts',
+                'contribute', 'critical', 'acute'),
+      session = session
+    )
     
     ## Footer ----
     
