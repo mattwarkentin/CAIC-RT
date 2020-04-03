@@ -35,6 +35,10 @@ close <- "Cerca"
 
 dev_by <- "Desarrollado por"
 
+tran_by <- "Traducción por"
+tb <- "Parth Patel"
+email <- "parthk.patel@mail.utoronto.ca"
+
 ## Navbar ----
 
 home <- "Hogar"

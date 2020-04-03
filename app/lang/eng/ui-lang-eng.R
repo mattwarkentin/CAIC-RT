@@ -35,6 +35,8 @@ close <- "Close"
 
 dev_by <- "Developed by"
 
+tb <- NA
+
 ## Navbar ----
 
 home <- "Home"

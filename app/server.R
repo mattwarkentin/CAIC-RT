@@ -39,6 +39,18 @@ server <- function(input, output, session) {
       )
     }
     
+    tran_foot <- function(name) {
+      if (is.na(name)) {
+        ""
+      } else {
+        paste0(tran_by, 
+        a(
+          glue(' {name}.'),
+          href = glue('mailto:', '{email}')
+        ))
+      }
+    }
+    
     footer <- 
       HTML(
         glue(" ",
@@ -48,7 +60,7 @@ server <- function(input, output, session) {
              "{track_twitter('Isaac I. Bogoch', 'BogochIsaac', 'twitter_iib', 1)}, ",
              "and ",
              "{track_twitter('Nathan M. Stall', 'NathanStall', 'twitter_nms', 1)}",
-             " (Toronto, Canada).<p/></footer>"
+             " (Toronto, Canada). {tran_foot(tb)}<p/></footer>"
         ))
     
     output$dev_by <- renderUI(HTML(glue('<hr /><footer><p>', dev_by, footer)))
@@ -532,7 +544,7 @@ server <- function(input, output, session) {
         labs(x = '', 
              y = y_lab()) + 
         color_scale +
-        scale_x_discrete(labels = with(plot_data(), glue("{resource}\n ({scales::comma(floor(value))} {xlab_suffix})"))) +
+        scale_x_discrete(labels = with(plot_data(), glue("{resource}\n ({str_trim(format(floor(value), big.mark = ','))} {xlab_suffix})"))) +
         scale_y_continuous(labels = scales::comma_format()) +
         theme_classic() +
         theme(legend.position = 'none',
