@@ -120,19 +120,21 @@ ui <- function(request) {
                            post = '%'),
                htmlOutput('p2_footnote_1'),
                htmlOutput('p2_footnote_2')
-               ), div(bookmarkButton(label = "Bookmark Current Values",
-                                     class = 'btn-success mb4'),
+               ), div(uiOutput('bookmark'),
                       class = 'tc')),
         
         # Third Column ----
         column(6,
-               
               bsCollapse(id = 'global', multiple = TRUE,
                 bsCollapsePanel(
                   title = htmlOutput('table_title'),
+                  uiOutput('input_data'),
         DT::dataTableOutput("tab_pop"),
         htmlOutput('table_source'),
-        htmlOutput('table_tip'), style = 'primary'
+        htmlOutput('table_tip'), 
+        actionButton('reset', 'Reset', class = 'btn-warning f4 f4-l f5-m',
+                     icon = icon('redo')),
+        style = 'primary'
                 ), open = ''
               ),
         
@@ -175,7 +177,7 @@ ui <- function(request) {
       htmlOutput('help_text')
     ),
     
-    # More Info tab ----
+    # More Info ----
     tabPanel(htmlOutput('tutorial'),
              HTML('<iframe width="560" height="315" src="https://www.youtube.com/embed/VxvweotOWBQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')),
     navbarMenu("More Info",

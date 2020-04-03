@@ -129,6 +129,8 @@ p2_footnote_1 <- "Default percent of critical care patients requiring mechanical
 
 p2_footnote_2 <- "Default number of acute care beds, critical care beds, and mechanical ventilators are based data extracted from Barrett et al. (2020), collected in Ontario. See Help page for full citations."
 
+bookmark <- "Bookmark custom values"
+
 ## Panel 3 ----
 
 table_title1 <- "Age-stratified Case Distribution and Severity"
@@ -224,6 +226,14 @@ n_vent_feedback <- "Warning: Number of mechanical ventilators is greater than th
 
 ## Data Table ----
 
+input_label <- "Upload CSV"
+
+input_btn <- "Browse"
+
+input_placehold <- "No file selected"
+
+input_text <- "The table below is editable. However, you may wish to upload your own data. Columns must be in the same order as the table below. File is assumed to have a header, though header labels are ignored."
+
 table_col1 <- "Age groups"
 
 table_col2 <- "Case distribution (%)"
@@ -237,6 +247,8 @@ table_modal_txt <- "This column can only accept numeric inputs. Please check you
 table_modal_sum <- "The case distribution column must sum to 100%. Please check your numbers!"
 
 table_modal_adm <- "Admission rates cannot be less than 0% or greater than 100%. Please check your numbers!"
+
+reset <- "Reset"
 
 ## Plot ----
 

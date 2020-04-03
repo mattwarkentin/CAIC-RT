@@ -21,21 +21,12 @@ server <- function(input, output, session) {
     req(input$lang)
     choose_lang <- input$lang
     
-    loader <- switch(choose_lang,
+    switch(choose_lang,
       'eng' = load_lang('eng'),
       'spa' = load_lang('spa')
     )
-    loader
     
     output$home <- renderUI(span(icon('toolbox'), home))
-    
-    setBookmarkExclude(
-      names = c('about_tool', 'interpretations',
-                'mvent', 'colors', 'global', 'plotly_afterplot-A',
-                '.clientValue-default-plotlyCrosstalkOpts',
-                'contribute', 'critical', 'acute'),
-      session = session
-    )
     
     ## Footer ----
     
@@ -68,10 +59,10 @@ server <- function(input, output, session) {
     updateButton(session, 'about_tool', glue(' {about_tool}'))
     updateButton(session, 'contribute', glue(' {contribute}'))
     output$p1_header <- renderUI(h4(p1_header,
-                                    class = 'f2 f4-m f2-l'))
-    output$lou_acute_label <- renderUI(p(lou_acute_label, class = 'f5-m f3-l f3'))
-    output$lou_crit_label <- renderUI(p(lou_crit_label, class = 'f5-m f3-l f3'))
-    output$lou_vent_label <- renderUI(p(lou_vent_label, class = 'f5-m f3-l f3'))
+                                    class = 'f3 f4-m f3-l'))
+    output$lou_acute_label <- renderUI(p(lou_acute_label, class = 'f5-m f4-l f4'))
+    output$lou_crit_label <- renderUI(p(lou_crit_label, class = 'f5-m f4-l f4'))
+    output$lou_vent_label <- renderUI(p(lou_vent_label, class = 'f5-m f4-l f4'))
     
     output$p1_footnote <- renderUI(p(p1_footnote, class = 'f5 f5-l f6-m'))
     
@@ -91,18 +82,18 @@ server <- function(input, output, session) {
     ## Panel 2 ----
     
     output$p2_header <- renderUI(h4(p2_header,
-                                    class = 'f2 f4-m f2-l'))
+                                    class = 'f3 f4-m f3-l'))
     
-    output$n_acute_label <- renderUI(p(n_acute_label, class = 'f5-m f3-l f3'))
+    output$n_acute_label <- renderUI(p(n_acute_label, class = 'f5-m f4-l f4'))
     updateButton(session, 'acute', glue(' {calc_acute}'))
     
-    output$n_crit_label <- renderUI(p(n_crit_label, class = 'f5-m f3-l f3'))
+    output$n_crit_label <- renderUI(p(n_crit_label, class = 'f5-m f4-l f4'))
     updateButton(session, 'critical', glue(' {calc_crit}'))
     
-    output$n_vent_label <- renderUI(p(n_vent_label, class = 'f5-m f3-l f3'))
+    output$n_vent_label <- renderUI(p(n_vent_label, class = 'f5-m f4-l f4'))
     updateButton(session, 'mvent', glue(' {calc_vent}'))
     
-    output$per_vent_label <- renderUI(p(per_vent_label, class = 'f5-m f3-l f3'))
+    output$per_vent_label <- renderUI(p(per_vent_label, class = 'f5-m f4-l f4'))
     
     output$p2_footnote_1 <- renderUI(p(p2_footnote_1, class = 'f5 f5-l f6-m'))
     output$p2_footnote_2 <- renderUI(p(p2_footnote_2, class = 'f5 f5-l f6-m'))
@@ -122,23 +113,36 @@ server <- function(input, output, session) {
     
     ## Panel 3 ----
     
-    output$table_title <- renderUI(HTML(glue("{icon('arrows-alt-v')} {table_title1} ({table_title2})")))
+    output$table_title <- renderUI(p(HTML(glue("{icon('sort')} {table_title1} ({table_title2})")), class = 'f3 f4-m f3-l'))
     output$table_tip <- renderUI(p(table_tip, class = 'f5'))
     output$table_source <- renderUI(p(glue('{table_source}: CDC COVID-19 Response Team. Severe Outcomes Among Patients with Coronavirus Disease 2019 (COVID-19) — United States, February 12–March 16, 2020. MMWR Morb Mortal Wkly Rep. 2020.'), class='f5'))
     
-    output$plot_title <- renderUI(h4(plot_title, class = 'f2 f3-m f2-l'))
-    output$plot_desc <- renderUI(p(plot_desc, class = 'navy f3 f3-l f4-m'))
+    output$input_data <- renderUI(
+      fileInput('data', 
+                label = span(p(input_label, class = 'f4'), 
+                             p(input_text, class = 'f5')),
+                buttonLabel = input_btn,
+                placeholder = input_placehold,
+                accept = '.csv'))
+    updateActionButton(session, 'reset', label = reset)
+    
+    output$plot_title <- renderUI(h4(plot_title, class = 'f3 f4-m f3-l'))
+    output$plot_desc <- renderUI(p(plot_desc, class = 'navy f4 f4-l f5-m'))
     
     updateSelectInput(session, 'colors', color_label)
     
-    output$interpret_title <- renderUI(h4(interpret_title))
-    output$acute_res_title <- renderUI(acute_res_title)
-    output$crit_res_title <- renderUI(crit_res_title)
-    output$vent_res_title <- renderUI(vent_res_title)
+    output$interpret_title <- renderUI(h4(interpret_title,
+                                          class = 'f3 f4-m f3-l'))
+    output$acute_res_title <- renderUI(p(acute_res_title, 
+                                         class = 'f3 f4-m f3-l'))
+    output$crit_res_title <- renderUI(p(crit_res_title,
+                                        class = 'f3 f4-m f3-l'))
+    output$vent_res_title <- renderUI(p(vent_res_title, 
+                                        class = 'f3 f4-m f3-l'))
 
     output$report <- renderUI({
       downloadButton('report_btn', report_button, 
-                     class = 'btn-primary f4')
+                     class = 'btn-primary f4 f4-l f5-m')
     })
     
     ## Help Page ----
@@ -201,6 +205,35 @@ server <- function(input, output, session) {
       title = "CAIC-RT: COVID-19 Acute and Intensive Care Resource Tool")
     )
   })
+  
+  
+  # Bookmark Button ----
+  
+  observeEvent({
+    n_acute(); lou_acute()
+    n_crit(); lou_crit()
+    n_vent(); lou_vent()
+    per_vent()
+    input$lang
+  }, {
+    output$bookmark <- renderUI(bookmarkButton(
+      class = 'btn-success mb4 f4 f4-l f5-m', 
+      label = bookmark))
+  }, ignoreInit = TRUE)
+  
+  setBookmarkExclude(
+    names = c('about_tool', 'interpretations',
+              'mvent', 'colors', 'global', 'plotly_afterplot-A',
+              '.clientValue-default-plotlyCrosstalkOpts',
+              'contribute', 'critical', 'acute',
+              'tab_pop_cell_clicked', 'plotly_relayout-A', 'data',
+              'plotly_click-A', 'plotly_doubleclick-A',
+              'plotly_hover-A', 
+              'reset', 'tab_pop_rows_current', 
+              'tab_pop_rows_all', 'tab_pop_state',
+              'tab_pop_search', 'tab_pop_cell_edit'),
+    session = session
+  )
   
   # Modal Resource Calculations ----
   
@@ -340,6 +373,22 @@ server <- function(input, output, session) {
   # Data Table ----
   
   x <- reactiveVal(default_table)
+  
+  observe({
+    file <- input$data
+    ext <- tools::file_ext(file$datapath)
+    
+    req(file)
+    
+    x(read_csv(file$datapath, col_names = c('age_dist', 
+                                            'case_dist', 
+                                            'ac_adm', 
+                                            'cc_adm'), skip = 1))
+  })
+  
+  observeEvent(input$reset, {
+    x(default_table)
+  })
   
   output$tab_pop <- DT::renderDT(
       DT::datatable(
