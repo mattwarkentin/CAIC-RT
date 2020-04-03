@@ -226,13 +226,13 @@ n_vent_feedback <- "Warning: Number of mechanical ventilators is greater than th
 
 ## Data Table ----
 
-input_label <- "Upload CSV"
+input_label <- "Upload File (CSV, Excel)"
 
 input_btn <- "Browse"
 
 input_placehold <- "No file selected"
 
-input_text <- "The table below is editable. However, you may wish to upload your own data. Columns must be in the same order as the table below. File is assumed to have a header, though header labels are ignored."
+input_text <- "The table below is editable. However, you may wish to upload your own data. The file should have four columns in the same order as the table below. The file is assumed to have a header, though header labels are ignored."
 
 table_col1 <- "Age groups"
 

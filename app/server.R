@@ -123,7 +123,7 @@ server <- function(input, output, session) {
                              p(input_text, class = 'f5')),
                 buttonLabel = input_btn,
                 placeholder = input_placehold,
-                accept = '.csv'))
+                accept = c('.csv', '.xlsx')))
     updateActionButton(session, 'reset', label = reset)
     
     output$plot_title <- renderUI(h4(plot_title, class = 'f3 f4-m f3-l'))
@@ -380,10 +380,16 @@ server <- function(input, output, session) {
     
     req(file)
     
-    x(read_csv(file$datapath, col_names = c('age_dist', 
-                                            'case_dist', 
-                                            'ac_adm', 
-                                            'cc_adm'), skip = 1))
+    switch (ext,
+      csv = x(read_csv(file$datapath, col_names = c('age_dist', 
+                                                    'case_dist', 
+                                                    'ac_adm', 
+                                                    'cc_adm'), skip = 1)),
+      xlsx = x(read_xlsx(file$datapath, col_names = c('age_dist', 
+                                                     'case_dist', 
+                                                     'ac_adm', 
+                                                     'cc_adm'), skip = 1))
+    )
   })
   
   observeEvent(input$reset, {
