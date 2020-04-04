@@ -620,7 +620,7 @@ server <- function(input, output, session) {
   
   vent_int <- reactive({
     input$lang
-    sanitize_crit(n_vent(), lou_vent(), ventBedRateR(),
+    sanitize_vent(n_vent(), lou_vent(), ventBedRateR(),
                   rateVentR(), maxVentR())}
   )
   

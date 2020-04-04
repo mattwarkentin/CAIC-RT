@@ -294,11 +294,11 @@ plot_tooltip <- "Les {resource} disponibles dans ce système de santé peuvent g
 # rate* is the rate of COVID-19 patients requiring a resource
 # max* is the maximum number of manageable COVID-19 cases
 
-summary_acute <- "Ayant {n_acute} lits de soins aigus disponibles et présupposant une durée moyenne de séjour de {lou_acute} jours en soins aigus, à capacité maximale, le taux de rotation prévu pour ce système de soins est de {acuteBedRate} lits de soins aigus libérés par jour. Selon la distribution d'âge des cas, la proportion de cas de COVID-19 nécessitant un lit de soins aigus est de {rateAcute}%. Compte tenu de cela, ce système de santé a la capacité de gérer un maximum de {maxAcute} nouveaux cas de COVID-19 par jour."
+summary_acute <- "Ayant {n_acute} lits de soins aigus disponibles et présupposant une durée moyenne de séjour de {lou_acute} jours en soins aigus, à capacité maximale, le taux de rotation prévu pour ce système de soins est de {acuteBedRate} lits de soins aigus libérés par jour. Selon la distribution d'âge des cas, la proportion de cas de COVID-19 nécessitant un lit de soins aigus est de {rateAcute} pour cent. Compte tenu de cela, ce système de santé a la capacité de gérer un maximum de {maxAcute} nouveaux cas de COVID-19 par jour."
 
-summary_crit <- "Ayant {n_crit} lits de soins intensifs disponibles et présupposant une durée moyenne de séjour de {lou_crit} jours en soins intensifs, à capacité maximale, le taux de rotation prévu pour ce système de soins est de  {critBedRate} lits de soins intensifs libérés par jour. Selon la distribution d'âge des cas, la proportion de cas de COVID-19 nécessitant un lit de soins intensifs est de {rateCrit}%. Compte tenu de cela, ce système de santé a la capacité de gérer un maximum de {maxCrit} nouveaux cas de COVID-19 par jour."
+summary_crit <- "Ayant {n_crit} lits de soins intensifs disponibles et présupposant une durée moyenne de séjour de {lou_crit} jours en soins intensifs, à capacité maximale, le taux de rotation prévu pour ce système de soins est de  {critBedRate} lits de soins intensifs libérés par jour. Selon la distribution d'âge des cas, la proportion de cas de COVID-19 nécessitant un lit de soins intensifs est de {rateCrit} pour cent. Compte tenu de cela, ce système de santé a la capacité de gérer un maximum de {maxCrit} nouveaux cas de COVID-19 par jour."
 
-summary_vent <- "Ayant {n_vent} dispositifs de ventilation mécanique et présupposant une durée moyenne de {lou_crit} jours sous ventilation mécanique, à capacité maximale, le taux de rotation prévu pour ce système de soins est de {ventBedRate} dispositifs de ventilation mécanique libérés par jour. Selon la distribution d'âge des cas, la proportion de cas de COVID-19 nécessitant un dispositif de ventilation mécanique est de {rateVent}%. Compte tenu de cela, ce système de santé a la capacité de gérer un maximum de {maxVent} nouveaux cas de COVID-19 par jour."
+summary_vent <- "Ayant {n_vent} dispositifs de ventilation mécanique et présupposant une durée moyenne de {lou_crit} jours sous ventilation mécanique, à capacité maximale, le taux de rotation prévu pour ce système de soins est de {ventBedRate} dispositifs de ventilation mécanique libérés par jour. Selon la distribution d'âge des cas, la proportion de cas de COVID-19 nécessitant un dispositif de ventilation mécanique est de {rateVent} pour cent. Compte tenu de cela, ce système de santé a la capacité de gérer un maximum de {maxVent} nouveaux cas de COVID-19 par jour."
   
 ## Report ----
 
@@ -308,7 +308,7 @@ progress_2 <- "Patientez, cela peut prendre quelques instants."
 
 report_type <- "Rapport global"
 
-report_date <- "Rapport généré:"
+report_date <- "Rapport généré"
 
 tool_info <- "Renseignements relatifs à l'outil"
 

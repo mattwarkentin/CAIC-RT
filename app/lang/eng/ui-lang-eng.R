@@ -167,12 +167,12 @@ report_button <- "Generate PDF Report"
 
 help_welcome <- "Welcome to the Help page for the COVID-19 Acute and Intensive Care Resource Tool (CAIC-RT). This page provides contact information and important resources that were used when developing this tool."
 
-contact_title <- 'Contact'
+contact_title <- "Contact"
 
 # {person} is the name of the persons to contact
 contact_info <- "If you would like to contact the developers of this tool with any comments, questions, or feedback, please send an email to {person}."
 
-thanks <- 'Thank you for using our tool! We look forward to hearing from you!'
+thanks <- "Thank you for using our tool! We look forward to hearing from you!"
 
 important_resources <- "Important Resources"
 
@@ -193,7 +193,7 @@ cont1 <- "You are multi-lingual, where one of the languages is English"
 cont2 <- "You have technical training in one of the following areas: medicine, epidemiology, medical sciences, public health, or a related field"
 
 # {deepit} and {matt} are links to our names/emails
-thats_it <- "That's it! If you meet both of the above criteria, we would be happy to have you contribute to this project. If you are still interested in contributing to this translation effort, please contact {deepit} or {matt} for instructions on how to contribute."
+thats_it <- "That's it! If you meet both of the above criteria, we would be happy to have you contribute to this project. If you are interested in contributing to this translation effort, please contact {deepit} or {matt} for instructions on how to contribute."
 
 recognition <- "Lastly, if you contribute to this project we would be happy to feature your name within the tool in order to give you the proper recognition."
 
@@ -284,7 +284,7 @@ summary_acute <- 'Based on {n_acute} available acute care beds and an average le
 
 summary_crit <- 'Based on {n_crit} available critical care beds and an average length of stay of {lou_crit} days, at maximum capacity the expected turnover rate is {critBedRate} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring a critical care bed is {rateCrit} percent. Given this, your healthcare environment has the capacity to manage a maximum of {maxCrit} incident cases of COVID-19 per day.'
 
-summary_vent <- 'Based on {n_vent} available ventical care beds and an average length of stay of {lou_vent} days, at maximum capacity the expected turnover rate is {ventBedRate} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring a ventical care bed is {rateVent} percent. Given this, your healthcare environment has the capacity to manage a maximum of {maxVent} incident cases of COVID-19 per day.'
+summary_vent <- 'Based on {n_vent} available mechanical ventilators and an average duration of use of {lou_vent} days, at maximum capacity the expected turnover rate is {ventBedRate} ventilators per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring a mechanical ventilator is {rateVent} percent. Given this, your healthcare environment has the capacity to manage a maximum of {maxVent} incident cases of COVID-19 per day.'
 
 ## Report ----
 
