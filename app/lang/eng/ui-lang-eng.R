@@ -129,9 +129,13 @@ per_vent_tooltip <- "Note: This is the percentage of COVID-19 critical care pati
 
 p2_footnote_1 <- "Default percent of critical care patients requiring mechanical ventilation are based on data extracted from Zhou et al. (2020) and Wang et al. (2020), collected in China. See Help page for full citations."
 
-p2_footnote_2 <- "Default number of acute care beds, critical care beds, and mechanical ventilators are based data extracted from Barrett et al. (2020), collected in Ontario. See Help page for full citations."
+p2_footnote_2 <- "Default number of acute care beds, critical care beds, and mechanical ventilators are based on data extracted from Barrett et al. (2020), collected in Ontario. See Help page for full citations."
 
 bookmark <- "Bookmark custom values"
+
+bookmark_title <- "Bookmarked Application Link"
+
+bookmark_sub <- "This link stores the current state of this application."
 
 ## Panel 3 ----
 

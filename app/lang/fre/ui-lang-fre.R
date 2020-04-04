@@ -25,234 +25,266 @@
 #
 #==============================================================================
 
+
 # User Interface ====
 
 ## Misc ----
 
-submit <- "Apply Changes"
+submit <- "Appliquer les modifications"
 
-close <- "Close"
+close <- "Fermer"
 
-dev_by <- "Developed by"
+dev_by <- "Développé par"
+
+tran_by <- "Traduction par"
+tb <- "Alexandra Blair"
+email <- "alexandra.blair@mail.utoronto.ca"
 
 ## Navbar ----
 
-home <- "Home"
+home <- "Acceuil"
 
-help <- "Help"
+help <- "Aide"
 
-tutorial <- "Tutorial"
+tutorial <- "Guide"
 
-more_info <- "More Info"
+more_info <- "Plus d'information"
 
-see_article <- "See the article"
+see_article <- "Afficher la référence"
 
-see_code <- "See the code"
+see_code <- "Afficher la syntaxe"
 
 ## Panel 1 ----
 
-last_update <- "Last Updated"
+last_update <- "Dernière mise à jour"
 
-lang <- "Choose Language"
+lang <- "Choisir la langue"
 
-about_tool <- "About This Tool"
+about_tool <- "À propos de cet outil"
 
-contribute <- "How can I contribute?"
+contribute <- "Comment contribuer?"
 
-p1_header <- "Expected Resource Utilization for COVID-19 Patients"
+p1_header <- "Utilisation prévue des ressources pour les patients atteints de la COVID-19"
 
-lou_acute_label <- "Mean days in acute care"
+lou_acute_label <- "Nombre moyen de jours en soins aigus"
 
-lou_acute_tooltip <- "Note: Acute care days are mutually exclusive of critical care and ventilator days."
+lou_acute_tooltip <- "À noter: Les jours en soins aigus s'excluent mutuellement des jours en soins intensifs et sous ventilation mécanique."
 
-lou_crit_label <- "Mean days in critical care"
+lou_crit_label <- "Nombre moyen de jours en soins intensifs"
 
-lou_crit_tooltip <- "Note: Critical care days are mutually exclusive of acute care days. Total number of days spent in critical care are equal to the number of days spent in critical care with or without a ventilator."
+lou_crit_tooltip <- "À noter: Les jours en soins intensifs s'excluent mutuellement des jours en soins aigus. Le nombre total de jours passés en soins intensifs est égal au nombre de jours passés en soins intensifs avec ou sans ventilation mécanique."
 
-lou_vent_label <- "Mean days on a mechanical ventilator"
+lou_vent_label <- "Nombre moyen de jours sous ventilation mécanique"
 
-lou_vent_tooltip <- "Note: Days spent on a mechanical ventilator are assumed to be spent in a critical care bed."
+lou_vent_tooltip <- "À noter: Il est présupposé que les jours passés sous ventilation mécanique sont passés dans un lit de soins intensifs"
 
-p1_footnote <- "Default values are based on data extracted from Zhou et al. (2020), Yang et al. (2020), and Wang et al. (2020), collected in China. See Help page for full citations."
+p1_footnote <- "Les valeurs de défaut sont basées sur des données extraites de Zhou et al. (2020), Yang et al. (2020), et Wang et al. (2020), recueillies en Chine. Naviguez vers la page d'Aide pour visualiser les références complètes."
 
 ## Panel 2 ----
 
-p2_header <- "Resource Availability"
+p2_header <- "Disponibilité des ressources"
 
-n_acute_label <- "Number of acute care beds for COVID-19 patients"
+n_acute_label <- "Nombre de lits de soins aigus disponibles pour les patients atteints de la COVID-19"
 
-n_acute_tooltip <- "Note: This is the total number of acute care beds that are available for or are currently being used by COVID-19 patients."
+n_acute_tooltip <- "À noter: Ceci représente le nombre total de lits de soins aigus disponibles pour ou présentement occupés par des patients atteints de la COVID-19."
 
-calc_acute <- "Calculate Acute Care Beds"
+calc_acute <- "Calculer le nombre de lits de soins aigus"
 
-acute_modal_title <- "Calculate the number of acute care beds available for COVID-19 cases"
+acute_modal_title <- "Calculer le nombre de lits de soins aigus disponibles pour les patients atteints de la COVID-19"
 
-acute_modal_n_acute <- "Total number of acute care beds"
+acute_modal_n_acute <- "Nombre total de lits de soins aigus"
 
-acute_modal_per_acute <- "Percent of acute care beds available for or currently being used by COVID-19 cases"
+acute_modal_per_acute <- "Pourcentage de lits de soins aigus disponibles pour ou présentement occupés par des patients atteints de la COVID-19" 
 
-acute_modal_surge <- "Acute care bed surge capacity for COVID-19 cases (number of beds)"
+acute_modal_surge <- "Capacité de pointe de lits de soins aigus pour les cas de COVID-19 (nombre de lits)"
 
-n_crit_label <- "Number of critical care beds for COVID-19 patients"
+n_crit_label <- "Nombre de lits de soins intensifs pour les patients atteints de la COVID-19"
 
-n_crit_tooltip <- "Note: This is the total number of critical care beds that are available for or are currently being used by COVID-19 patients."
+n_crit_tooltip <- "À  noter: Ceci représente le nombre total de lits de soins intensifs disponibles pour ou présentement occupés par des patients atteints de la COVID-19."
 
-calc_crit <- "Calculate Critical Care Beds"
+calc_crit <- "Calculer le nombre de lits de soins intensifs"
 
-crit_modal_title <- "Calculate the number of critical care beds available for COVID-19 cases"
+crit_modal_title <- "Calculer le nombre de lits de soins intensifs disponibles pour les cas de COVID-19"
 
-crit_modal_n_crit <- "Total number of critical care beds"
+crit_modal_n_crit <- "Nombre total de lits de soins intensifs"
 
-crit_modal_per_crit <- "Percent of critical care beds available for or currently being used by COVID-19 cases"
+crit_modal_per_crit <- "Pourcentage de lits de soins intensifs disponibles pour ou présentement occupés par des patients atteints de la COVID-19"
 
-crit_modal_surge <- "Critical care bed surge capacity for COVID-19 cases (number of beds)"
+crit_modal_surge <- "Capacité de pointe de lits de soins intensifs les cas de COVID-19 (nombre de lits)"
 
-n_vent_label <- "Number of mechanical ventilators for COVID-19 patients"
+n_vent_label <- "Nombre de ventilateurs pour les patients atteints de la COVID-19"
 
-n_vent_tooltip <- "Note: This is the total number of mechanical ventilators that are available for or are currently being used by COVID-19 patients."
+n_vent_tooltip <- "À noter: Ceci représente le nombre de ventilateurs disponibles pour, ou présentement utilisés par, des patients atteints de la COVID-19."
 
-calc_vent <- "Calculate Mechanical Ventilators"
+calc_vent <- "Caculer le nombre de dispositifs</br> de ventilation mécanique"
 
-vent_modal_title <- "Calculate the number of mechanical ventilators available for COVID-19 cases"
+vent_modal_title <- "Caculer le nombre de dispositifs de ventilation mécanique disponibles pour les cas de COVID-19"
 
-vent_modal_n_vent <- "Total number of mechanical ventilators"
+vent_modal_n_vent <- "Nombre total de dispositifs de ventilation mécanique"
 
-vent_modal_per_vent <- "Percent of mechanical ventilators available for or currently being used by COVID-19 cases"
+vent_modal_per_vent <- "Pourcentage de dispositifs de ventilation mécanique disponibles pour ou présentement utilisés par des cas de COVID-19"
 
-vent_modal_surge <- "Mechanical ventilator surge capacity for COVID-19 cases (number of ventilators)"
+vent_modal_surge <- "Capacité de pointe de dispositifs de ventilation mécanique pour les cas de COVID-19 (nombre de ventilateurs)"
 
-per_vent_label <- "Percent of critical care patients requiring mechanical ventilation"
+per_vent_label <- "Pourcentage de patients en soins intensifs nécessitant une ventilation mécanique"
 
-per_vent_tooltip <- "Note: This is the percentage of COVID-19 critical care patients requiring mechanical ventilation."
 
-p2_footnote_1 <- "Default percent of critical care patients requiring mechanical ventilation are based on data extracted from Zhou et al. (2020) and Wang et al. (2020), collected in China. See Help page for full citations."
+per_vent_tooltip <- "À noter: Ceci représente le pourcentage de patients atteints de la COVID-19 en soins intensifs nécessitant une ventilation mécanique" 
 
-p2_footnote_2 <- "Default number of acute care beds, critical care beds, and mechanical ventilators are based data extracted from Barrett et al. (2020), collected in Ontario. See Help page for full citations."
+p2_footnote_1 <- "Les pourcentages par défaut de patients en soins intensifs nécessitant une ventilation mécanique sont basés sur des données extraites de Zhou et al. (2020) et Wang et al. (2020), recueillies en Chine. Naviguez vers la page d'Aide pour visualiser les références complètes."
+
+p2_footnote_2 <- "Les nombres par défaut de lits de soins intensifs, lits de soins aigus, et de dispositifs de ventilation mécanique sont basés sur des données extraites de Barrett et al. (2020) recueillies en Ontario. Naviguez vers la page d'Aide pour visualiser les références complètes."
+
+bookmark <- "Enregistrer l'état actuel des intrants </br>personnalisés sous forme d'URL"
+
+bookmark_title <- "Ajouter l'application à vos favoris"
+
+bookmark_sub <- "Ce lien enregistre l'état actuel de cette application."
 
 ## Panel 3 ----
 
-table_title1 <- "Age-stratified Case Distribution and Severity"
+table_title1 <- "Distribution et sévérité des cas stratifiés selon l'âge"
 
-table_title2 <- "click to toggle visibility"
+table_title2 <- "Cliquez pour visualiser"
 
-table_source <- "Source"
+table_source <- "Référence"
 
-table_tip <- "TIP: Double-click a cell to begin editing. Use [TAB] to navigate through column items while editing. Press [CONTROL + ENTER] when done editing a column."
+table_tip <- "ASTUCE: Double-cliquez sur une cellule du tableau pour effectuer une modification des valeurs. Utilisez la touche [TAB] de votre clavier pour naviguer entre les éléments de la colonne pendant l'édition. Appuyez simultanément sur les touches [CONTROL + ENTRÉE/ENTER] de votre clavier lorsque vous avez terminé l'édition d'une colonne."
 
-plot_title <- "Maximum daily number of incident COVID-19 cases manageable by healthcare system"
+plot_title <- "Le nombre maximal de nouveaux cas de COVID-19 par jour pouvant être gérés par le système de santé"
 
-plot_desc <- "The values shown below are thresholds for the maximum daily number of incident COVID-19 cases that can occur without causing a resource deficit. In other words, if more cases occur than the values shown below, the amount of acute care beds, critical care beds, and/or mechanical ventilators would be insufficient to meet the healthcare system's needs."
+plot_desc <- "Les valeurs indiquées ci-dessous représentent les seuils maximaux du nombre de cas incidents de COVID-19 (nouveaux cas) qui peuvent s'ajouter par jour sans entraîner un déficit de ressources. En d'autres mots, si le nombre de cas dépasse les valeurs indiquées ci-dessous, le nombre de lits de soins aigus, de lits de soins intensifs et/ou de ventilateurs sera insuffisant pour répondre aux besoins du système de santé."
 
-color_label <- "Choose Colour Palette"
+color_label <- "Choisir une palette de couleurs"
 
-interpret_title <- "Interpreting the Results"
+interpret_title <- "Interprétation des résultats"
 
-acute_res_title <- "Acute Care"
+acute_res_title <- "Soins aigus"
 
-crit_res_title <- "Critical Care"
+crit_res_title <- "Soins intensifs"
 
-vent_res_title <- "Mechanical Ventilators"
+vent_res_title <- "Dispositifs de ventilation mécanique"
 
-report_button <- "Generate PDF Report"
+report_button <- "Générer un rapport en format PDF"
 
 ## Help Page ----
 
-help_welcome <- "Welcome to the Help page for the COVID-19 Acute and Intensive Care Resource Tool (CAIC-RT). This page provides contact information and important resources that were used when developing this tool."
+help_welcome <- "Bienvenue à la page d'Aide du CAIC-RT: COVID-19 Acute and Intensive Care Resource Tool (Outil de ressources pour les soins aigus et intensifs de COVID-19). Cette page fournit les coordonnées pour rejoindre les développeurs de l'outil ainsi que les ressources clés qui ont été utilisées lors l'élaboration de l'outil"
 
-contact_title <- 'Contact'
+contact_title <- "Coordonnées"
 
 # {person} is the name of the persons to contact
-contact_info <- "If you would like to contact the developers of this tool with any comments, questions, or feedback, please send an email to {person}."
 
-thanks <- 'Thank you for using our tool! We look forward to hearing from you!'
+contact_info <- "Si vous souhaitez contacter les développeurs de cet outil pour tout commentaire, question ou réaction, veuillez envoyer un courriel à {person}"
 
-important_resources <- "Important Resources"
+thanks <-"Merci d'utiliser notre outil ! Au plaisir de recevoir vos commentaires!"
 
-resource_sentence <- "Below are some key resources that were used when developing this tool."
+important_resources <- "Ressources clés"
+
+resource_sentence <- "Vous trouverez ci-dessous quelques ressources clés qui ont été utilisées lors de l'élaboration de cet outil"
 
 # Server Side ====
 
 ## Language Modal ----
 
-lang_title <- "How can I contribute?"
+lang_title <- "Comment contribuer?"
 
-# {CoC} is a named-link to the Contributor Code of Conduct
-cont_details <- "We are honoured that you are interested in contributing to this project. Right now, we are very interested in collaborating to translate this tool into as many languages as possible. First, please read the {CoC}."
+# {CoC} is a named-link to the Contributor Code of Conduct [Un code de conduite des contributeurs]
 
-how_to_cont <- "In order to contribute, please make sure you meet the following criteria:"
+cont_details <- "Nous sommes reconnaissants de l'intérêt que vous portez à ce projet. En ce moment, nous souhaitons collaborer à la traduction de cet outil dans le plus grand nombre de langues possible. Tout d'abord, veuillez lire le {CoC}."
+  
+how_to_cont <- "Afin de pouvoir contribuer, veuillez vous assurer que vous remplissez les critères suivants:"
 
-cont1 <- "You are multi-lingual, where one of the languages is English"
-cont2 <- "You have technical training in one of the following areas: medicine, epidemiology, medical sciences, public health, or a related field"
+cont1 <- "Vous maîtrisez plusieurs langues, dont l'une doit être l'anglais"
+
+cont2 <- "Vous avez une formation technique dans l'un des domaines suivants: la médecine, l'épidémiologie, les sciences médicales, la santé publique ou un domaine connexe"
 
 # {deepit} and {matt} are links to our names/emails
-thats_it <- "That's it! If you meet both of the above criteria, we would be happy to have you contribute to this project. If you are still interested in contributing to this translation effort, please contact {deepit} or {matt} for instructions on how to contribute."
 
-recognition <- "Lastly, if you contribute to this project we would be happy to feature your name within the tool in order to give you the proper recognition."
+thats_it <- "C'est tout! Si vous remplissez les deux critères ci-dessus, nous serions heureux que vous contribuiez à ce projet. Si vous êtes intéressé à contribuer aux efforts de traduction de cet outil, veuillez contacter {deepit} ou {matt} pour obtenir des instructions concernant la démarche à suivre."
 
-# {CoC} is a named-link to the Contributor Code of Conduct
-code <- "Please note that the ‘CAIC-RT’ project is released with a {CoC}. By contributing to this project, you agree to abide by its terms."
+recognition <-"Enfin, si vous contribuez à ce projet, nous serions heureux de publier votre nom dans l'outil afin de reconnaître votre contribution."
+  
+# {CoC} is a named-link to the Contributor Code of Conduct [Un code de conduite des contributeurs]
+
+code <- "Veuillez noter que le projec âCAIC-RTâ  est publié avec un {CoC}. En contribuant à ce projet, vous acceptez de respecter les conditions stipulées."
 
 ## Welcome Modal ----
 
-welcome_title <- "CAIC-RT: COVID-19 Acute and Intensive Care Resource Tool"
+welcome_title <- "CAIC-RT: COVID-19 Acute and Intensive Care Resource Tool (Outil de ressources pour les soins aigus et intensifs de COVID-19)"
 
-authors <- "Authors"
+authors <- "Auteurs"
 
 desc_title <- "Description"
 
-desc <- "An online tool capable of estimating the maximum daily number of incident COVID-19 cases that a healthcare system could manage based on age-based case distribution and severity, and the number of available acute and critical care resources."
-
-how_to <- "How to use this tool:"
+desc <- "Un outil en ligne capable d'estimer le nombre maximal de nouveaux cas de COVID-19 par jour qu'un système de santé pourrait gérer en fonction de la répartition des cas selon leur âge et de leur sévérité, ainsi que du nombre de ressources disponibles pour les soins aigus et intensifs."
+  
+how_to <- "Comment utiliser cet outil:"
 
 # {CDC} is a link to the CDC resource
-item1 <- "Review the default age-stratified case distribution and severity data, which are based on US data from the {CDC}."
 
-item1_opt <- "Optional: You may enter your own information into the table based on local clinical data and experience."
+item1 <- "Visualiser la distribution par défaut des cas, stratifiés selon l'âge et la sévérité, qui est basée sur les données américaines du {CDC}."
+  
+item1_opt <- "Facultatif : vous pouvez entrer vos propres données dans le tableau en fonction de vos données cliniques ou de votre expérience locale."
 
 # We recommend being consistent with p1_header and p2_header
-item2 <- "Tune the Expected Resource Utilization and Resource Availability inputs to your own healthcare environment."
 
-item3 <- "Inspect the results in the bar graph, which displays the maximum daily number of incident COVID-19 cases that a healthcare system could manage based on resource availability."
+item2 <- "Modifiez les données relatives à l'utilisation prévue des ressources et à la disponibilité des ressources, selon le contexte de votre système de santé."
 
-item4 <- "Visualize in real-time how the results change when modifying the input parameters."
+item3 <- "Examinez les résultats dans l'histogramme (graphique à colonnes), qui affiche le nombre maximal de nouveaux cas de COVID-19 par jour qu'un système de santé pourrait gérer en fonction de la disponibilité des ressources."
+
+item4 <- "Visualisez en temps réel la manière dont les résultats changent lorsque vous modifiez les paramètres."
+  
 
 ## Feedback ----
 
-n_crit_feedback <- "Warning: Number of critical care beds is less than the number of mechanical ventilators."
+n_crit_feedback <- "Attention: le nombre de lits de soins intensifs est inférieur au nombre de dispositifs de ventilation mécanique."
 
-n_vent_feedback <- "Warning: Number of mechanical ventilators is greater than the number of critical care beds."
+n_vent_feedback <- "Attention: le nombre de dispositifs de ventilation mécanique est supérieur au nombre de lits de soins intensifs."
+
 
 ## Data Table ----
 
-table_col1 <- "Age groups"
+input_label <- "Télécharger un document (CSV, Excel)"
 
-table_col2 <- "Case distribution (%)"
+input_btn <- "Parcourir"
 
-table_col3 <- "Acute care admission (%)"
+input_placehold <- "Aucun document sélectionné"
 
-table_col4 <- "Critical care admission (%)"
+input_text <- "Le tableau ci-dessous est modifiable. Cependant, vous souhaiterez peut-être télécharger vos propres données. Si oui, le fichier doit avoir quatre colonnes, placées dans le même ordre que celles dans le tableau ci-dessous. La première rangée du tableau sera considérée comme l'en-tête, bien que les étiquettes d'en-tête seront ignorées."
 
-table_modal_txt <- "This column can only accept numeric inputs. Please check your numbers!"
+table_col1 <- "Groupes d'âge"
 
-table_modal_sum <- "The case distribution column must sum to 100%. Please check your numbers!"
+table_col2 <- "Distribution des cas (%)"
 
-table_modal_adm <- "Admission rates cannot be less than 0% or greater than 100%. Please check your numbers!"
+table_col3 <- "Admis aux soins aigus (%)"
+
+table_col4 <- "Admis aux soins intensifs (%)"
+
+table_modal_txt <- "Cette colonne ne peut accepter que des entrées numériques. Veuillez vérifier vos chiffres!"
+
+table_modal_sum <- "La somme des valeurs dans la colonne de la distribution de cas doit être égale à 100%. Veuillez vérifier vos chiffres!"
+
+table_modal_adm <- "Le pourcentage de cas admis ne peut être inférieur à 0% ou supérieur à 100%. Veuillez vérifier vos chiffres!"
+
+reset <- "Réinitialiser"
 
 ## Plot ----
 
-ylab <- "Maximum Daily Number of Cases"
+ylab <- "Nombre maximal de cas par jour"
 
-xlab_acute <- "Acute Care Beds"
+xlab_acute <- "Lits de soins aigus"
 
-xlab_crit <- "Critical Care Beds"
+xlab_crit <- "Lits de soins intensifs"
 
-xlab_vent <- "Mechanical Ventilators"
+xlab_vent <- "Dispositifs de ventilation mécanique"
 
-xlab_suffix <- "new cases/day"
+xlab_suffix <- "nouveaux cas/jour"
 
 # {resource} is either acute care beds, critical care beds, or mechanical ventilators
 # {value} is the maximum number of cases for any {resource}
-plot_tooltip <- "The number of available {resource} in this healthcare system can manage a maximum of {value} daily cases of COVID-19"
+
+plot_tooltip <- "Les {resource} disponibles dans ce système de santé peuvent gérer un maximum de {value} nouveaux cas par jour de COVID-19"
 
 ## Interpretations ----
 
@@ -262,29 +294,30 @@ plot_tooltip <- "The number of available {resource} in this healthcare system ca
 # rate* is the rate of COVID-19 patients requiring a resource
 # max* is the maximum number of manageable COVID-19 cases
 
-summary_acute <- 'Based on {n_acute} available acute care beds and an average length of stay of {lou_acute} days, at maximum capacity the expected turnover rate is {acuteBedRate} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring an acute care bed is {rateAcute} percent. Given this, your healthcare environment has the capacity to manage a maximum of {maxAcute} incident cases of COVID-19 per day.'
+summary_acute <- "Ayant {n_acute} lits de soins aigus disponibles et présupposant une durée moyenne de séjour de {lou_acute} jours en soins aigus, à capacité maximale, le taux de rotation prévu pour ce système de soins est de {acuteBedRate} lits de soins aigus libérés par jour. Selon la distribution d'âge des cas, la proportion de cas de COVID-19 nécessitant un lit de soins aigus est de {rateAcute}%. Compte tenu de cela, ce système de santé a la capacité de gérer un maximum de {maxAcute} nouveaux cas de COVID-19 par jour."
 
-summary_crit <- 'Based on {n_crit} available critical care beds and an average length of stay of {lou_crit} days, at maximum capacity the expected turnover rate is {critBedRate} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring a critical care bed is {rateCrit} percent. Given this, your healthcare environment has the capacity to manage a maximum of {maxCrit} incident cases of COVID-19 per day.'
+summary_crit <- "Ayant {n_crit} lits de soins intensifs disponibles et présupposant une durée moyenne de séjour de {lou_crit} jours en soins intensifs, à capacité maximale, le taux de rotation prévu pour ce système de soins est de  {critBedRate} lits de soins intensifs libérés par jour. Selon la distribution d'âge des cas, la proportion de cas de COVID-19 nécessitant un lit de soins intensifs est de {rateCrit}%. Compte tenu de cela, ce système de santé a la capacité de gérer un maximum de {maxCrit} nouveaux cas de COVID-19 par jour."
 
-summary_vent <- 'Based on {n_vent} available ventical care beds and an average length of stay of {lou_vent} days, at maximum capacity the expected turnover rate is {ventBedRate} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring a ventical care bed is {rateVent} percent. Given this, your healthcare environment has the capacity to manage a maximum of {maxVent} incident cases of COVID-19 per day.'
-
+summary_vent <- "Ayant {n_vent} dispositifs de ventilation mécanique et présupposant une durée moyenne de {lou_crit} jours sous ventilation mécanique, à capacité maximale, le taux de rotation prévu pour ce système de soins est de {ventBedRate} dispositifs de ventilation mécanique libérés par jour. Selon la distribution d'âge des cas, la proportion de cas de COVID-19 nécessitant un dispositif de ventilation mécanique est de {rateVent}%. Compte tenu de cela, ce système de santé a la capacité de gérer un maximum de {maxVent} nouveaux cas de COVID-19 par jour."
+  
 ## Report ----
 
-progress_1 <- "Generating report..."
+progress_1 <- "Génération du rapport..."
 
-progress_2 <- "Hold tight, this may take a few moments."
+progress_2 <- "Patientez, cela peut prendre quelques instants."
 
-report_type <- "General Report"
+report_type <- "Rapport global"
 
-report_date <- "Report Generated"
+report_date <- "Rapport généré:"
 
-tool_info <- "Tool Information"
+tool_info <- "Renseignements relatifs à l'outil"
 
-custom_inputs <- "Customizable Inputs"
+custom_inputs <- "Intrants personnalisés"
 
 # This should be partially consistent with p2_header
-caption2 <- "Resource Availability for COVID-19 Patients."
 
-col_name1 <- "Input Parameter"
+caption2 <- "Disponibilité des ressources pour les patients atteints de la COVID-19"
 
-col_name2 <- "Value"
+col_name1 <- "Intrant"
+
+col_name2 <- "Valeur"

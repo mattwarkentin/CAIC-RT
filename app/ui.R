@@ -26,7 +26,8 @@ tool_meta <-
 
 # Based on ISO 639-2/B 
 # https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
-langs <- sort(c('English' = 'eng', 'Spanish' = 'spa'))
+langs <- sort(c('English' = 'eng', 'Spanish' = 'spa',
+                'French' = 'fre'))
 
 ui <- function(request) {
   navbarPage(
@@ -95,7 +96,7 @@ ui <- function(request) {
                             value = 8378, min = 0),
                actionButton('acute', 'Calculate Acute Care Beds',
                             icon = icon('cogs'), 
-                            class = 'bg-dark-gray white f3 f5-l f7-m'),
+                            class = 'bg-dark-gray white f5 f5-l f7-m'),
                hr(),
                
                numericInput(inputId = "n_crit",
@@ -103,7 +104,7 @@ ui <- function(request) {
                             value = 513, min = 0),
                actionButton('critical', 'Calculate Critical Care Beds',
                             icon = icon('cogs'), 
-                            class = 'bg-dark-gray white f3 f5-l f7-m'),
+                            class = 'bg-dark-gray white f5 f5-l f7-m'),
                hr(),
                
                numericInput(inputId = "n_vent",
@@ -111,7 +112,7 @@ ui <- function(request) {
                             value = 328, min = 0),
                actionButton('mvent', 'Calculate Mechanical Ventilators',
                             icon = icon('cogs'), 
-                            class = "bg-dark-gray white f3 f5-l f7-m"),
+                            class = "bg-dark-gray white f5 f5-l f7-m"),
                hr(),
                
                sliderInput(inputId = "per_vent",
@@ -179,7 +180,7 @@ ui <- function(request) {
     
     # More Info ----
     tabPanel(htmlOutput('tutorial'),
-             HTML('<iframe width="560" height="315" src="https://www.youtube.com/embed/VxvweotOWBQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')),
+             HTML('<iframe width="560" height="315" src="https://www.youtube.com/embed/owjI123tUrE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')),
     navbarMenu(htmlOutput('more_info', inline = TRUE),
                tabPanel(tags$a(htmlOutput('see_article'), href = "https://www.medrxiv.org/content/10.1101/2020.03.25.20043711v1", target = "_blank")),
                tabPanel(tags$a(htmlOutput('see_code'), href = "https://www.github.com/mattwarkentin/CAIC-RT", target = "_blank"))

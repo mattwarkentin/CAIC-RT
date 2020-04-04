@@ -6,24 +6,13 @@ server <- function(input, output, session) {
   }
   
   observeEvent(input$lang, {
-    showMe <- function(lang) {
-      showNotification(p(glue('Rendering {lang} UI...')), 
-                       type = 'message') 
-    }
-    
-    switch (input$lang,
-      eng = showMe('English'),
-      spa = showMe('Spanish')
-    )
-  }, ignoreInit = TRUE)
-  
-  observeEvent(input$lang, {
     req(input$lang)
     choose_lang <- input$lang
     
     switch(choose_lang,
       'eng' = load_lang('eng'),
-      'spa' = load_lang('spa')
+      'spa' = load_lang('spa'),
+      'fre' = load_lang('fre')
     )
     
     output$home <- renderUI(span(icon('toolbox'), home))
@@ -230,7 +219,14 @@ server <- function(input, output, session) {
   }, {
     output$bookmark <- renderUI(bookmarkButton(
       class = 'btn-success mb4 f4 f4-l f5-m', 
-      label = bookmark))
+      label = HTML(bookmark)))
+    
+    onBookmarked(function(url) {
+      showModal(urlModal(url, 
+                         title = bookmark_title, 
+                         subtitle = bookmark_sub))
+    })
+    
   }, ignoreInit = TRUE)
   
   setBookmarkExclude(

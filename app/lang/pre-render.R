@@ -10,7 +10,8 @@ library(purrr)
 library(rmarkdown)
 
 # Based on ISO 639-2/B (https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
-langs <- c('English' = 'eng', 'Spanish' = 'spa')
+langs <- c('English' = 'eng', 'Spanish' = 'spa',
+           'French' = 'fre')
 
 # Help Text ----
 walk(langs, ~{source(glue('app/lang/{.}/ui-lang-{.}.R')); render(

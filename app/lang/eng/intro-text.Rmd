@@ -30,11 +30,11 @@ h5(glue(params$authors, ':'), style = 'font-variant: small-caps;')
 ```
 
 <ul>
-  <li>Vasily Giannakeas, MPH <sup class='f7'>1,2</sup></li>
-  <li>Deepit Bhatia, MPH</li>
-  <li>Matthew T. Warkentin, MSc <sup class='f7'>2,3</sup></li>
+  <li>Vasily Giannakeas, MPH <sup class='f7'>1,2</sup> <a class="link dim black" href="mailto:vasily.giannakeas@wchospital.ca"><i class="fa fa-envelope"></i></a></li>
+  <li>Deepit Bhatia, MPH <a class="link dim black" href="mailto:deepit.bhatia@mail.utoronto.ca"><i class="fa fa-envelope"></i></a></li>
+  <li>Matthew T. Warkentin, MSc <sup class='f7'>2,3</sup> <a class="link dim black" href="mailto:warkentin@lunenfeld.ca"><i class="fa fa-envelope"></i></a></li>
   <li>Isaac I. Bogoch, MD <sup class='f7'>4,5</sup></li>
-  <li>Nathan M. Stall, MD <sup class='f7'>1,4,6,7</sup></li>
+  <li>Nathan M. Stall, MD <sup class='f7'>1,4,6,7</sup> <a class="link dim black" href="mailto:nathan.stall@sinaihealth.ca"><i class="fa fa-envelope"></i></a></li>
 </ul>
 
 <hr />

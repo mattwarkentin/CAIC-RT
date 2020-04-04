@@ -133,7 +133,11 @@ p2_footnote_1 <- "El porcentaje predeterminado de pacientes de cuidados crítico
 
 p2_footnote_2 <- "El número predeterminado de camas de cuidados agudos, camas de cuidados críticos y ventiladores mecánicos se basa en datos extraídos de Barrett et al. (2020), recogido en Ontario. Vea la página de ayuda para citacións completas."
 
-bookmark <- 'Bookmark custom values'
+bookmark <- "Marcapágina valores personalizados"
+
+bookmark_title <- "Marcada Aplicación Enlace"
+
+bookmark_sub <- "Este enlace almacena el estado actual de esta aplicación."
 
 ## Panel 3 ----
 
@@ -230,13 +234,13 @@ n_vent_feedback <- "Advertencia: El número de ventiladores mecánicos es mayor 
 
 ## Data Table ----
 
-input_label <- "Upload CSV"
+input_label <- "Subir archivo (CSV, Excel)"
 
-input_btn <- "Browse"
+input_btn <- "Ramoneo"
 
-input_placehold <- "No file selected"
+input_placehold <- "Ningún archivo seleccionado"
 
-input_text <- "The table below is editable. However, you may wish to upload your own data. Columns must be in the same order as the table below. File is assumed to have a header, though header labels are ignored."
+input_text <- "La continuación tabla es editable. Sin embargo, es posible que desee cargar sus propios datos. Las columnas deben estar en el mismo orden que la tabla a continuación. Se supone que el archivo tiene un encabezado, aunque las etiquetas de encabezado se ignoran."
 
 table_col1 <- "Grupos de edad"
 
@@ -252,7 +256,7 @@ table_modal_sum <- "La columna de distribución de casos debe sumar 100%. Por fa
 
 table_modal_adm <- "Las tasas de admisión no pueden ser inferiores al 0% ni superiores al 100%. Por favor revise sus números!"
 
-reset <- "Reset"
+reset <- "Reajustar"
 
 ## Plot ----
 
