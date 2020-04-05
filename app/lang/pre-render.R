@@ -58,3 +58,10 @@ walk(langs, ~{source(glue('app/lang/{.}/ui-lang-{.}.R')); render(
     item3 = item3,
     item4 = item4
   ))})
+
+# News ----
+rmarkdown::render(
+  'app/lang/NEWS.Rmd', 
+  output_format = c('html_fragment', 'github_document')
+  )
+fs::file_move('app/lang/NEWS.md', 'NEWS.md')

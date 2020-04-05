@@ -73,6 +73,11 @@ ui <- function(request) {
                numericInput(inputId = "lou_acute",
                             label = htmlOutput('lou_acute_label'),
                             value = 11, min = 1),
+               actionButton('calc_lou_acute', 
+                            'Calculate Length of Stay',
+                            icon = icon('bed'), 
+                            class = 'bg-dark-gray white f5 f5-l f7-m'),
+               hr(),
                
                numericInput(inputId = "lou_crit",
                             label = htmlOutput('lou_crit_label'),
@@ -87,7 +92,7 @@ ui <- function(request) {
                ),
         
         # Second Column ----
-        column(3,
+        column(4,
                wellPanel(
                htmlOutput('p2_header'),
                
@@ -125,7 +130,7 @@ ui <- function(request) {
                       class = 'tc')),
         
         # Third Column ----
-        column(6,
+        column(5,
               bsCollapse(id = 'global', multiple = TRUE,
                 bsCollapsePanel(
                   title = htmlOutput('table_title'),
@@ -177,10 +182,15 @@ ui <- function(request) {
       htmlOutput('help'),
       htmlOutput('help_text')
     ),
+    # What's New? ----
+    tabPanel(htmlOutput('whats_new'),
+             htmlOutput('whats_new_text')),
     
-    # More Info ----
+    # Tutorial ----
     tabPanel(htmlOutput('tutorial'),
              HTML('<iframe width="560" height="315" src="https://www.youtube.com/embed/owjI123tUrE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>')),
+    
+    # More Info ----
     navbarMenu(htmlOutput('more_info', inline = TRUE),
                tabPanel(tags$a(htmlOutput('see_article'), href = "https://www.medrxiv.org/content/10.1101/2020.03.25.20043711v1", target = "_blank")),
                tabPanel(tags$a(htmlOutput('see_code'), href = "https://www.github.com/mattwarkentin/CAIC-RT", target = "_blank"))

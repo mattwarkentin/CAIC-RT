@@ -45,6 +45,8 @@ help <- "Help"
 
 tutorial <- "Tutorial"
 
+whats_new <- "What's New?"
+
 more_info <- "More Info"
 
 see_article <- "See the article"
@@ -66,6 +68,14 @@ p1_header <- "Expected Resource Utilization for COVID-19 Patients"
 lou_acute_label <- "Mean days in acute care"
 
 lou_acute_tooltip <- "Note: Acute care days are mutually exclusive of critical care and ventilator days."
+
+calc_lou_label <- "Calculate Length of Stay"
+
+acute_lou_modal_title <- "Calculate total acute care length of stay for COVID-19 patients"
+
+acute_modal_lou_acute <- "Mean length of stay in acute care for patients who only spent time in acute care"
+
+acute_modal_lou_extra <- "Mean length of stay in acute care before or after critical care admission (average of all patients, including those who did not spend time in acute care before or after critical care admission)"
 
 lou_crit_label <- "Mean days in critical care"
 

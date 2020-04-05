@@ -80,6 +80,8 @@ server <- function(input, output, session) {
                placement = "bottom", trigger = 'hover',
                options = list(container = "body"))
     
+    updateButton(session, 'calc_lou_acute', glue(' {calc_lou_label}'))
+    
     ## Panel 2 ----
     
     output$p2_header <- renderUI(h4(p2_header,
@@ -151,6 +153,12 @@ server <- function(input, output, session) {
     output$help <- renderUI(span(icon('question-circle'), help))
     
     output$help_text <- renderUI(includeHTML(glue('lang/{input$lang}/help-text.html')))
+    
+    ## Whats New? ----
+    
+    output$whats_new <- renderUI(span(icon('history'), whats_new))
+    
+    output$whats_new_text <- renderUI(includeHTML(glue('lang/NEWS.html')))
     
     ## More Info ----
     
@@ -242,6 +250,38 @@ server <- function(input, output, session) {
               'tab_pop_search', 'tab_pop_cell_edit'),
     session = session
   )
+  
+  # Modal Length of Stay Calculations ----
+  lou_acute_only <- 11; lou_acute_extra <- 5
+  
+  observeEvent(input$calc_lou_acute, {
+    
+    showModal(modalDialog(
+      title = acute_lou_modal_title,
+      easyClose = TRUE, size = 'm',
+      footer = modalButton(close),
+      numericInput('lou_acute_only', acute_modal_lou_acute, 
+                   min = 0, value = lou_acute_only),
+      numericInput('lou_acute_extra', acute_modal_lou_extra,
+                   min = 0, value = lou_acute_extra),
+      actionButton('submit_lou_ac', submit, 
+                   class = 'btn-success')
+    ))
+  })
+  
+  observeEvent(input$submit_lou_ac, {
+    updateNumericInput(session, 'lou_acute', 
+                       value = input$lou_acute_only + input$lou_acute_extra)
+    removeModal()
+  })
+  
+  observeEvent({
+    input$lou_acute_only
+    input$lou_acute_extra
+  }, {
+    lou_acute_only <<- input$lou_acute_only
+    lou_acute_extra <<- input$lou_acute_extra
+  })
   
   # Modal Resource Calculations ----
   
