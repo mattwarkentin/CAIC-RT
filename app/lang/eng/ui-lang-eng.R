@@ -284,7 +284,7 @@ summary_acute <- 'Based on {n_acute} available acute care beds and an average le
 
 summary_crit <- 'Based on {n_crit} available critical care beds and an average length of stay of {lou_crit} days, at maximum capacity the expected turnover rate is {critBedRate} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring a critical care bed is {rateCrit} percent. Given this, your healthcare environment has the capacity to manage a maximum of {maxCrit} incident cases of COVID-19 per day.'
 
-summary_vent <- 'Based on {n_vent} available mechanical ventilators and an average duration of use of {lou_vent} days, at maximum capacity the expected turnover rate is {ventBedRate} ventilators per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring a mechanical ventilator is {rateVent} percent. Given this, your healthcare environment has the capacity to manage a maximum of {maxVent} incident cases of COVID-19 per day.'
+summary_vent <- 'Based on {n_vent} available mechanical ventilators and an average duration of use of {lou_vent} days, at maximum capacity the expected turnover rate is {ventBedRate} ventilators per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring mechanical ventilation is {rateVent} percent. Given this, your healthcare environment has the capacity to manage a maximum of {maxVent} incident cases of COVID-19 per day.'
 
 ## Report ----
 
