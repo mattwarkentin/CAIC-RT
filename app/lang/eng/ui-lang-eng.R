@@ -85,7 +85,7 @@ lou_vent_label <- "Mean days on a mechanical ventilator"
 
 lou_vent_tooltip <- "Note: Days spent on a mechanical ventilator are assumed to be spent in a critical care bed."
 
-p1_footnote <- "Default values are based on data extracted from Zhou et al. (2020), Yang et al. (2020), and Wang et al. (2020), collected in China. See Help page for full citations."
+p1_footnote <- "Default values are based on data extracted from Grasselli et al. (2020), collected in Italy. See Help page for full citations."
 
 ## Panel 2 ----
 

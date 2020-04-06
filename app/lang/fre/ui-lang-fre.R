@@ -78,7 +78,7 @@ lou_vent_label <- "Nombre moyen de jours sous ventilation mécanique"
 
 lou_vent_tooltip <- "À noter: Il est présupposé que les jours passés sous ventilation mécanique sont passés dans un lit de soins intensifs"
 
-p1_footnote <- "Les valeurs de défaut sont basées sur des données extraites de Zhou et al. (2020), Yang et al. (2020), et Wang et al. (2020), recueillies en Chine. Naviguez vers la page d'Aide pour visualiser les références complètes."
+p1_footnote <- "Les valeurs de défaut sont basées sur des données extraites de Grasselli et al. (2020), recueillies en Italie. Naviguez vers la page d'Aide pour visualiser les références complètes."
 
 ## Panel 2 ----
 

@@ -77,7 +77,7 @@ lou_vent_label <- "Días medios en un ventilador mecánico"
 
 lou_vent_tooltip <- "Nota: Se supone que los días que se pasan en un ventilador mecánico se pasan en una cama de cuidados críticos."
 
-p1_footnote <- "Los valores predeterminados se basan en datos extraídos de Zhou et al. (2020), Yang et al. (2020), y Wang et al. (2020), recogido en China. Vea la página de ayuda para citas completas."
+p1_footnote <- "Los valores predeterminados se basan en datos extraídos de Grasselli et al. (2020), recogido en Italia. Vea la página de ayuda para citas completas."
 
 ## Panel 2 ----
 
