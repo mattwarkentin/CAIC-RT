@@ -82,11 +82,11 @@ ui <- function(request) {
                
                numericInput(inputId = "lou_crit",
                             label = htmlOutput('lou_crit_label'),
-                            value = 20, min = 1),
+                            value = 9, min = 1),
                
                numericInput(inputId = "lou_vent",
                             label = htmlOutput('lou_vent_label'),
-                            value = 20, min = 1),
+                            value = 9, min = 1),
                
                htmlOutput('p1_footnote'),
                )

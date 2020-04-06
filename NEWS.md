@@ -3,6 +3,15 @@
 
 ## v1.1.0 (2020-04-05)
 
+### Major Changes
+
+  - Length of stay in Critical Care and duration of use for mechanical
+    ventilators have been updated to **9 days** from **20 days** based
+    on emegring data from
+    [Italy](https://jamanetwork.com/journals/jama/fullarticle/2764365?utm_source=twitter)
+
+### New Features
+
   - Age-stratified case distribution and severity table now supports
     users uploading CSV or Excel files with custom data
 

@@ -466,10 +466,20 @@ server <- function(input, output, session) {
           ordering = FALSE,
           dom = 'tB',
           keys = TRUE,
-          buttons = c('copy', 'csv', 'excel')),
+          buttons = c('copy', 'csv', 'excel'),
+          scrollX = TRUE,
+          initComplete = JS("
+                        function(settings, json) {
+                          $(this.api().table().header()).css({
+                          'font-size': '12px',
+                          });
+                        }
+                    ")
+          ),
         colnames = col_names()
       ) %>% 
-        formatString(columns = c(2,3,4), suffix = '%')
+        formatString(columns = c(2,3,4), suffix = '%') %>% 
+        formatStyle(columns = 1:4, fontSize = "12px")
     )
   
   outputOptions(output, 'tab_pop', suspendWhenHidden = FALSE)

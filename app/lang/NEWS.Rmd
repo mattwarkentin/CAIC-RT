@@ -1,12 +1,22 @@
 ---
 output: 
   html_fragment: default
-  github_document: default
+  github_document: 
+    keep_html: false
+    html_preview: false
 ---
 
 # CAIC-RT
 
-## v1.1.0 (2020-04-05)
+---
+
+## v1.1.0 (2020-04-XX)
+
+### Major Changes
+
+- Length of stay in Critical Care and duration of use for Mechanical Ventilators have been updated to __9 days__ from __20 days__ based on emegring data from Italy, [Grasselli et al. (2020)](https://jamanetwork.com/journals/jama/fullarticle/2764365?utm_source=twitter).
+
+### New Features
 
 - Age-stratified case distribution and severity table now supports users uploading CSV or Excel files with custom data
 
@@ -20,14 +30,20 @@ output:
 - New modal widget for helping users compute the mean length of stay in acute care for COVID-19 patients
   + This accounts for patient-time for those who only spent time in acute care, and also those who spent time in acute care before or after spending time in critical care.
 
+---
+
 ## v1.0.2 (2020-03-28)
 
 - PDF report generation feature was added to tool
+
+---
 
 ## v1.0.1 (2020-03-25)
 
 - Minor bug fix for updating the feedback warning generated when the number of critical care beds was less than the number of mechanical ventilators
   + Previously, if the feedback warning was triggered when changing the critical care input, the feedback warning was not properly removed when the mechanical ventilator input was updated (and vice versa).
+
+---
 
 ## v1.0.0 (2020-03-24)
 
