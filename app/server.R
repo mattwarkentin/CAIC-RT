@@ -16,6 +16,7 @@ server <- function(input, output, session) {
     )
     
     output$home <- renderUI(span(icon('toolbox'), home))
+    outputOptions(output, 'home', suspendWhenHidden = FALSE)
     
     ## Footer ----
     
@@ -119,6 +120,8 @@ server <- function(input, output, session) {
     output$table_title <- renderUI(p(HTML(glue("{icon('sort')} {table_title1} ({table_title2})")), class = 'f3 f4-m f3-l'))
     output$table_tip <- renderUI(p(table_tip, class = 'f5'))
     output$table_source <- renderUI(p(glue('{table_source}: CDC COVID-19 Response Team. Severe Outcomes Among Patients with Coronavirus Disease 2019 (COVID-19) — United States, February 12–March 16, 2020. MMWR Morb Mortal Wkly Rep. 2020.'), class='f5'))
+    outputOptions(output, 'table_tip', suspendWhenHidden = FALSE)
+    outputOptions(output, 'table_source', suspendWhenHidden = FALSE)
     
     output$input_data <- renderUI(
       fileInput('data', 
@@ -127,6 +130,8 @@ server <- function(input, output, session) {
                 buttonLabel = input_btn,
                 placeholder = input_placehold,
                 accept = c('.csv', '.xlsx')))
+    outputOptions(output, 'input_data', suspendWhenHidden = FALSE)
+    
     updateActionButton(session, 'reset', label = reset)
     
     output$plot_title <- renderUI(h4(plot_title, class = 'f3 f4-m f3-l'))
@@ -151,25 +156,33 @@ server <- function(input, output, session) {
     ## Help Page ----
     
     output$help <- renderUI(span(icon('question-circle'), help))
+    outputOptions(output, 'help', suspendWhenHidden = FALSE)
     
     output$help_text <- renderUI(includeHTML(glue('lang/{input$lang}/help-text.html')))
+    outputOptions(output, 'help_text', suspendWhenHidden = FALSE)
     
     ## Whats New? ----
     
     output$whats_new <- renderUI(span(icon('history'), whats_new))
+    outputOptions(output, 'whats_new', suspendWhenHidden = FALSE)
     
     output$whats_new_text <- renderUI(includeHTML(glue('lang/NEWS.html')))
+    outputOptions(output, 'whats_new_text', suspendWhenHidden = FALSE)
     
     ## More Info ----
     
     output$tutorial <- renderUI(span(icon('youtube'), tutorial))
+    outputOptions(output, 'tutorial', suspendWhenHidden = FALSE)
     
     output$more_info <- renderUI(more_info)
+    outputOptions(output, 'more_info', suspendWhenHidden = FALSE)
     
     output$see_article <- renderUI(span(icon('file-medical-alt'), 
                                           see_article))
+    outputOptions(output, 'see_article', suspendWhenHidden = FALSE)
     
     output$see_code <- renderUI(span(icon('github'), see_code))
+    outputOptions(output, 'see_code', suspendWhenHidden = FALSE)
     
   })
   
@@ -433,6 +446,13 @@ server <- function(input, output, session) {
     x(default_table)
   })
   
+  col_names <- eventReactive(input$lang, {
+    c(table_col1, 
+      table_col2, 
+      table_col3, 
+      table_col4)
+  })
+    
   output$tab_pop <- DT::renderDT(
       DT::datatable(
         x(),
@@ -447,13 +467,12 @@ server <- function(input, output, session) {
           dom = 'tB',
           keys = TRUE,
           buttons = c('copy', 'csv', 'excel')),
-        colnames = c(table_col1, 
-                     table_col2, 
-                     table_col3, 
-                     table_col4)
+        colnames = col_names()
       ) %>% 
         formatString(columns = c(2,3,4), suffix = '%')
     )
+  
+  outputOptions(output, 'tab_pop', suspendWhenHidden = FALSE)
   
   proxy <- dataTableProxy('tab_pop')
   
@@ -661,6 +680,10 @@ server <- function(input, output, session) {
     p(vent_int(), class = 'f3 f4-m f3-l')
   }
   )
+  
+  outputOptions(output, 'acute_int', suspendWhenHidden = FALSE)
+  outputOptions(output, 'crit_int', suspendWhenHidden = FALSE)
+  outputOptions(output, 'mv_int', suspendWhenHidden = FALSE)
   
   # Generate Reports ----
   output$report_btn <- downloadHandler(
