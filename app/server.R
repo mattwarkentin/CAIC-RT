@@ -219,11 +219,12 @@ server <- function(input, output, session) {
   # Bookmark Button ----
   
   observeEvent({
+    input$lang
     n_acute(); lou_acute()
     n_crit(); lou_crit()
     n_vent(); lou_vent()
     per_vent()
-    input$lang
+    input$colors
   }, {
     output$bookmark <- renderUI(bookmarkButton(
       class = 'btn-success mb4 f4 f4-l f5-m', 
@@ -239,20 +240,24 @@ server <- function(input, output, session) {
   
   setBookmarkExclude(
     names = c('about_tool', 'interpretations',
-              'mvent', 'colors', 'global', 'plotly_afterplot-A',
+              'mvent', 'global', 'plotly_afterplot-A',
               '.clientValue-default-plotlyCrosstalkOpts',
               'contribute', 'critical', 'acute',
               'tab_pop_cell_clicked', 'plotly_relayout-A', 'data',
               'plotly_click-A', 'plotly_doubleclick-A',
-              'plotly_hover-A', 
+              'plotly_hover-A',
               'reset', 'tab_pop_rows_current', 
               'tab_pop_rows_all', 'tab_pop_state',
-              'tab_pop_search', 'tab_pop_cell_edit'),
+              'tab_pop_search', 'tab_pop_cell_edit',
+              'calc_lou_acute', 'submit_lou_ac',
+              'submit_mv', 'submit_cc', 'submit_ac'
+              ),
     session = session
   )
   
   # Modal Length of Stay Calculations ----
-  lou_acute_only <- 11; lou_acute_extra <- 5
+  lou_acute_only <- reactiveVal(10) 
+  lou_acute_extra <- reactiveVal(5)
   
   observeEvent(input$calc_lou_acute, {
     
@@ -261,33 +266,34 @@ server <- function(input, output, session) {
       easyClose = TRUE, size = 'm',
       footer = modalButton(close),
       numericInput('lou_acute_only', acute_modal_lou_acute, 
-                   min = 0, value = lou_acute_only),
+                   min = 0, value = lou_acute_only()),
       numericInput('lou_acute_extra', acute_modal_lou_extra,
-                   min = 0, value = lou_acute_extra),
+                   min = 0, value = lou_acute_extra()),
       actionButton('submit_lou_ac', submit, 
                    class = 'btn-success')
     ))
   })
   
   observeEvent(input$submit_lou_ac, {
+    lou_acute_only(input$lou_acute_only)
+    lou_acute_extra(input$lou_acute_extra)
     updateNumericInput(session, 'lou_acute', 
-                       value = input$lou_acute_only + input$lou_acute_extra)
+                       value = round(lou_acute_only() + 
+                         (lou_acute_extra() * rateAcuteR() / 100)))
     removeModal()
-  })
-  
-  observeEvent({
-    input$lou_acute_only
-    input$lou_acute_extra
-  }, {
-    lou_acute_only <<- input$lou_acute_only
-    lou_acute_extra <<- input$lou_acute_extra
   })
   
   # Modal Resource Calculations ----
   
-  tot_ac_bed <- 33511; tot_ac_av <- 25; tot_ac_sur <- 0
-  tot_cc_bed <- 2053; tot_cc_av <- 25; tot_cc_sur <- 0
-  tot_mv_bed <- 1311; tot_mv_av <- 25; tot_mv_sur <- 0
+  tot_ac_bed <- reactiveVal(33511)
+  tot_ac_av <- reactiveVal(25)
+  tot_ac_sur <- reactiveVal(0)
+  tot_cc_bed <- reactiveVal(2053)
+  tot_cc_av <- reactiveVal(25)
+  tot_cc_sur <- reactiveVal(0)
+  tot_mv <- reactiveVal(1311)
+  tot_mv_av <- reactiveVal(25)
+  tot_mv_sur <- reactiveVal(0)
   
   observeEvent(input$acute, {
     
@@ -296,32 +302,27 @@ server <- function(input, output, session) {
       easyClose = TRUE, size = 'm',
       footer = modalButton(close),
       numericInput('tot_ac_bed', acute_modal_n_acute, 
-                   min = 0, value = tot_ac_bed),
+                   min = 0, value = tot_ac_bed()),
       sliderInput('tot_ac_av', acute_modal_per_acute,
-                  min = 0, max = 100, value = tot_ac_av, step = 1,
+                  min = 0, max = 100, value = tot_ac_av(), 
+                  step = 1,
                   post = '%'),
       numericInput('tot_ac_sur', acute_modal_surge,
-                   min = 0, max = 100, value = tot_ac_sur),
+                   min = 0, max = 100, value = tot_ac_sur()),
       actionButton('submit_ac', submit, 
                    class = 'btn-success')
     ))
   })
   observeEvent(input$submit_ac, {
+    tot_ac_bed(input$tot_ac_bed)
+    tot_ac_av(input$tot_ac_av)
+    tot_ac_sur(input$tot_ac_sur)
     updateNumericInput(session, 'n_acute', 
-                       value = floor((input$tot_ac_bed * 
-                                  (input$tot_ac_av / 100)) + 
-                                  (input$tot_ac_sur))
+                       value = floor((tot_ac_bed() * 
+                                  (tot_ac_av() / 100)) + 
+                                  (tot_ac_sur()))
                        )
     removeModal()
-  })
-  observeEvent({
-    input$tot_ac_bed
-    input$tot_ac_av
-    input$tot_ac_sur
-  }, {
-    tot_ac_bed <<- input$tot_ac_bed
-    tot_ac_av <<- input$tot_ac_av
-    tot_ac_sur <<- input$tot_ac_sur
   })
   
   observeEvent(input$critical, {
@@ -331,32 +332,26 @@ server <- function(input, output, session) {
       easyClose = TRUE, size = 'm',
       footer = modalButton(close),
       numericInput('tot_cc_bed', crit_modal_n_crit, 
-                   min = 0, value = tot_cc_bed),
+                   min = 0, value = tot_cc_bed()),
       sliderInput('tot_cc_av', crit_modal_per_crit,
-                  min = 0, max = 100, value = tot_cc_av, step = 1,
+                  min = 0, max = 100, value = tot_cc_av(), step = 1,
                   post = '%'),
       numericInput('tot_cc_sur', crit_modal_surge,
-                   min = 0, max = 100, value = tot_cc_sur),
+                   min = 0, max = 100, value = tot_cc_sur()),
       actionButton('submit_cc', submit, 
                    class = 'btn-success')
     ))
   })
   observeEvent(input$submit_cc, {
+    tot_cc_bed(input$tot_cc_bed)
+    tot_cc_av(input$tot_cc_av)
+    tot_cc_sur(input$tot_cc_sur)
     updateNumericInput(session, 'n_crit', 
-                       value = floor((input$tot_cc_bed * 
-                                        (input$tot_cc_av / 100)) + 
-                                       (input$tot_cc_sur))
+                       value = floor((tot_cc_bed() * 
+                                        (tot_cc_av() / 100)) + 
+                                       (tot_cc_sur()))
     )
     removeModal()
-  })
-  observeEvent({
-    input$tot_cc_bed
-    input$tot_cc_av
-    input$tot_cc_sur
-  }, {
-    tot_cc_bed <<- input$tot_cc_bed
-    tot_cc_av <<- input$tot_cc_av
-    tot_cc_sur <<- input$tot_cc_sur
   })
   
   observeEvent(input$mvent, {
@@ -365,33 +360,27 @@ server <- function(input, output, session) {
       title = vent_modal_title,
       easyClose = TRUE, size = 'm',
       footer = modalButton(close),
-      numericInput('tot_mv_bed', vent_modal_n_vent, 
-                   min = 0, value = tot_mv_bed),
+      numericInput('tot_mv', vent_modal_n_vent, 
+                   min = 0, value = tot_mv()),
       sliderInput('tot_mv_av', vent_modal_per_vent,
-                  min = 0, max = 100, value = tot_mv_av, step = 1,
+                  min = 0, max = 100, value = tot_mv_av(), step = 1,
                   post = '%'),
       numericInput('tot_mv_sur', vent_modal_surge,
-                   min = 0, max = 100, value = tot_mv_sur),
+                   min = 0, max = 100, value = tot_mv_sur()),
       actionButton('submit_mv', submit, 
                    class = 'btn-success')
     ))
   })
   observeEvent(input$submit_mv, {
+    tot_mv(input$tot_mv)
+    tot_mv_av(input$tot_mv_av)
+    tot_mv_sur(input$tot_mv_sur)
     updateNumericInput(session, 'n_vent', 
-                       value = floor((input$tot_mv_bed * 
-                                        (input$tot_mv_av / 100)) + 
-                                       (input$tot_mv_sur))
+                       value = floor((tot_mv() * 
+                                        (tot_mv_av() / 100)) + 
+                                       (tot_mv_sur()))
     )
     removeModal()
-  })
-  observeEvent({
-    input$tot_mv_bed
-    input$tot_mv_av
-    input$tot_mv_sur
-  }, {
-    tot_mv_bed <<- input$tot_mv_bed
-    tot_mv_av <<- input$tot_mv_av
-    tot_mv_sur <<- input$tot_mv_sur
   })
   
   # Observe Number of CC Beds ----
@@ -577,24 +566,26 @@ server <- function(input, output, session) {
         ggplot(aes(resource, value, fill = resource,
                                    text = str_wrap(tooltip, width = 40))) +
         geom_col(show.legend = FALSE, col = 'black') +
+        geom_hline(aes(yintercept = min(value, na.rm = TRUE)), 
+                   lty = 3) +
         labs(x = '', 
              y = y_lab()) + 
         color_scale +
         scale_x_discrete(labels = with(plot_data(), glue("{resource}\n ({str_trim(format(floor(value), big.mark = ','))} {xlab_suffix})"))) +
         scale_y_continuous(labels = scales::comma_format()) +
         theme_classic() +
-        theme(legend.position = 'none',
+        theme(legend.position = 'none', 
               axis.text.x = element_text(angle = 25))
       p
     }
   })
   
   output$plot <- renderPlotly({
-    
-    ggplotly(plot(), tooltip = 'text') %>% 
-      config(displayModeBar = FALSE) %>% 
-      layout(xaxis = list(fixedrange = TRUE)) %>% 
-      layout(yaxis = list(fixedrange = TRUE))
+
+  ggplotly(plot(), tooltip = 'text') %>% 
+    config(displayModeBar = FALSE) %>% 
+    layout(xaxis = list(fixedrange = TRUE)) %>% 
+    layout(yaxis = list(fixedrange = TRUE))
     
   })
   

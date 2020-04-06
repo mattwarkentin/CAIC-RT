@@ -141,7 +141,7 @@ p2_footnote_1 <- "Default percent of critical care patients requiring mechanical
 
 p2_footnote_2 <- "Default number of acute care beds, critical care beds, and mechanical ventilators are based on data extracted from Barrett et al. (2020), collected in Ontario. See Help page for full citations."
 
-bookmark <- "Bookmark custom values"
+bookmark <- "Bookmark custom inputs"
 
 bookmark_title <- "Bookmarked Application Link"
 
