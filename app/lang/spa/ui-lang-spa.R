@@ -129,7 +129,7 @@ per_vent_label <- "Porcentaje de pacientes de cuidados críticos que requieren v
 
 per_vent_tooltip <- "Nota: Este es el porcentaje de pacientes con cuidados críticos COVID-19 que requieren ventilación mecánica."
 
-p2_footnote_1 <- "El porcentaje predeterminado de pacientes de cuidados críticos que requieren ventilación mecánica se basa en datos extraídos de Zhou et al. (2020) y Wang et al. (2020), recogido en China. Vea la página de ayuda para citacions completas."
+p2_footnote_1 <- "El porcentaje predeterminado de pacientes de cuidados críticos que requieren ventilación mecánica se basa en datos extraídos de Grasselli et al. (2020), Zhou et al. (2020), y Wang et al. (2020), recogido en Italia y China. Vea la página de ayuda para citacions completas."
 
 p2_footnote_2 <- "El número predeterminado de camas de cuidados agudos, camas de cuidados críticos y ventiladores mecánicos se basa en datos extraídos de Barrett et al. (2020), recogido en Ontario. Vea la página de ayuda para citacións completas."
 

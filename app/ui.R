@@ -74,11 +74,6 @@ ui <- function(request) {
                             label = htmlOutput('lou_acute_label'),
                             value = round((10 + (5 * 26.7 / 100))), 
                             min = 1),
-               actionButton('calc_lou_acute', 
-                            'Calculate Length of Stay',
-                            icon = icon('bed'), 
-                            class = 'bg-dark-gray white f5 f5-l f7-m'),
-               hr(),
                
                numericInput(inputId = "lou_crit",
                             label = htmlOutput('lou_crit_label'),
@@ -123,7 +118,7 @@ ui <- function(request) {
                
                sliderInput(inputId = "per_vent",
                             label = htmlOutput('per_vent_label'),
-                            value = 50, min = 0, max = 100, step = 1, 
+                            value = 70, min = 0, max = 100, step = 1, 
                            post = '%'),
                htmlOutput('p2_footnote_1'),
                htmlOutput('p2_footnote_2')

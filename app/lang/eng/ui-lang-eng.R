@@ -73,9 +73,11 @@ calc_lou_label <- "Calculate Length of Stay"
 
 acute_lou_modal_title <- "Calculate total acute care length of stay for COVID-19 patients"
 
-acute_modal_lou_acute <- "Mean length of stay in acute care for patients who only spent time in acute care"
+acute_modal_lou_acute <- "Mean length of stay in acute care for patients not spending time in critical care"
 
-acute_modal_lou_extra <- "Mean length of stay in acute care before or after critical care admission (average of all patients, including those who did not spend time in acute care before or after critical care admission)"
+acute_modal_lou_extra <- "Mean length of stay in acute care before or after spending time in critical care"
+
+acute_modal_prop <- 'Percent of critical care patients that require acute care resources'
 
 lou_crit_label <- "Mean days in critical care"
 
@@ -137,9 +139,9 @@ per_vent_label <- "Percent of critical care patients requiring mechanical ventil
 
 per_vent_tooltip <- "Note: This is the percentage of COVID-19 critical care patients requiring mechanical ventilation."
 
-p2_footnote_1 <- "Default percent of critical care patients requiring mechanical ventilation are based on data extracted from Zhou et al. (2020) and Wang et al. (2020), collected in China. See Help page for full citations."
+p2_footnote_1 <- "Default percent of critical care patients requiring mechanical ventilation are based on data extracted from Grasselli et al. (2020), Zhou et al. (2020), and Wang et al. (2020), collected in Italy and China. See Help page for full citations."
 
-p2_footnote_2 <- "Default number of acute care beds, critical care beds, and mechanical ventilators are based on data extracted from Barrett et al. (2020), collected in Ontario. See Help page for full citations."
+p2_footnote_2 <- "Default number of acute care beds, critical care beds, and mechanical ventilators are based on Ontario data extracted from Barrett et al. (2020). See Help page for full citations."
 
 bookmark <- "Bookmark custom inputs"
 
@@ -250,13 +252,13 @@ input_placehold <- "No file selected"
 
 input_text <- "The table below is editable. However, you may wish to upload your own data. The file should have four columns in the same order as the table below. The file is assumed to have a header, though header labels are ignored."
 
-table_col1 <- "Age groups"
+table_col1 <- "Age Groups"
 
-table_col2 <- "Case distribution (%)"
+table_col2 <- "Case Distribution (%)"
 
-table_col3 <- "Acute care admission (%)"
+table_col3 <- "Require Acute Care (%)"
 
-table_col4 <- "Critical care admission (%)"
+table_col4 <- "Require Critical Care (%)"
 
 table_modal_txt <- "This column can only accept numeric inputs. Please check your numbers!"
 

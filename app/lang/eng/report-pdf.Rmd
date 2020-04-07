@@ -82,11 +82,11 @@ knitr::asis_output(
        )
 knitr::asis_output(glue('\\textbf{<<params$authors>>:}', .open = '<<', .close = '>>'))
 knitr::asis_output('\\begin{itemize}')
-knitr::asis_output('\\item{\\small Vasily Giannakeas, MPH \\textsuperscript{1,2}}')
+knitr::asis_output('\\item{\\small Vasily Giannakeas, MPH \\textsuperscript{1,2,3}}')
 knitr::asis_output('\\item{\\small Deepit Bhatia, MPH}')
-knitr::asis_output('\\item{\\small Matthew T. Warkentin, MSc \\textsuperscript{2,3}}')
-knitr::asis_output('\\item{\\small Isaac I. Bogoch, MD \\textsuperscript{4,5}}')
-knitr::asis_output('\\item{\\small Nathan M. Stall, MD \\textsuperscript{1,4,6,7}}')
+knitr::asis_output('\\item{\\small Matthew T. Warkentin, MSc \\textsuperscript{2,4}}')
+knitr::asis_output('\\item{\\small Isaac I. Bogoch, MD \\textsuperscript{5,6}}')
+knitr::asis_output('\\item{\\small Nathan M. Stall, MD \\textsuperscript{1,5,7,8}}')
 knitr::asis_output('\\end{itemize}')
 knitr::asis_output('\\medskip')
 ```
@@ -104,7 +104,7 @@ knitr::asis_output('\\medskip')
 
 ```{r affiliations}
 knitr::asis_output("{\\tiny\\begin{singlespace}
-1. Women's College Research Institute, Women's College Hospital, Toronto, Ontario, Canada; 2. Dalla Lana School of Public Health, University of Toronto, Toronto, Ontario, Canada; 3. Lunenfeld-Tanenbaum Research Institute, Sinai Health System, Toronto, Ontario, Canada; 4. Department of Medicine, University of Toronto, Toronto, Ontario, Canada; 5. Divisions of General Internal Medicine and Infectious Diseases, University Health Network, Toronto, Canada; 6. Institute of Health Policy, Management and Evaluation, University of Toronto, Toronto, Ontario, Canada; 7. Divisions of General Internal Medicine and Geriatrics, Sinai Health System, Toronto, Ontario, Canada
+1. Women's College Research Institute, Women's College Hospital, Toronto, Ontario, Canada; 2. Dalla Lana School of Public Health, University of Toronto, Toronto, Ontario, Canada; 3. ICES, Toronto, Ontario, Canada; 4. Lunenfeld-Tanenbaum Research Institute, Sinai Health System, Toronto, Ontario, Canada; 5. Department of Medicine, University of Toronto, Toronto, Ontario, Canada; 6. Divisions of General Internal Medicine and Infectious Diseases, University Health Network, Toronto, Canada; 7. Institute of Health Policy, Management and Evaluation, University of Toronto, Toronto, Ontario, Canada; 8. Divisions of General Internal Medicine and Geriatrics, Sinai Health System, Toronto, Ontario, Canada
 \\end{singlespace}}")
 ```
 
