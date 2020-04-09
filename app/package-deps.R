@@ -8,6 +8,7 @@ library(htmltools)
 
 # Data science deps
 library(tidyverse)
+library(readxl)
 library(glue)
 library(tibble)
 library(ggplot2)

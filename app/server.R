@@ -1,6 +1,199 @@
 server <- function(input, output, session) {
   # Lanuage Rendering ----
 
+  load_lang <- function(lang) {
+    source(glue('lang/{lang}/ui-lang-{lang}.R'))
+  }
+  
+  observeEvent(input$lang, {
+    req(input$lang)
+    choose_lang <- input$lang
+    
+    switch(choose_lang,
+      'eng' = load_lang('eng'),
+      'spa' = load_lang('spa'),
+      'fre' = load_lang('fre')
+    )
+    
+    output$home <- renderUI(span(icon('toolbox'), home))
+    outputOptions(output, 'home', suspendWhenHidden = FALSE)
+    
+    ## Footer ----
+    
+    track_twitter <- function(name, handle, label, value = 1) {
+      a(
+        glue('{name}'),
+        href = glue('https://www.twitter.com/{handle}'),
+        target = '_blank',
+        #onclick = glue('ga("send", "event", "click", "link", "{label}", {value})')
+      )
+    }
+    
+    tran_foot <- function(name) {
+      if (is.na(name)) {
+        ""
+      } else {
+        paste0(tran_by, 
+        a(
+          glue(' {name}.'),
+          href = glue('mailto:', '{email}')
+        ))
+      }
+    }
+    
+    footer <- 
+      HTML(
+        glue(" ",
+             "{track_twitter('Vasily Giannakeas', 'vasilepi', 'twitter_vg', 1)}, ",
+             "{track_twitter('Deepit Bhatia', 'BreslowDay', 'twitter_db', 1)}, ",
+             "{track_twitter('Matthew T. Warkentin', 'mattwrkntn', 'twitter_mtw', 1)}, ",
+             "{track_twitter('Isaac I. Bogoch', 'BogochIsaac', 'twitter_iib', 1)}, ",
+             "and ",
+             "{track_twitter('Nathan M. Stall', 'NathanStall', 'twitter_nms', 1)}",
+             " (Toronto, Canada). {tran_foot(tb)}<p/></footer>"
+        ))
+    
+    output$dev_by <- renderUI(HTML(glue('<hr /><footer><p>', dev_by, footer)))
+    
+    ## Panel 1 ----
+    output$last_update <- renderUI(HTML(glue("{strong(last_update)}: {Sys.Date()}")))
+    updateSelectInput(session, 'lang', lang)
+    updateButton(session, 'about_tool', glue(' {about_tool}'))
+    updateButton(session, 'contribute', glue(' {contribute}'))
+    output$p1_header <- renderUI(h4(p1_header,
+                                    class = 'f3 f4-m f3-l'))
+    output$lou_acute_label <- renderUI(p(lou_acute_label, class = 'f5-m f4-l f4'))
+    output$lou_crit_label <- renderUI(p(lou_crit_label, class = 'f5-m f4-l f4'))
+    output$lou_vent_label <- renderUI(p(lou_vent_label, class = 'f5-m f4-l f4'))
+    
+    output$p1_footnote <- renderUI(p(p1_footnote, class = 'f5 f5-l f6-m'))
+    
+    
+    addTooltip(session, "lou_acute", lou_acute_tooltip, 
+               placement = "bottom", trigger = 'hover',
+               options = list(container = "body"))
+    
+    addTooltip(session, "lou_crit", lou_crit_tooltip, 
+               placement = "bottom", trigger = 'hover',
+               options = list(container = "body"))
+    
+    addTooltip(session, "lou_vent", lou_vent_tooltip, 
+               placement = "bottom", trigger = 'hover',
+               options = list(container = "body"))
+    
+    updateButton(session, 'calc_lou_acute', glue(' {calc_lou_label}'))
+    
+    ## Panel 2 ----
+    
+    output$p2_header <- renderUI(h4(p2_header,
+                                    class = 'f3 f4-m f3-l'))
+    
+    output$n_acute_label <- renderUI(p(n_acute_label, class = 'f5-m f4-l f4'))
+    updateButton(session, 'acute', glue(' {calc_acute}'))
+    
+    output$n_crit_label <- renderUI(p(n_crit_label, class = 'f5-m f4-l f4'))
+    updateButton(session, 'critical', glue(' {calc_crit}'))
+    
+    output$n_vent_label <- renderUI(p(n_vent_label, class = 'f5-m f4-l f4'))
+    updateButton(session, 'mvent', glue(' {calc_vent}'))
+    
+    output$per_vent_label <- renderUI(p(per_vent_label, class = 'f5-m f4-l f4'))
+    
+    output$p2_footnote_1 <- renderUI(p(p2_footnote_1, class = 'f5 f5-l f6-m'))
+    output$p2_footnote_2 <- renderUI(p(p2_footnote_2, class = 'f5 f5-l f6-m'))
+    
+    addTooltip(session, "n_acute", n_acute_tooltip, 
+               placement = "bottom", trigger = 'hover',
+               options = list(container = "body"))
+    addTooltip(session, "n_crit", n_crit_tooltip, 
+              placement = "bottom", trigger = 'hover',
+              options = list(container = "body"))
+    addTooltip(session, "n_vent", n_vent_tooltip, 
+              placement = "bottom", trigger = 'hover',
+              options = list(container = "body"))
+    addTooltip(session, "per_vent", per_vent_tooltip, 
+              placement = "bottom", trigger = 'hover',
+              options = list(container = "body"))
+    
+    ## Panel 3 ----
+    
+    output$table_title <- renderUI(p(HTML(glue("{icon('sort')} {table_title1} ({table_title2})")), class = 'f3 f4-m f3-l'))
+    output$table_tip <- renderUI(p(table_tip, class = 'f5'))
+    output$table_source <- renderUI(p(glue('{table_source}: CDC COVID-19 Response Team. Severe Outcomes Among Patients with Coronavirus Disease 2019 (COVID-19) — United States, February 12–March 16, 2020. MMWR Morb Mortal Wkly Rep. 2020.'), class='f5'))
+    outputOptions(output, 'table_tip', suspendWhenHidden = FALSE)
+    outputOptions(output, 'table_source', suspendWhenHidden = FALSE)
+    
+    output$input_data <- renderUI(
+      fileInput('data', 
+                label = span(p(input_label, class = 'f4'), 
+                             p(input_text, class = 'f5')),
+                buttonLabel = input_btn,
+                placeholder = input_placehold,
+                accept = c('.csv', '.xlsx')))
+    outputOptions(output, 'input_data', suspendWhenHidden = FALSE)
+    
+    updateActionButton(session, 'reset', label = reset)
+    
+    output$plot_title <- renderUI(h4(plot_title, class = 'f3 f4-m f3-l'))
+    output$plot_desc <- renderUI(p(plot_desc, class = 'navy f4 f4-l f5-m'))
+    
+    updateSelectInput(session, 'colors', color_label)
+    
+    output$interpret_title <- renderUI(h4(interpret_title,
+                                          class = 'f3 f4-m f3-l'))
+    output$acute_res_title <- renderUI(p(acute_res_title, 
+                                         class = 'f3 f4-m f3-l'))
+    output$crit_res_title <- renderUI(p(crit_res_title,
+                                        class = 'f3 f4-m f3-l'))
+    output$vent_res_title <- renderUI(p(vent_res_title, 
+                                        class = 'f3 f4-m f3-l'))
+
+    output$report <- renderUI({
+      downloadButton('report_btn', report_button, 
+                     class = 'btn-primary f4 f4-l f5-m')
+    })
+    
+    ## Help Page ----
+    
+    output$help <- renderUI(span(icon('question-circle'), help))
+    outputOptions(output, 'help', suspendWhenHidden = FALSE)
+    
+    output$help_text <- renderUI(includeHTML(glue('lang/{input$lang}/help-text.html')))
+    outputOptions(output, 'help_text', suspendWhenHidden = FALSE)
+    
+    ## Whats New? ----
+    
+    output$whats_new <- renderUI(span(icon('history'), whats_new))
+    outputOptions(output, 'whats_new', suspendWhenHidden = FALSE)
+    
+    output$whats_new_text <- renderUI(includeHTML(glue('lang/NEWS.html')))
+    outputOptions(output, 'whats_new_text', suspendWhenHidden = FALSE)
+    
+    ## More Info ----
+    
+    output$tutorial <- renderUI(span(icon('youtube'), tutorial))
+    outputOptions(output, 'tutorial', suspendWhenHidden = FALSE)
+    
+    output$more_info <- renderUI(more_info)
+    outputOptions(output, 'more_info', suspendWhenHidden = FALSE)
+    
+    output$see_article <- renderUI(span(icon('file-medical-alt'), 
+                                          see_article))
+    outputOptions(output, 'see_article', suspendWhenHidden = FALSE)
+    
+    output$see_code <- renderUI(span(icon('github'), see_code))
+    outputOptions(output, 'see_code', suspendWhenHidden = FALSE)
+    
+  })
+  
+  # Language Contribution ----
+  
+  observeEvent(input$contribute, {
+    showModal(modalDialog(title = h4(lang_title), 
+                          size = 'm', 
+                          easyClose = TRUE, footer = modalButton('Close'),
+                          includeHTML(glue('lang/{input$lang}/contribute.html'))))
+  })
   # US Case Distribution Data ----
   default_table <- 
     tribble(
@@ -15,129 +208,193 @@ server <- function(input, output, session) {
     )
   
   # Welcome Modal ----
+
   observeEvent("", {
     showModal(modalDialog(
-      includeHTML("lang/eng/intro_text.html"),
+      includeHTML("lang/eng/intro-text.html"),
       easyClose = TRUE, size = 'm', 
-      title = HTML('CAIC-RT: COVID-19 Acute and Intensive Care Resource Tool')
-    ))
+      footer = modalButton(close),
+      title = "CAIC-RT: COVID-19 Acute and Intensive Care Resource Tool")
+    )
   }
   )
   
   observeEvent(input$about_tool, {
     showModal(modalDialog(
-      includeHTML("lang/eng/intro_text.html"),
+      includeHTML(glue("lang/{input$lang}/intro-text.html")),
       easyClose = TRUE, size = 'm', 
-      title = HTML('CAIC-RT: COVID-19 Acute and Intensive Care Resource Tool')
+      footer = modalButton(close),
+      title = "CAIC-RT: COVID-19 Acute and Intensive Care Resource Tool")
+    )
+  })
+  
+  
+  # Bookmark Button ----
+  
+  observeEvent({
+    input$lang
+    n_acute(); lou_acute()
+    n_crit(); lou_crit()
+    n_vent(); lou_vent()
+    per_vent()
+    input$colors
+  }, {
+    output$bookmark <- renderUI(bookmarkButton(
+      class = 'btn-success f4 f4-l f5-m', 
+      label = HTML(bookmark)))
+    
+    onBookmarked(function(url) {
+      showModal(urlModal(url, 
+                         title = bookmark_title, 
+                         subtitle = bookmark_sub))
+    })
+    
+  }, ignoreInit = TRUE)
+  
+  setBookmarkExclude(
+    names = c('about_tool', 'interpretations',
+              'mvent', 'global', 'plotly_afterplot-A',
+              '.clientValue-default-plotlyCrosstalkOpts',
+              'contribute', 'critical', 'acute',
+              'tab_pop_cell_clicked', 'plotly_relayout-A', 'data',
+              'plotly_click-A', 'plotly_doubleclick-A',
+              'plotly_hover-A',
+              'reset', 'tab_pop_rows_current', 
+              'tab_pop_rows_all', 'tab_pop_state',
+              'tab_pop_search', 'tab_pop_cell_edit',
+              'calc_lou_acute', 'submit_lou_ac',
+              'submit_mv', 'submit_cc', 'submit_ac'
+              ),
+    session = session
+  )
+  
+  # Modal Length of Stay Calculations ----
+  
+  lou_acute_only <- reactiveVal(10) 
+  lou_acute_extra <- reactiveVal(5)
+  
+  observeEvent(input$calc_lou_acute, {
+    
+    showModal(modalDialog(
+      title = acute_lou_modal_title,
+      easyClose = TRUE, size = 'm',
+      footer = modalButton(close),
+      numericInput('lou_acute_only', acute_modal_lou_acute, 
+                   min = 0, value = lou_acute_only()),
+      hr(),
+      numericInput('lou_acute_extra', acute_modal_lou_extra,
+                   min = 0, value = lou_acute_extra()),
+      actionButton('submit_lou_ac', submit, 
+                   class = 'btn-success')
     ))
   })
   
+  observeEvent(input$submit_lou_ac, {
+    lou_acute_only(input$lou_acute_only)
+    lou_acute_extra(input$lou_acute_extra)
+    updateNumericInput(session, 'lou_acute', 
+                       value = round(lou_acute_only() + 
+                                       (lou_acute_extra() * rateAcuteR() / 100)))
+    removeModal()
+  })
   # Modal Resource Calculations ----
   
-  tot_ac_bed <- 33511; tot_ac_av <- 25; tot_ac_sur <- 0
-  tot_cc_bed <- 2053; tot_cc_av <- 25; tot_cc_sur <- 0
-  tot_mv_bed <- 1311; tot_mv_av <- 25; tot_mv_sur <- 0
+  tot_ac_bed <- reactiveVal(33511)
+  tot_ac_av <- reactiveVal(25)
+  tot_ac_sur <- reactiveVal(0)
+  tot_cc_bed <- reactiveVal(2053)
+  tot_cc_av <- reactiveVal(25)
+  tot_cc_sur <- reactiveVal(0)
+  tot_mv <- reactiveVal(1311)
+  tot_mv_av <- reactiveVal(25)
+  tot_mv_sur <- reactiveVal(0)
   
   observeEvent(input$acute, {
     
     showModal(modalDialog(
-      title = "Calculate the number of acute care beds available for COVID-19 cases",
+      title = acute_modal_title,
       easyClose = TRUE, size = 'm',
-      numericInput('tot_ac_bed', 'Total number of acute care beds', 
-                   min = 0, value = tot_ac_bed),
-      sliderInput('tot_ac_av', "Percent of acute care beds available for or currently being used by COVID-19 cases",
-                  min = 0, max = 100, value = tot_ac_av, step = 1,
+      footer = modalButton(close),
+      numericInput('tot_ac_bed', acute_modal_n_acute, 
+                   min = 0, value = tot_ac_bed()),
+      sliderInput('tot_ac_av', acute_modal_per_acute,
+                  min = 0, max = 100, value = tot_ac_av(), 
+                  step = 1,
                   post = '%'),
-      numericInput('tot_ac_sur', "Acute care bed surge capacity for COVID-19 cases (number of beds)",
-                   min = 0, max = 100, value = tot_ac_sur),
-      actionButton('submit_ac', "Apply Changes", 
+      numericInput('tot_ac_sur', acute_modal_surge,
+                   min = 0, max = 100, value = tot_ac_sur()),
+      actionButton('submit_ac', submit, 
                    class = 'btn-success')
     ))
   })
   observeEvent(input$submit_ac, {
+    tot_ac_bed(input$tot_ac_bed)
+    tot_ac_av(input$tot_ac_av)
+    tot_ac_sur(input$tot_ac_sur)
     updateNumericInput(session, 'n_acute', 
-                       value = floor((input$tot_ac_bed * 
-                                  (input$tot_ac_av / 100)) + 
-                                  (input$tot_ac_sur))
+                       value = floor((tot_ac_bed() * 
+                                  (tot_ac_av() / 100)) + 
+                                  (tot_ac_sur()))
                        )
     removeModal()
-  })
-  observeEvent({
-    input$tot_ac_bed
-    input$tot_ac_av
-    input$tot_ac_sur
-  }, {
-    tot_ac_bed <<- input$tot_ac_bed
-    tot_ac_av <<- input$tot_ac_av
-    tot_ac_sur <<- input$tot_ac_sur
   })
   
   observeEvent(input$critical, {
     
     showModal(modalDialog(
-      title = "Calculate the number of critical care beds available for COVID-19 cases",
+      title = crit_modal_title,
       easyClose = TRUE, size = 'm',
-      numericInput('tot_cc_bed', 'Total number of critical care beds', 
-                   min = 0, value = tot_cc_bed),
-      sliderInput('tot_cc_av', "Percent of critical care beds available for or currently being used by COVID-19 cases",
-                  min = 0, max = 100, value = tot_cc_av, step = 1,
+      footer = modalButton(close),
+      numericInput('tot_cc_bed', crit_modal_n_crit, 
+                   min = 0, value = tot_cc_bed()),
+      sliderInput('tot_cc_av', crit_modal_per_crit,
+                  min = 0, max = 100, value = tot_cc_av(), step = 1,
                   post = '%'),
-      numericInput('tot_cc_sur', "Critical care bed surge capacity for COVID-19 cases (number of beds)",
-                   min = 0, max = 100, value = tot_cc_sur),
-      actionButton('submit_cc', "Apply Changes", 
+      numericInput('tot_cc_sur', crit_modal_surge,
+                   min = 0, max = 100, value = tot_cc_sur()),
+      actionButton('submit_cc', submit, 
                    class = 'btn-success')
     ))
   })
   observeEvent(input$submit_cc, {
+    tot_cc_bed(input$tot_cc_bed)
+    tot_cc_av(input$tot_cc_av)
+    tot_cc_sur(input$tot_cc_sur)
     updateNumericInput(session, 'n_crit', 
-                       value = floor((input$tot_cc_bed * 
-                                        (input$tot_cc_av / 100)) + 
-                                       (input$tot_cc_sur))
+                       value = floor((tot_cc_bed() * 
+                                        (tot_cc_av() / 100)) + 
+                                       (tot_cc_sur()))
     )
     removeModal()
-  })
-  observeEvent({
-    input$tot_cc_bed
-    input$tot_cc_av
-    input$tot_cc_sur
-  }, {
-    tot_cc_bed <<- input$tot_cc_bed
-    tot_cc_av <<- input$tot_cc_av
-    tot_cc_sur <<- input$tot_cc_sur
   })
   
   observeEvent(input$mvent, {
     
     showModal(modalDialog(
-      title = "Calculate the number of mechanical ventilators available for COVID-19 cases",
+      title = vent_modal_title,
       easyClose = TRUE, size = 'm',
-      numericInput('tot_mv_bed', 'Total number of mechanical ventilators', 
-                   min = 0, value = tot_mv_bed),
-      sliderInput('tot_mv_av', "Percent of mechanical ventilators available for or currently being used by COVID-19 cases",
-                  min = 0, max = 100, value = tot_mv_av, step = 1,
+      footer = modalButton(close),
+      numericInput('tot_mv', vent_modal_n_vent, 
+                   min = 0, value = tot_mv()),
+      sliderInput('tot_mv_av', vent_modal_per_vent,
+                  min = 0, max = 100, value = tot_mv_av(), step = 1,
                   post = '%'),
-      numericInput('tot_mv_sur', "Mechanical ventilator surge capacity for COVID-19 cases (number of ventilators)",
-                   min = 0, max = 100, value = tot_mv_sur),
-      actionButton('submit_mv', "Apply Changes", 
+      numericInput('tot_mv_sur', vent_modal_surge,
+                   min = 0, max = 100, value = tot_mv_sur()),
+      actionButton('submit_mv', submit, 
                    class = 'btn-success')
     ))
   })
   observeEvent(input$submit_mv, {
+    tot_mv(input$tot_mv)
+    tot_mv_av(input$tot_mv_av)
+    tot_mv_sur(input$tot_mv_sur)
     updateNumericInput(session, 'n_vent', 
-                       value = floor((input$tot_mv_bed * 
-                                        (input$tot_mv_av / 100)) + 
-                                       (input$tot_mv_sur))
+                       value = floor((tot_mv() * 
+                                        (tot_mv_av() / 100)) + 
+                                       (tot_mv_sur()))
     )
     removeModal()
-  })
-  observeEvent({
-    input$tot_mv_bed
-    input$tot_mv_av
-    input$tot_mv_sur
-  }, {
-    tot_mv_bed <<- input$tot_mv_bed
-    tot_mv_av <<- input$tot_mv_av
-    tot_mv_sur <<- input$tot_mv_sur
   })
   
   # Observe Number of CC Beds ----
@@ -148,7 +405,7 @@ server <- function(input, output, session) {
     feedbackWarning(
       inputId = 'n_crit',
       condition = input$n_crit < input$n_vent,
-      text = "Warning: Number of critical care beds is less than the number of mechanical ventilators."
+      text = n_crit_feedback
     )
   })
   
@@ -160,7 +417,7 @@ server <- function(input, output, session) {
     feedbackWarning(
       inputId = 'n_vent',
       condition = input$n_vent > input$n_crit,
-      text = "Warning: Number of mechanical ventilators is greater than the number of critical care beds."
+      text = n_vent_feedback
     )
   })
   
@@ -168,6 +425,35 @@ server <- function(input, output, session) {
   
   x <- reactiveVal(default_table)
   
+  observe({
+    file <- input$data
+    ext <- tools::file_ext(file$datapath)
+    
+    req(file)
+    
+    switch (ext,
+      csv = x(read_csv(file$datapath, col_names = c('age_dist', 
+                                                    'case_dist', 
+                                                    'ac_adm', 
+                                                    'cc_adm'), skip = 1)),
+      xlsx = x(read_xlsx(file$datapath, col_names = c('age_dist', 
+                                                     'case_dist', 
+                                                     'ac_adm', 
+                                                     'cc_adm'), skip = 1))
+    )
+  })
+  
+  observeEvent(input$reset, {
+    x(default_table)
+  })
+  
+  col_names <- eventReactive(input$lang, {
+    c(table_col1, 
+      table_col2, 
+      table_col3, 
+      table_col4)
+  })
+    
   output$tab_pop <- DT::renderDT(
       DT::datatable(
         x(),
@@ -181,14 +467,23 @@ server <- function(input, output, session) {
           ordering = FALSE,
           dom = 'tB',
           keys = TRUE,
-          buttons = c('copy', 'csv', 'excel')),
-        colnames = c("Age groups", 
-                     "Case distribution (%)", 
-                     "Acute care admission (%)", 
-                     "Critical care admission (%)")
+          buttons = c('copy', 'csv', 'excel'),
+          scrollX = TRUE,
+          initComplete = JS("
+                        function(settings, json) {
+                          $(this.api().table().header()).css({
+                          'font-size': '12px',
+                          });
+                        }
+                    ")
+          ),
+        colnames = col_names()
       ) %>% 
-        formatString(columns = c(2,3,4), suffix = '%')
+        formatString(columns = c(2,3,4), suffix = '%') %>% 
+        formatStyle(columns = 1:4, fontSize = "12px")
     )
+  
+  outputOptions(output, 'tab_pop', suspendWhenHidden = FALSE)
   
   proxy <- dataTableProxy('tab_pop')
   
@@ -197,19 +492,19 @@ server <- function(input, output, session) {
     x(new)
     
     if (any(is.na(x()[, 2:4]), na.rm = TRUE)) {
-      shinyalert('Uh oh!', 'This column can only accept numeric inputs. Please check your numbers!', type = 'error')
+      shinyalert('Uh oh!', table_modal_txt, type = 'error')
     } 
     
     if (!dplyr::near(sum(x()[, 'case_dist'], na.rm = TRUE), 100, tol = 0.1)) {
-      shinyalert('Uh oh!', 'The case distribution column must sum to 100%. Please check your numbers!', type = 'error')
+      shinyalert('Uh oh!', table_modal_sum, type = 'error')
     }
     
     if (any(x()[, 'ac_adm']>100 | x()[, 'ac_adm']<0, na.rm = TRUE)) {
-      shinyalert('Uh oh!', 'Admission rates cannot be less than 0% or greater than 100%. Please check your numbers!', type = 'error')
+      shinyalert('Uh oh!', table_modal_adm, type = 'error')
     }
     
     if (any(x()[, 'cc_adm']>100 | x()[, 'cc_adm']<0, na.rm = TRUE)) {
-      shinyalert('Uh oh!', 'Admission rates cannot be less than 0% or greater than 100%. Please check your numbers!', type = 'error')
+      shinyalert('Uh oh!', table_modal_adm, type = 'error')
     }
     
   })
@@ -243,19 +538,38 @@ server <- function(input, output, session) {
                            input$n_vent, input$lou_vent, input$per_vent)})
   
   # Plot Data
-  plot_data <- reactive(
+  
+  format_tooltip <- function(resource, value, text) {
+    resource <- tolower(resource)
+    value <- format(floor(value), big.mark = ",")
+    
+    glue(text)
+  }
+  
+  plot_data <- reactive({
+    input$tab_pop_cell_edit
+    input$lang
+    
     tribble(
-      ~name, ~value,
-      "Acute Care Beds", maxAcuteR(),
-      "Critical Care Beds", maxCritR(),
-      "Mechanical Ventilators", maxVentR()
-    )
+      ~resource, ~value,
+      xlab_acute, maxAcuteR(),
+      xlab_crit, maxCritR(),
+      xlab_vent, maxVentR()
+    ) %>% 
+      mutate(
+        tooltip = format_tooltip(resource, value, plot_tooltip),
+        resource = factor(resource,
+                          levels = c(xlab_acute, xlab_crit,
+                                          xlab_vent)))
+    
+    }
   )
+  
+  y_lab <- reactive({input$lang; ylab})
   
   # Plotly Results ----
   
   plot <- reactive({
-    input$tab_pop_cell_edit
     
     color_scale <- switch(input$colors,
                           YlOrRd = scale_fill_manual(values = c('#FFEC19', '#FF9800', '#F6412D')),
@@ -267,9 +581,9 @@ server <- function(input, output, session) {
     )
     
     if (all(is.na(maxAcuteR()), is.na(maxCritR()), is.na(maxVentR()))) {
-      p <- ggplot(plot_data(), aes(glue("{name}\n ({value} new cases/day)"), value, fill = name, text = glue("The number of available {tolower(name)}\n in this healthcare system can manage\n a maximum of {value} daily cases of COVID-19"))) +
+      p <- ggplot(plot_data(), aes(resource, value, fill = resource, text = str_wrap(tooltip, width = 40))) +
         labs(x = '', 
-             y = 'Maximum Daily Number of Cases') + 
+             y = y_lab()) + 
         color_scale +
         theme_classic() +
         theme(legend.position = 'none',
@@ -277,63 +591,123 @@ server <- function(input, output, session) {
       p
     } else {
     
-      p <- ggplot(plot_data(), aes(glue("{name}\n ({scales::comma(floor(value))} new cases/day)"), value, fill = name,
-                                   text = glue("The number of available {tolower(name)}\n in this healthcare system can manage\n a maximum of {scales::comma(floor(value))} daily new cases of COVID-19"))) +
+      p <- 
+        plot_data() %>% 
+        ggplot(aes(resource, value, fill = resource,
+                                   text = str_wrap(tooltip, width = 40))) +
         geom_col(show.legend = FALSE, col = 'black') +
+        geom_hline(aes(yintercept = min(value, na.rm = TRUE)), 
+                   lty = 2) +
         labs(x = '', 
-             y = 'Maximum Daily Number of Cases') + 
+             y = y_lab()) + 
         color_scale +
+        scale_x_discrete(labels = with(plot_data(), glue("{resource}\n ({str_trim(format(floor(value), big.mark = ','))} {xlab_suffix})"))) +
         scale_y_continuous(labels = scales::comma_format()) +
         theme_classic() +
-        theme(legend.position = 'none',
+        theme(legend.position = 'none', 
               axis.text.x = element_text(angle = 25))
       p
     }
   })
   
   output$plot <- renderPlotly({
-    
-    ggplotly(plot(), tooltip = 'text') %>% 
-      config(displayModeBar = FALSE) %>% 
-      layout(xaxis = list(fixedrange = TRUE)) %>% 
-      layout(yaxis = list(fixedrange = TRUE))
+
+  ggplotly(plot(), tooltip = 'text') %>% 
+    config(displayModeBar = FALSE) %>% 
+    layout(xaxis = list(fixedrange = TRUE)) %>% 
+    layout(yaxis = list(fixedrange = TRUE))
     
   })
   
   # Interpretation Box ----
   
-  output$acute_int <- renderText({
+  sanitize_acute <- function(n_acute, lou_acute,
+    acuteBedRate, rateAcute, maxAcute) {
+    
+    n_acute = format(n_acute, big.mark = ",")
+    acuteBedRate = format(floor(acuteBedRate), big.mark = ",")
+    rateAcute = round(rateAcute, 1)
+    maxAcute = format(floor(maxAcute), big.mark = ",")
+    
+    glue(summary_acute)
+  }
+  
+  acute_int <- reactive({
+    input$lang
+    sanitize_acute(n_acute(), lou_acute(), acuteBedRateR(),
+                   rateAcuteR(), maxAcuteR())})
+  
+  output$acute_int <- renderUI({
     input$tab_pop_cell_edit
     
-    glue('Based on {format(n_acute(), big.mark = ",")} available acute care beds and an average length of stay of {lou_acute()} days, at maximum capacity the expected turnover rate is {format(floor(acuteBedRateR()), big.mark = ",")} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring an acute care bed is {round(rateAcuteR(), 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(floor(maxAcuteR()), big.mark = ",")} incident cases of COVID-19 per day.')
+    p(acute_int(), class = 'f3 f4-m f3-l')
   }
   )
   
-  output$crit_int <- renderText({
+  sanitize_crit <- function(n_crit, lou_crit,
+                             critBedRate, rateCrit, maxCrit) {
+    
+    n_crit = format(n_crit, big.mark = ",")
+    critBedRate = format(floor(critBedRate), big.mark = ",")
+    rateCrit = round(rateCrit, 1)
+    maxCrit = format(floor(maxCrit), big.mark = ",")
+    
+    glue(summary_crit)
+  }
+  
+  crit_int <- reactive({
+    input$lang
+    sanitize_crit(n_crit(), lou_crit(), critBedRateR(),
+                  rateCritR(), maxCritR())}
+  )
+  
+  output$crit_int <- renderUI({
     input$tab_pop_cell_edit
     
-    glue('Based on {format(n_crit(), big.mark = ",")} available critical care beds and an average length of stay of {lou_crit()} days, at maximum capacity the expected turnover rate is {format(floor(critBedRateR()), big.mark = ",")} beds per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring a critical care bed is {round(rateCritR(), 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(floor(maxCritR()), big.mark = ",")} incident cases of COVID-19 per day.')
+    p(crit_int(), class = 'f3 f4-m f3-l')
   }
   )
   
-  output$mv_int <- renderText({
+  sanitize_vent <- function(n_vent, lou_vent,
+                            ventBedRate, rateVent, maxVent) {
+    
+    n_vent = format(n_vent, big.mark = ",")
+    ventBedRate = format(floor(ventBedRate), big.mark = ",")
+    rateVent = round(rateVent, 1)
+    maxVent = format(floor(maxVent), big.mark = ",")
+    
+    glue(summary_vent)
+  }
+  
+  vent_int <- reactive({
+    input$lang
+    sanitize_vent(n_vent(), lou_vent(), ventBedRateR(),
+                  rateVentR(), maxVentR())}
+  )
+  
+  output$mv_int <- renderUI({
     input$tab_pop_cell_edit
-    glue('Based on {format(n_vent(), big.mark = ",")} available mechanical ventilators with an average duration of use of {lou_vent()} days, at maximum capacity the expected turnover rate is {format(floor(ventBedRateR()), big.mark = ",")} ventilators per day. Based on the age-stratified case distribution, the proportion of COVID-19 cases requiring mechanical ventilation is {round(rateVentR(), 1)} percent. Given this, your healthcare environment has the capacity to manage a maximum of {format(floor(maxVentR()), big.mark = ",")} incident cases of COVID-19 per day.')
+
+    p(vent_int(), class = 'f3 f4-m f3-l')
   }
   )
+  
+  outputOptions(output, 'acute_int', suspendWhenHidden = FALSE)
+  outputOptions(output, 'crit_int', suspendWhenHidden = FALSE)
+  outputOptions(output, 'mv_int', suspendWhenHidden = FALSE)
   
   # Generate Reports ----
-  output$report <- downloadHandler(
+  output$report_btn <- downloadHandler(
     filename = function() {glue("CAIC-RT_report_{Sys.Date()}.pdf")},
     
     content = function(file) {
 
-      withProgress(message = "Generating report...",
-                   detail = 'Hold tight, this may take a few moments.',
+      withProgress(message = progress_1,
+                   detail = progress_2,
                    {
                      tempReport <- file.path(tempdir(), "report.Rmd")
                      incProgress(0.25)
-                     file.copy("lang/eng/report_pdf.Rmd", tempReport, 
+                     file.copy("lang/eng/report-pdf.Rmd", tempReport, 
                                overwrite = TRUE)
                      incProgress(0.25)
                      params <- list(
@@ -362,7 +736,40 @@ server <- function(input, output, session) {
                            ventBedRate = ventBedRateR(),
                            maxVent = maxVentR()
                          )
-                       ), plot = plot())
+                       ), 
+                       plot = plot(),
+                       acute_int = acute_int(),
+                       crit_int = crit_int(),
+                       vent_int = vent_int(),
+                       report_type = report_type,
+                       report_date = report_date,
+                       authors = authors,
+                       tool_info = tool_info,
+                       desc = desc,
+                       desc_title = desc_title,
+                       custom_inputs = custom_inputs,
+                       lou_acute_label = lou_acute_label,
+                       lou_crit_label = lou_crit_label,
+                       lou_vent_label = lou_vent_label,
+                       caption1 = p1_header,
+                       caption2 = caption2,
+                       caption3 = table_title1,
+                       col_name1 = col_name1,
+                       col_name2 = col_name2,
+                       n_acute_label = n_acute_label,
+                       n_crit_label = n_crit_label,
+                       n_vent_label = n_vent_label,
+                       per_vent_label = per_vent_label,
+                       table_col1 = table_col1,
+                       table_col2 = table_col2,
+                       table_col3 = table_col3,
+                       table_col4 = table_col4,
+                       plot_title = plot_title,
+                       interpret_title = interpret_title,
+                       acute_res_title = acute_res_title,
+                       crit_res_title = crit_res_title,
+                       vent_res_title = vent_res_title
+                       )
                      incProgress(0.25)
                      rmarkdown::render(
                        tempReport,

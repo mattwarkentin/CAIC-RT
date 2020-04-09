@@ -1,0 +1,70 @@
+---
+title: Welcome Modal
+output: html_fragment
+params:
+  authors: NULL
+  desc_title: NULL
+  desc: NULL
+  how_to: NULL
+  item1: NULL
+  item1_opt: NULL
+  item2: NULL
+  item3: NULL
+  item4: NULL
+---
+
+```{r setup, include=FALSE}
+library(htmltools)
+library(glue)
+
+knitr::opts_chunk$set(
+  echo=FALSE, 
+  results = 'asis'
+  )
+
+CDC <- tags$a('CDC', href = "https://www.cdc.gov/mmwr/volumes/69/wr/mm6912e2.htm", target = "_blank")
+```
+
+```{r}
+h5(glue(params$authors, ':'), style = 'font-variant: small-caps;')
+```
+
+<ul>
+  <li>Vasily Giannakeas, MPH <sup class='f7'>1,2,3</sup> <a class="link dim black" href="mailto:vasily.giannakeas@wchospital.ca"><i class="fa fa-envelope"></i></a></li>
+  <li>Deepit Bhatia, MPH <a class="link dim black" href="mailto:deepit.bhatia@mail.utoronto.ca"><i class="fa fa-envelope"></i></a></li>
+  <li>Matthew T. Warkentin, MSc <sup class='f7'>2,4</sup> <a class="link dim black" href="mailto:warkentin@lunenfeld.ca"><i class="fa fa-envelope"></i></a></li>
+  <li>Isaac I. Bogoch, MD <sup class='f7'>5,6</sup></li>
+  <li>Nathan M. Stall, MD <sup class='f7'>1,5,7,8</sup> <a class="link dim black" href="mailto:nathan.stall@sinaihealth.ca"><i class="fa fa-envelope"></i></a></li>
+</ul>
+
+<hr />
+
+```{r}
+h5(glue(params$desc_title, ':'), style = 'font-variant: small-caps;')
+
+p(params$desc)
+```
+
+<hr />
+
+```{r}
+h5(params$how_to, style = 'font-variant: small-caps;')
+```
+
+```{r}
+tags$ol(
+  tags$li(HTML(glue(params$item1))),
+  tags$ul(
+    tags$li(params$item1_opt)
+  ),
+  tags$li(params$item2),
+  tags$li(params$item3),
+  tags$li(params$item4)
+)
+```
+
+<hr />
+
+```{r}
+tags$p("1. Women's College Research Institute, Women's College Hospital, Toronto, Ontario, Canada; 2. Dalla Lana School of Public Health, University of Toronto, Toronto, Ontario, Canada; 3. ICES, Toronto, Ontario, Canada; 4. Lunenfeld-Tanenbaum Research Institute, Sinai Health System, Toronto, Ontario, Canada; 5. Department of Medicine, University of Toronto, Toronto, Ontario, Canada; 6. Divisions of General Internal Medicine and Infectious Diseases, University Health Network, Toronto, Canada; 7. Institute of Health Policy, Management and Evaluation, University of Toronto, Toronto, Ontario, Canada; 8. Divisions of General Internal Medicine and Geriatrics, Sinai Health System, Toronto, Ontario, Canada", class = 'f7')
+```
