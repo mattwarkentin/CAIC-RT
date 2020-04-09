@@ -114,33 +114,30 @@ ui <- function(request) {
                actionButton('mvent', 'Calculate Mechanical Ventilators',
                             icon = icon('cogs'), 
                             class = "bg-dark-gray white f5 f5-l f7-m"),
-               hr(),
-               
-               sliderInput(inputId = "per_vent",
-                            label = htmlOutput('per_vent_label'),
-                            value = 70, min = 0, max = 100, step = 1, 
-                           post = '%'),
-               htmlOutput('p2_footnote_1'),
+
                htmlOutput('p2_footnote_2')
-               ), div(uiOutput('bookmark'),
-                      class = 'tc')),
+               ), bsCollapse(id = 'global', multiple = TRUE,
+                             bsCollapsePanel(
+                               title = htmlOutput('table_title'),
+                               uiOutput('input_data'),
+                               DT::dataTableOutput("tab_pop"),
+                               htmlOutput('table_source'),
+                               htmlOutput('table_tip'), 
+                               actionButton('reset', 'Reset', class = 'btn-warning f4 f4-l f5-m',
+                                            icon = icon('redo')),
+                               hr(),
+                               sliderInput(inputId = "per_vent",
+                                           label = htmlOutput('per_vent_label'),
+                                           value = 70, min = 0, max = 100, step = 1, 
+                                           post = '%'),
+                               htmlOutput('p2_footnote_1'),
+                               style = 'primary'
+                             ), open = ''
+               )),
         
         # Third Column ----
         column(5,
-              bsCollapse(id = 'global', multiple = TRUE,
-                bsCollapsePanel(
-                  title = htmlOutput('table_title'),
-                  uiOutput('input_data'),
-        DT::dataTableOutput("tab_pop"),
-        htmlOutput('table_source'),
-        htmlOutput('table_tip'), 
-        actionButton('reset', 'Reset', class = 'btn-warning f4 f4-l f5-m',
-                     icon = icon('redo')),
-        style = 'primary'
-                ), open = ''
-              ),
-        
-        htmlOutput('plot_title'),
+               htmlOutput('plot_title'),
         htmlOutput('plot_desc'),
 
         span(dropdownButton(size = 'xs', icon = icon('cog'),
@@ -165,13 +162,13 @@ ui <- function(request) {
                                br(),
                                htmlOutput('mv_int'))),
           hr(),
-          div(uiOutput('report'),
+          div(uiOutput('report', class = 'dib'), 
+               uiOutput('bookmark', class = 'dib'),
               class = 'tc')
           )
             )
       )
       ),
-    
     
     # Help Page ----
     tabPanel(

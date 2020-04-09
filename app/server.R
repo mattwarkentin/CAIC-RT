@@ -81,6 +81,8 @@ server <- function(input, output, session) {
                placement = "bottom", trigger = 'hover',
                options = list(container = "body"))
     
+    updateButton(session, 'calc_lou_acute', glue(' {calc_lou_label}'))
+    
     ## Panel 2 ----
     
     output$p2_header <- renderUI(h4(p2_header,
@@ -238,7 +240,7 @@ server <- function(input, output, session) {
     input$colors
   }, {
     output$bookmark <- renderUI(bookmarkButton(
-      class = 'btn-success mb4 f4 f4-l f5-m', 
+      class = 'btn-success f4 f4-l f5-m', 
       label = HTML(bookmark)))
     
     onBookmarked(function(url) {
@@ -266,6 +268,35 @@ server <- function(input, output, session) {
     session = session
   )
   
+  # Modal Length of Stay Calculations ----
+  
+  lou_acute_only <- reactiveVal(10) 
+  lou_acute_extra <- reactiveVal(5)
+  
+  observeEvent(input$calc_lou_acute, {
+    
+    showModal(modalDialog(
+      title = acute_lou_modal_title,
+      easyClose = TRUE, size = 'm',
+      footer = modalButton(close),
+      numericInput('lou_acute_only', acute_modal_lou_acute, 
+                   min = 0, value = lou_acute_only()),
+      hr(),
+      numericInput('lou_acute_extra', acute_modal_lou_extra,
+                   min = 0, value = lou_acute_extra()),
+      actionButton('submit_lou_ac', submit, 
+                   class = 'btn-success')
+    ))
+  })
+  
+  observeEvent(input$submit_lou_ac, {
+    lou_acute_only(input$lou_acute_only)
+    lou_acute_extra(input$lou_acute_extra)
+    updateNumericInput(session, 'lou_acute', 
+                       value = round(lou_acute_only() + 
+                                       (lou_acute_extra() * rateAcuteR() / 100)))
+    removeModal()
+  })
   # Modal Resource Calculations ----
   
   tot_ac_bed <- reactiveVal(33511)

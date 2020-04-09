@@ -17,6 +17,7 @@ output:
 - Default length of stay in Critical Care and duration of use for Mechanical Ventilators have been updated to __9 days__ from __20 days__ based on emegring data from Italy, [Grasselli et al. (2020)](https://jamanetwork.com/journals/jama/fullarticle/2764365?utm_source=twitter).
 
 - Default percent of critical care patients requiring mechanical ventilation has been updated to __70%__ from __50%__ based on emerging data from Italy, [Grasselli et al. (2020)](https://jamanetwork.com/journals/jama/fullarticle/2764365?utm_source=twitter).
+  + The slider has been moved from its original location to within the collapsible panel containing the age-stratified case distribution data.
 
 ### New Features
 
@@ -28,9 +29,6 @@ output:
 
 - Added a bookmark button to allow users to generate a URL that captures the current state of the inputs
   + The URL allows users to return to the tool with the same inputs used previously.
-
-- Added a new modal widget for aiding users to compute the mean length of stay in acute care for COVID-19 patients
-  + The widget accounts for patient-time for those who only spent time in acute care, and also those who spent time in acute care before or after spending time in critical care.
 
 ---
 
