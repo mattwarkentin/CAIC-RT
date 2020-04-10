@@ -268,7 +268,7 @@ xlab_crit <- "Camas de cuidados críticos"
 
 xlab_vent <- "Ventiladores mecanicas"
 
-xlab_suffix <- "nuevos casos/día"
+xlab_suffix <- "casos/día"
 
 # {resource} is either acute care beds, critical care beds, or mechanical ventilators
 # {value} is the maximum number of cases for any {resource}
