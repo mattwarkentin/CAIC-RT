@@ -150,7 +150,7 @@ server <- function(input, output, session) {
 
     output$report <- renderUI({
       downloadButton('report_btn', report_button, 
-                     class = 'btn-primary f4 f4-l f5-m')
+                     class = 'btn-primary f4 f4-l f5-m mb2')
     })
     
     ## Help Page ----
@@ -240,7 +240,7 @@ server <- function(input, output, session) {
     input$colors
   }, {
     output$bookmark <- renderUI(bookmarkButton(
-      class = 'btn-success f4 f4-l f5-m', 
+      class = 'btn-success f4 f4-l f5-m mb2', 
       label = HTML(bookmark)))
     
     onBookmarked(function(url) {

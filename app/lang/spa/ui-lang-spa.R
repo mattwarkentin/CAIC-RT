@@ -47,6 +47,8 @@ help <- "Ayuda"
 
 tutorial <- "De tutoría"
 
+whats_new <- "Cambios"
+
 more_info <- "Más información"
 
 see_article <- "Ver el artículo"
@@ -246,9 +248,9 @@ table_col1 <- "Grupos de edad"
 
 table_col2 <- "Distribución de casos (%)"
 
-table_col3 <- "Admisión de atención aguda (%)"
+table_col3 <- "Requerir cuidados agudos (%)"
 
-table_col4 <- "Admisión de cuidados críticos (%)"
+table_col4 <- "Requerir cuidados críticos (%)"
 
 table_modal_txt <- "Esta columna solo puede aceptar entradas numéricas. Por favor revise sus números!"
 

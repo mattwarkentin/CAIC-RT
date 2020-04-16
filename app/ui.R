@@ -113,7 +113,7 @@ ui <- function(request) {
                             value = 328, min = 0),
                actionButton('mvent', 'Calculate Mechanical Ventilators',
                             icon = icon('cogs'),
-                            class = "bg-dark-gray white f5 f5-l f7-m"),
+                            class = "bg-dark-gray white f5 f5-l f7-m mb4"),
 
                htmlOutput('p2_footnote_2')
                ), bsCollapse(id = 'global', multiple = TRUE,

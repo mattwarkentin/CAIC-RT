@@ -4,3 +4,4 @@
 .Ruserdata
 inst/
 app/rsconnect/shinyapps.io/matt-warkentin/
+.httr-oauth

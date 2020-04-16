@@ -48,6 +48,8 @@ help <- "Aide"
 
 tutorial <- "Guide"
 
+whats_new <- "Changements"
+
 more_info <- "Plus d'information"
 
 see_article <- "Afficher la référence"
@@ -257,9 +259,9 @@ table_col1 <- "Groupes d'âge"
 
 table_col2 <- "Distribution des cas (%)"
 
-table_col3 <- "Admis aux soins aigus (%)"
+table_col3 <- "Besoin de soins aigus (%)"
 
-table_col4 <- "Admis aux soins intensifs (%)"
+table_col4 <- "Besoin de soins intensifs (%)"
 
 table_modal_txt <- "Cette colonne ne peut accepter que des entrées numériques. Veuillez vérifier vos chiffres!"
 

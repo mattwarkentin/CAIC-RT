@@ -45,7 +45,7 @@ help <- "Help"
 
 tutorial <- "Tutorial"
 
-whats_new <- "What's New?"
+whats_new <- "Changes"
 
 more_info <- "More Info"
 
