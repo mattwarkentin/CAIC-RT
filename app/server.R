@@ -1,5 +1,5 @@
 server <- function(input, output, session) {
-  # Lanuage Rendering ----
+  # Language Rendering ----
 
   load_lang <- function(lang) {
     source(glue('lang/{lang}/ui-lang-{lang}.R'))
@@ -404,7 +404,7 @@ server <- function(input, output, session) {
   }, {
     feedbackWarning(
       inputId = 'n_crit',
-      condition = input$n_crit < input$n_vent,
+      show = input$n_crit < input$n_vent,
       text = n_crit_feedback
     )
   })
@@ -416,7 +416,7 @@ server <- function(input, output, session) {
     }, {
     feedbackWarning(
       inputId = 'n_vent',
-      condition = input$n_vent > input$n_crit,
+      show = input$n_vent > input$n_crit,
       text = n_vent_feedback
     )
   })
