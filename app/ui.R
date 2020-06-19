@@ -185,7 +185,7 @@ ui <- function(request) {
 
     # More Info ----
     navbarMenu(htmlOutput('more_info', inline = TRUE),
-               tabPanel(tags$a(htmlOutput('see_article'), href = "https://www.medrxiv.org/content/10.1101/2020.03.25.20043711v1", target = "_blank")),
+               tabPanel(tags$a(htmlOutput('see_article'), href = "https://www.acpjournals.org/doi/10.7326/M20-1169", target = "_blank")),
                tabPanel(tags$a(htmlOutput('see_code'), href = "https://www.github.com/mattwarkentin/CAIC-RT", target = "_blank"))
     )
   )
