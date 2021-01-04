@@ -119,7 +119,7 @@ server <- function(input, output, session) {
     
     output$table_title <- renderUI(p(HTML(glue("{icon('sort')} {table_title1} ({table_title2})")), class = 'f3 f4-m f3-l'))
     output$table_tip <- renderUI(p(table_tip, class = 'f5'))
-    output$table_source <- renderUI(p(glue('{table_source}: CDC COVID-19 Response Team. Severe Outcomes Among Patients with Coronavirus Disease 2019 (COVID-19) — United States, February 12–March 16, 2020. MMWR Morb Mortal Wkly Rep. 2020.'), class='f5'))
+    output$table_source <- renderUI(p(HTML(glue('{strong(table_source)}: COVID-19 Demographics, Acute Care Resource Use and Mortality by Age and Sex in Ontario, Canada: Population-based Retrospective Cohort Analysis. Stephen Mac, Kali Barrett, Yasin A. Khan, David MJ Naimark, Laura Rosella, Raphael Ximenes, Beate Sander. medRxiv 2020.11.04.20225474; doi: {a(href = "https://doi.org/10.1101/2020.11.04.20225474", "https://doi.org/10.1101/2020.11.04.20225474")}.')), class='f5'))
     outputOptions(output, 'table_tip', suspendWhenHidden = FALSE)
     outputOptions(output, 'table_source', suspendWhenHidden = FALSE)
     
@@ -194,17 +194,19 @@ server <- function(input, output, session) {
                           easyClose = TRUE, footer = modalButton('Close'),
                           includeHTML(glue('lang/{input$lang}/contribute.html'))))
   })
-  # US Case Distribution Data ----
+  # Case Distribution Data ----
   default_table <- 
     tribble(
       ~age_dist, ~case_dist, ~ac_adm, ~cc_adm,
-      "0-19", 5.02, 2.05, 0,
-      "20-44", 28.8, 17.55, 3.10,
-      "45-54", 17.5, 24.75, 7.90,
-      "55-64", 17.5, 25.30, 7.95,
-      "65-74", 16.7, 36.05, 13.45,
-      "75-84", 8.57, 44.60, 20.75,
-      "85+", 5.88, 50.80, 17.65
+      "0-9",   5.0,  1.2,  0.2,
+      "10-19", 10.5, 1.1,  0.2,
+      "20-29", 31.0, 1.4,  0.2,
+      "30-39", 17.5, 3.0,  0.5,
+      "40-49", 12.5, 5.4,  1.3,
+      "50-59", 11.0, 9.9,  3.5,
+      "60-69", 7.0,  17.8, 5.9,
+      "70-79", 3.0,  30.7, 7.6,
+      "80+",   2.5,  25.0, 2.0
     )
   
   # Welcome Modal ----

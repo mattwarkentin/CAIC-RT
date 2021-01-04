@@ -72,16 +72,16 @@ ui <- function(request) {
                htmlOutput('p1_header'),
                numericInput(inputId = "lou_acute",
                             label = htmlOutput('lou_acute_label'),
-                            value = round((10 + (5 * 26.7 / 100))),
+                            value = 11.8,
                             min = 1),
 
                numericInput(inputId = "lou_crit",
                             label = htmlOutput('lou_crit_label'),
-                            value = 9, min = 1),
+                            value = 16.4, min = 1),
 
                numericInput(inputId = "lou_vent",
                             label = htmlOutput('lou_vent_label'),
-                            value = 9, min = 1),
+                            value = 20.5, min = 1),
 
                htmlOutput('p1_footnote'),
                )
@@ -128,7 +128,7 @@ ui <- function(request) {
                                hr(),
                                sliderInput(inputId = "per_vent",
                                            label = htmlOutput('per_vent_label'),
-                                           value = 70, min = 0, max = 100, step = 1,
+                                           value = 60, min = 0, max = 100, step = 1,
                                            post = '%'),
                                htmlOutput('p2_footnote_1'),
                                style = 'primary'
