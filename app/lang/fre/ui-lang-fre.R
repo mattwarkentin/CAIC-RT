@@ -80,7 +80,7 @@ lou_vent_label <- "Nombre moyen de jours sous ventilation mécanique"
 
 lou_vent_tooltip <- "À noter: Il est présupposé que les jours passés sous ventilation mécanique sont passés dans un lit de soins intensifs"
 
-p1_footnote <- "Les valeurs de défaut sont basées sur des données extraites de Grasselli et al. (2020), recueillies en Italie. Naviguez vers la page d'Aide pour visualiser les références complètes."
+p1_footnote <- "Les valeurs de défaut sont basées sur des données extraites de Mac et al. (2020). Naviguez vers la page d'Aide pour visualiser les références complètes."
 
 ## Panel 2 ----
 
@@ -133,7 +133,7 @@ per_vent_label <- "Pourcentage de patients en soins intensifs nécessitant une v
 
 per_vent_tooltip <- "À noter: Ceci représente le pourcentage de patients atteints de la COVID-19 en soins intensifs nécessitant une ventilation mécanique" 
 
-p2_footnote_1 <- "Les pourcentages par défaut de patients en soins intensifs nécessitant une ventilation mécanique sont basés sur des données extraites de Grasselli et al. (2020), Zhou et al. (2020), et Wang et al. (2020), recueillies en Italie et Chine. Naviguez vers la page d'Aide pour visualiser les références complètes."
+p2_footnote_1 <- "Les pourcentages par défaut de patients en soins intensifs nécessitant une ventilation mécanique sont basés sur des données extraites de Mac et al. (2020). Naviguez vers la page d'Aide pour visualiser les références complètes."
 
 p2_footnote_2 <- "Les nombres par défaut de lits de soins intensifs, lits de soins aigus, et de dispositifs de ventilation mécanique sont basés sur des données extraites de Barrett et al. (2020) recueillies en Ontario. Naviguez vers la page d'Aide pour visualiser les références complètes."
 

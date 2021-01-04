@@ -87,7 +87,7 @@ lou_vent_label <- "Mean days on a mechanical ventilator"
 
 lou_vent_tooltip <- "Note: Days spent on a mechanical ventilator are assumed to be spent in a critical care bed."
 
-p1_footnote <- "Default values are based on data extracted from Grasselli et al. (2020), collected in Italy. See Help page for full citations."
+p1_footnote <- "Default values are based on data extracted from Mac et al. (2020). See Help page for full citations."
 
 ## Panel 2 ----
 
@@ -139,7 +139,7 @@ per_vent_label <- "Percent of critical care patients requiring mechanical ventil
 
 per_vent_tooltip <- "Note: This is the percentage of COVID-19 critical care patients requiring mechanical ventilation."
 
-p2_footnote_1 <- "Default percent of critical care patients requiring mechanical ventilation are based on data extracted from Grasselli et al. (2020), Zhou et al. (2020), and Wang et al. (2020), collected in Italy and China. See Help page for full citations."
+p2_footnote_1 <- "Default percent of critical care patients requiring mechanical ventilation are based on data extracted from Mac et al. (2020). See Help page for full citations."
 
 p2_footnote_2 <- "Default number of acute care beds, critical care beds, and mechanical ventilators are based on Ontario data extracted from Barrett et al. (2020). See Help page for full citations."
 

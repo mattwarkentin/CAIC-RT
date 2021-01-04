@@ -45,8 +45,11 @@ p(params$resource_sentence)
 ```
 
 <ul>
+  <li>
+  COVID-19 Demographics, Acute Care Resource Use and Mortality by Age and Sex in Ontario, Canada: Population-based Retrospective Cohort Analysis. Stephen Mac, Kali Barrett, Yasin A. Khan, David MJ Naimark, Laura Rosella, Raphael Ximenes, Beate Sander. medRxiv 2020.11.04.20225474; doi: <a href="https://doi.org/10.1101/2020.11.04.20225474">https://doi.org/10.1101/2020.11.04.20225474</a>
+  </li>
   <li>Barrett K, Khan Y, Mac S, Ximenes R, Naimark D, Tuite A, et al. COVID-19: Predicting Healthcare Resource Needs in Ontario 2020 [updated March 18, 2020. Available from: <a href="https://drive.google.com/drive/folders/1T5I2VKuvVFD0FmFGItcH_ZX1XioH4vYU">https://drive.google.com/drive/folders/1T5I2VKuvVFD0FmFGItcH_ZX1XioH4vYU</a>.
-</li>
+  </li>
   <li>CDC COVID-19 Response Team. Severe Outcomes Among Patients with Coronavirus Disease 2019 (COVID-19) — United States, February 12–March 16, 2020. MMWR Morb Mortal Wkly Rep. 2020.</li>
   <li>Dong J, Perry O. Queueing Models for Patient-Flow Dynamics in Inpatient Wards. Operations Research. 2020;68(1):250-275.</li>
   <li>Grasselli G, Pesenti A, Cecconi M. Critical Care Utilization for the COVID-19 Outbreak in Lombardy, Italy: Early Experience and Forecast During an Emergency Response. JAMA. 2020.</li>

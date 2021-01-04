@@ -79,7 +79,7 @@ lou_vent_label <- "Días medios en un ventilador mecánico"
 
 lou_vent_tooltip <- "Nota: Se supone que los días que se pasan en un ventilador mecánico se pasan en una cama de cuidados críticos."
 
-p1_footnote <- "Los valores predeterminados se basan en datos extraídos de Grasselli et al. (2020), recogido en Italia. Vea la página de ayuda para citas completas."
+p1_footnote <- "Los valores predeterminados se basan en datos extraídos de Mac et al. (2020). Vea la página de ayuda para citas completas."
 
 ## Panel 2 ----
 
@@ -131,7 +131,7 @@ per_vent_label <- "Porcentaje de pacientes de cuidados críticos que requieren v
 
 per_vent_tooltip <- "Nota: Este es el porcentaje de pacientes con cuidados críticos COVID-19 que requieren ventilación mecánica."
 
-p2_footnote_1 <- "El porcentaje predeterminado de pacientes de cuidados críticos que requieren ventilación mecánica se basa en datos extraídos de Grasselli et al. (2020), Zhou et al. (2020), y Wang et al. (2020), recogido en Italia y China. Vea la página de ayuda para citacions completas."
+p2_footnote_1 <- "El porcentaje predeterminado de pacientes de cuidados críticos que requieren ventilación mecánica se basa en datos extraídos de Mac et al. (2020). Vea la página de ayuda para citacions completas."
 
 p2_footnote_2 <- "El número predeterminado de camas de cuidados agudos, camas de cuidados críticos y ventiladores mecánicos se basa en datos extraídos de Barrett et al. (2020), recogido en Ontario. Vea la página de ayuda para citacións completas."
 
