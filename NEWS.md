@@ -1,63 +1,78 @@
 
 # CAIC-RT
 
------
+------------------------------------------------------------------------
+
+## v1.2.0 (2021-01-04)
+
+-   Updated length of stay, percent of critical care patients requiring
+    mechanical ventilation, and age-specific information based on
+    emerging Canadian data, [Mac et al.,
+    2020](https://www.medrxiv.org/content/10.1101/2020.11.04.20225474v1)
+    -   Length of stay (in days): Acute care \[11 → 11.8\], Critical
+        care \[9 → 16.4\], Mechanical ventilator \[9 → 20.5\]
+    -   Percent of critical care patients requiring mechanical
+        ventilation \[70% → 60%\]
+    -   Finer age-specific strata with updated case distribution and
+        severity data
+
+------------------------------------------------------------------------
 
 ## v1.1.0 (2020-04-07)
 
 ### Major Changes
 
-  - Default length of stay in Critical Care and duration of use for
+-   Default length of stay in Critical Care and duration of use for
     Mechanical Ventilators have been updated to **9 days** from **20
     days** based on emegring data from Italy, [Grasselli et
     al. (2020)](https://jamanetwork.com/journals/jama/fullarticle/2764365?utm_source=twitter).
 
-  - Default percent of critical care patients requiring mechanical
+-   Default percent of critical care patients requiring mechanical
     ventilation has been updated to **70%** from **50%** based on
     emerging data from Italy, [Grasselli et
     al. (2020)](https://jamanetwork.com/journals/jama/fullarticle/2764365?utm_source=twitter).
-    
-      - The slider has been moved from its original location to within
+
+    -   The slider has been moved from its original location to within
         the collapsible panel containing the age-stratified case
         distribution data.
 
 ### New Features
 
-  - Age-stratified case distribution and severity table now supports
+-   Age-stratified case distribution and severity table now supports
     users uploading CSV or Excel files with custom data
 
-  - Multilingual: CAIC-RT now supports French and Spanish language
+-   Multilingual: CAIC-RT now supports French and Spanish language
     translations, in addition to English (\#2).
 
-  - Walkthrough: Added a tutorial video explaining how to use and
+-   Walkthrough: Added a tutorial video explaining how to use and
     interpret CAIC-RT
 
-  - Added a bookmark button to allow users to generate a URL that
+-   Added a bookmark button to allow users to generate a URL that
     captures the current state of the inputs
-    
-      - The URL allows users to return to the tool with the same inputs
+
+    -   The URL allows users to return to the tool with the same inputs
         used previously.
 
------
+------------------------------------------------------------------------
 
 ## v1.0.2 (2020-03-28)
 
-  - PDF report generation feature was added to tool
+-   PDF report generation feature was added to tool
 
------
+------------------------------------------------------------------------
 
 ## v1.0.1 (2020-03-25)
 
-  - Minor bug fix for updating the feedback warning generated when the
+-   Minor bug fix for updating the feedback warning generated when the
     number of critical care beds was less than the number of mechanical
     ventilators
-      - Previously, if the feedback warning was triggered when changing
+    -   Previously, if the feedback warning was triggered when changing
         the critical care input, the feedback warning was not properly
         removed when the mechanical ventilator input was updated (and
         vice versa).
 
------
+------------------------------------------------------------------------
 
 ## v1.0.0 (2020-03-24)
 
-  - Initial public tool deployment
+-   Initial public tool deployment

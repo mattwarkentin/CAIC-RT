@@ -10,6 +10,15 @@ output:
 
 ---
 
+## v1.2.0 (2021-01-04)
+
+- Updated length of stay, percent of critical care patients requiring mechanical ventilation, and age-specific information based on emerging Canadian data, [Mac et al., 2020](https://www.medrxiv.org/content/10.1101/2020.11.04.20225474v1)
+    + Length of stay (in days): Acute care [11 → 11.8], Critical care [9 → 16.4], Mechanical ventilator [9 → 20.5]
+    + Percent of critical care patients requiring mechanical ventilation [70% → 60%]
+    + Finer age-specific strata with updated case distribution and severity data
+
+---
+
 ## v1.1.0 (2020-04-07)
 
 ### Major Changes
